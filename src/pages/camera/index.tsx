@@ -1,15 +1,13 @@
 import { View, Text, Camera, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 export default function CameraPage() {
-  const [isWeapp, setIsWeapp] = useState(false)
+  const isWeapp = Taro.getEnv() === Taro.ENV_TYPE.WEAPP
   const [devicePosition, setDevicePosition] = useState<'front' | 'back'>('front')
   const [flash, setFlash] = useState<'off' | 'on' | 'torch'>('off')
-
-  useEffect(() => {
-    setIsWeapp(Taro.getEnv() === Taro.ENV_TYPE.WEAPP)
-  }, [])
+  const [isScanning, setIsScanning] = useState(false)
+  const [scanProgress, setScanProgress] = useState(0)
 
   const handleSwitchCamera = () => {
     setDevicePosition(prev => prev === 'front' ? 'back' : 'front')
@@ -33,7 +31,7 @@ export default function CameraPage() {
     })
   }
 
-  const handleTakePhoto = () => {
+  const handleStartDetection = () => {
     if (!isWeapp) return
 
     const userId = Taro.getStorageSync('userId')
@@ -52,19 +50,40 @@ export default function CameraPage() {
       return
     }
 
+    // 开始扫描
+    setIsScanning(true)
+    setScanProgress(0)
+
+    // 模拟扫描动画
+    let progress = 0
+    const scanInterval = setInterval(() => {
+      progress += 2
+      setScanProgress(progress)
+
+      if (progress >= 100) {
+        clearInterval(scanInterval)
+        // 扫描完成，自动拍照
+        takePhoto()
+      }
+    }, 50) // 5秒内完成扫描（100% / 2% per 50ms = 5秒）
+  }
+
+  const takePhoto = () => {
     const ctx = Taro.createCameraContext()
     ctx.takePhoto({
       quality: 'high',
       success: (res) => {
         console.log('拍照成功:', res.tempImagePath)
+        // 跳转到分析页面，带上识别成功标识
         Taro.redirectTo({
-          url: `/pages/analyzing/index?imagePath=${encodeURIComponent(res.tempImagePath)}`
+          url: `/pages/analyzing/index?imagePath=${encodeURIComponent(res.tempImagePath)}&scanSuccess=true`
         })
       },
       fail: (err) => {
         console.error('拍照失败:', err)
+        setIsScanning(false)
         Taro.showToast({
-          title: '拍照失败',
+          title: '拍照失败，请重试',
           icon: 'none'
         })
       }
@@ -115,29 +134,56 @@ export default function CameraPage() {
         onError={handleCameraError}
       />
 
-      {/* 人脸检测框 */}
+      {/* 人脸检测框 - 改进的面部轮廓 */}
       <View className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <View className="relative w-[300px] h-[400px]">
-          {/* 四个角落的装饰 */}
-          <View className="absolute top-0 left-0 w-16 h-16">
-            <View className="w-8 h-8 border-t-4 border-l-4 border-white rounded-tl-lg" />
-          </View>
-          <View className="absolute top-0 right-0 w-16 h-16">
-            <View className="w-8 h-8 border-t-4 border-r-4 border-white rounded-tr-lg" />
-          </View>
-          <View className="absolute bottom-0 left-0 w-16 h-16">
-            <View className="w-8 h-8 border-b-4 border-l-4 border-white rounded-bl-lg" />
-          </View>
-          <View className="absolute bottom-0 right-0 w-16 h-16">
-            <View className="w-8 h-8 border-b-4 border-r-4 border-white rounded-br-lg" />
+        <View className="relative w-[280px] h-[380px]">
+          {/* 面部轮廓 - 优化的形状 */}
+          <View className="absolute inset-0">
+            {/* 头顶轮廓 */}
+            <View className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-16 border-t-4 border-l-4 border-r-4 border-rose-400 rounded-t-[60px]" />
+
+            {/* 左侧脸颊轮廓 */}
+            <View className="absolute top-12 left-0 w-16 h-48 border-l-4 border-rose-400 rounded-l-[80px]" />
+
+            {/* 右侧脸颊轮廓 */}
+            <View className="absolute top-12 right-0 w-16 h-48 border-r-4 border-rose-400 rounded-r-[80px]" />
+
+            {/* 下巴轮廓 */}
+            <View className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-16 border-b-4 border-l-4 border-r-4 border-rose-400 rounded-b-[40px]" />
           </View>
 
-          {/* 内部虚线框 */}
-          <View className="absolute inset-4 border-2 border-white/30 rounded-lg" />
+          {/* 扫描线动画 */}
+          {isScanning && (
+            <View
+              className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-rose-400 to-transparent"
+              style={{
+                top: `${scanProgress}%`,
+                boxShadow: '0 0 20px rgba(244, 63, 94, 0.8)',
+              }}
+            >
+              <View className="w-full h-full bg-white opacity-50" />
+            </View>
+          )}
+
+          {/* 扫描网格背景 */}
+          {isScanning && (
+            <View className="absolute inset-4 opacity-20">
+              <View className="w-full h-full" style={{ backgroundImage: 'linear-gradient(rgba(244, 63, 94, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(244, 63, 94, 0.3) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+            </View>
+          )}
+
+          {/* 扫描进度文字 */}
+          {isScanning && (
+            <View className="absolute -bottom-16 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-sm px-4 py-2 rounded-full">
+              <Text className="text-white text-xs block text-center">
+                正在扫描面部... {Math.round(scanProgress)}%
+              </Text>
+            </View>
+          )}
 
           {/* 中心提示点 */}
           <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <View className="w-3 h-3 bg-white/50 rounded-full" />
+            <View className="w-2 h-2 bg-rose-400 rounded-full shadow-lg shadow-rose-400/50" />
           </View>
         </View>
       </View>
@@ -171,7 +217,10 @@ export default function CameraPage() {
         <View className="mx-6 mb-6 bg-black/40 backdrop-blur-sm rounded-2xl p-4">
           <View className="flex items-center justify-center gap-2">
             <Text className="text-white text-sm text-center">
-              💡 请将面部对准框内，保持光线充足，表情自然
+              {isScanning
+                ? '💡 请保持面部在轮廓内，不要移动'
+                : '💡 请将面部对准轮廓，保持光线充足，表情自然'
+              }
             </Text>
           </View>
         </View>
@@ -182,24 +231,39 @@ export default function CameraPage() {
             {/* 切换摄像头按钮 */}
             <View
               onClick={handleSwitchCamera}
-              className="bg-white/20 w-14 h-14 flex items-center justify-center rounded-2xl active:bg-white/30 transition-colors flex-shrink-0"
+              className={`bg-white/20 w-14 h-14 flex items-center justify-center rounded-2xl transition-colors flex-shrink-0 ${
+                isScanning ? 'opacity-50' : 'active:bg-white/30'
+              }`}
             >
               <Text className="text-2xl block">🔄</Text>
             </View>
 
-            {/* 拍照按钮 */}
-            <View
-              onClick={handleTakePhoto}
-              className="relative w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform flex-shrink-0"
-            >
-              <View className="absolute inset-0 bg-white rounded-full" />
-              <View className="w-20 h-20 bg-rose-400 rounded-full border-4 border-white" />
-            </View>
+            {/* 开始检测按钮 */}
+            {isScanning ? (
+              <View className="relative w-24 h-24 bg-rose-400 rounded-full flex items-center justify-center shadow-2xl shadow-rose-400/50">
+                <View className="absolute inset-0 bg-rose-400 rounded-full animate-ping opacity-50" />
+                <View className="w-20 h-20 bg-rose-400 rounded-full border-4 border-white flex items-center justify-center">
+                  <Text className="text-white text-2xl font-bold">{5 - Math.floor(scanProgress / 20)}</Text>
+                </View>
+              </View>
+            ) : (
+              <View
+                onClick={handleStartDetection}
+                className="relative w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform flex-shrink-0"
+              >
+                <View className="absolute inset-0 bg-white rounded-full" />
+                <View className="w-20 h-20 bg-rose-400 rounded-full border-4 border-white flex items-center justify-center">
+                  <Text className="text-white text-sm font-bold">开始检测</Text>
+                </View>
+              </View>
+            )}
 
             {/* 闪光灯切换按钮 */}
             <View
               onClick={handleSwitchFlash}
-              className="bg-white/20 w-14 h-14 flex items-center justify-center rounded-2xl active:bg-white/30 transition-colors flex-shrink-0"
+              className={`bg-white/20 w-14 h-14 flex items-center justify-center rounded-2xl transition-colors flex-shrink-0 ${
+                isScanning ? 'opacity-50' : 'active:bg-white/30'
+              }`}
             >
               <Text className="text-2xl block">
                 {flash === 'off' ? '🔴' : flash === 'on' ? '⚪' : '💡'}
