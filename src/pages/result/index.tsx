@@ -122,7 +122,7 @@ export default function ResultPage() {
   const scoreRating = overallScore >= 80 ? '优秀' : overallScore >= 60 ? '良好' : '需改善'
 
   const handleViewRecommendations = () => {
-    Taro.switchTab({
+    Taro.navigateTo({
       url: '/pages/recommend/index'
     })
   }
