@@ -42,57 +42,57 @@ export default function ResultPage() {
           icon: '💧',
           name: '水分',
           value: analysisResult.moisture,
-          evaluation: analysisResult.moisture >= 70 ? '良好' : analysisResult.moisture >= 50 ? '一般' : '需改善',
-          color: analysisResult.moisture >= 70 ? '#10B981' : analysisResult.moisture >= 50 ? '#F59E0B' : '#EF4444'
+          evaluation: analysisResult.moisture >= 60 ? '充足' : analysisResult.moisture >= 30 ? '偏低' : '严重缺水',
+          color: analysisResult.moisture >= 60 ? '#10B981' : analysisResult.moisture >= 30 ? '#F59E0B' : '#EF4444'
         },
         {
           icon: '🛢️',
           name: '油分',
           value: analysisResult.oiliness,
-          evaluation: analysisResult.oiliness <= 40 ? '良好' : analysisResult.oiliness <= 60 ? '一般' : '需改善',
-          color: analysisResult.oiliness <= 40 ? '#10B981' : analysisResult.oiliness <= 60 ? '#F59E0B' : '#EF4444'
+          evaluation: analysisResult.oiliness <= 30 ? '低' : analysisResult.oiliness <= 70 ? '适中' : '偏高',
+          color: analysisResult.oiliness <= 30 ? '#10B981' : analysisResult.oiliness <= 70 ? '#F59E0B' : '#EF4444'
         },
         {
           icon: '🌡️',
           name: '敏感度',
           value: analysisResult.sensitivity,
-          evaluation: analysisResult.sensitivity <= 30 ? '良好' : analysisResult.sensitivity <= 50 ? '一般' : '需改善',
-          color: analysisResult.sensitivity <= 30 ? '#10B981' : analysisResult.sensitivity <= 50 ? '#F59E0B' : '#EF4444'
+          evaluation: analysisResult.sensitivity <= 20 ? '不敏感' : analysisResult.sensitivity <= 50 ? '轻度敏感' : '高度敏感',
+          color: analysisResult.sensitivity <= 20 ? '#10B981' : analysisResult.sensitivity <= 50 ? '#F59E0B' : '#EF4444'
         },
         {
           icon: '🔴',
           name: '痘痘',
           value: analysisResult.acne || 0,
-          evaluation: analysisResult.acne && analysisResult.acne <= 20 ? '良好' : analysisResult.acne && analysisResult.acne <= 40 ? '一般' : '需改善',
-          color: analysisResult.acne && analysisResult.acne <= 20 ? '#10B981' : analysisResult.acne && analysisResult.acne <= 40 ? '#F59E0B' : '#EF4444'
+          evaluation: analysisResult.acne && analysisResult.acne <= 10 ? '几乎无' : analysisResult.acne && analysisResult.acne <= 40 ? '轻微' : analysisResult.acne && analysisResult.acne <= 70 ? '中度' : '严重',
+          color: analysisResult.acne && analysisResult.acne <= 10 ? '#10B981' : analysisResult.acne && analysisResult.acne <= 40 ? '#F59E0B' : analysisResult.acne && analysisResult.acne <= 70 ? '#F97316' : '#EF4444'
         },
         {
           icon: '🌀',
           name: '皱纹',
           value: analysisResult.wrinkles || 0,
-          evaluation: analysisResult.wrinkles && analysisResult.wrinkles <= 30 ? '良好' : analysisResult.wrinkles && analysisResult.wrinkles <= 50 ? '一般' : '需改善',
-          color: analysisResult.wrinkles && analysisResult.wrinkles <= 30 ? '#10B981' : analysisResult.wrinkles && analysisResult.wrinkles <= 50 ? '#F59E0B' : '#EF4444'
+          evaluation: analysisResult.wrinkles && analysisResult.wrinkles <= 20 ? '几乎无' : analysisResult.wrinkles && analysisResult.wrinkles <= 50 ? '轻微' : analysisResult.wrinkles && analysisResult.wrinkles <= 80 ? '中度' : '严重',
+          color: analysisResult.wrinkles && analysisResult.wrinkles <= 20 ? '#10B981' : analysisResult.wrinkles && analysisResult.wrinkles <= 50 ? '#F59E0B' : analysisResult.wrinkles && analysisResult.wrinkles <= 80 ? '#F97316' : '#EF4444'
         },
         {
           icon: '🟤',
           name: '色斑',
           value: analysisResult.spots || 0,
-          evaluation: analysisResult.spots && analysisResult.spots <= 20 ? '良好' : analysisResult.spots && analysisResult.spots <= 40 ? '一般' : '需改善',
-          color: analysisResult.spots && analysisResult.spots <= 20 ? '#10B981' : analysisResult.spots && analysisResult.spots <= 40 ? '#F59E0B' : '#EF4444'
+          evaluation: analysisResult.spots && analysisResult.spots <= 10 ? '几乎无' : analysisResult.spots && analysisResult.spots <= 40 ? '轻微' : analysisResult.spots && analysisResult.spots <= 70 ? '中度' : '严重',
+          color: analysisResult.spots && analysisResult.spots <= 10 ? '#10B981' : analysisResult.spots && analysisResult.spots <= 40 ? '#F59E0B' : analysisResult.spots && analysisResult.spots <= 70 ? '#F97316' : '#EF4444'
         },
         {
           icon: '⚫',
           name: '毛孔',
           value: analysisResult.pores || 0,
-          evaluation: analysisResult.pores && analysisResult.pores <= 40 ? '良好' : analysisResult.pores && analysisResult.pores <= 60 ? '一般' : '需改善',
-          color: analysisResult.pores && analysisResult.pores <= 40 ? '#10B981' : analysisResult.pores && analysisResult.pores <= 60 ? '#F59E0B' : '#EF4444'
+          evaluation: analysisResult.pores && analysisResult.pores <= 30 ? '几乎无' : analysisResult.pores && analysisResult.pores <= 60 ? '轻微' : analysisResult.pores && analysisResult.pores <= 80 ? '中度' : '粗大',
+          color: analysisResult.pores && analysisResult.pores <= 30 ? '#10B981' : analysisResult.pores && analysisResult.pores <= 60 ? '#F59E0B' : analysisResult.pores && analysisResult.pores <= 80 ? '#F97316' : '#EF4444'
         },
         {
           icon: '⚫',
           name: '黑头',
           value: analysisResult.blackheads || 0,
-          evaluation: analysisResult.blackheads && analysisResult.blackheads <= 30 ? '良好' : analysisResult.blackheads && analysisResult.blackheads <= 50 ? '一般' : '需改善',
-          color: analysisResult.blackheads && analysisResult.blackheads <= 30 ? '#10B981' : analysisResult.blackheads && analysisResult.blackheads <= 50 ? '#F59E0B' : '#EF4444'
+          evaluation: analysisResult.blackheads && analysisResult.blackheads <= 20 ? '几乎无' : analysisResult.blackheads && analysisResult.blackheads <= 50 ? '轻微' : analysisResult.blackheads && analysisResult.blackheads <= 80 ? '中度' : '严重',
+          color: analysisResult.blackheads && analysisResult.blackheads <= 20 ? '#10B981' : analysisResult.blackheads && analysisResult.blackheads <= 50 ? '#F59E0B' : analysisResult.blackheads && analysisResult.blackheads <= 80 ? '#F97316' : '#EF4444'
         }
       ]
       setIndicators(inds)

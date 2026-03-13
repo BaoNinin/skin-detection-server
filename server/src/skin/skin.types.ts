@@ -4,6 +4,11 @@ export interface SkinAnalysisResult {
   moisture: number;
   oiliness: number;
   sensitivity: number;
+  acne: number;
+  wrinkles: number;
+  spots: number;
+  pores: number;
+  blackheads: number;
   recommendations: string[];
 }
 
