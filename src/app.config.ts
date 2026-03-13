@@ -1,15 +1,19 @@
 export default defineAppConfig({
   pages: [
-    'pages/index/index',
+    'pages/landing/index',
+    'pages/camera/index',
+    'pages/analyzing/index',
+    'pages/result/index',
     'pages/recommend/index',
     'pages/history/index',
+    'pages/history-detail/index',
     'pages/profile/index'
   ],
   window: {
     backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#fff',
+    navigationBarBackgroundColor: '#E8B4BC',
     navigationBarTitleText: '智能皮肤检测',
-    navigationBarTextStyle: 'black'
+    navigationBarTextStyle: 'white'
   },
   tabBar: {
     color: '#9CA3AF',
@@ -18,8 +22,8 @@ export default defineAppConfig({
     borderStyle: 'black',
     list: [
       {
-        pagePath: 'pages/index/index',
-        text: '检测',
+        pagePath: 'pages/landing/index',
+        text: '首页',
         iconPath: './assets/tabbar/camera.png',
         selectedIconPath: './assets/tabbar/camera-active.png'
       },
