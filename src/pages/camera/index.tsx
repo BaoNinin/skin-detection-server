@@ -127,8 +127,8 @@ export default function CameraPage() {
         </View>
       </View>
 
-      {/* 顶部控制栏 */}
-      <View className="absolute top-0 left-0 right-0 p-6">
+      {/* 顶部控制栏 - 只显示取消按钮和闪光灯状态 */}
+      <View className="absolute top-0 left-0 right-0 p-6 z-10">
         <View className="flex justify-between items-center">
           {/* 取消按钮 */}
           <View
@@ -145,18 +145,13 @@ export default function CameraPage() {
             </Text>
           </View>
 
-          {/* 闪光灯切换按钮 */}
-          <View
-            onClick={handleSwitchFlash}
-            className="bg-black/30 w-10 h-10 flex items-center justify-center rounded-full active:bg-black/50 transition-colors"
-          >
-            <Text className="text-xl block">{flash === 'off' ? '🔴' : flash === 'on' ? '⚪' : '💡'}</Text>
-          </View>
+          {/* 占位，保持布局对称 */}
+          <View className="w-10 h-10" />
         </View>
       </View>
 
       {/* 底部操作区域 */}
-      <View className="absolute bottom-0 left-0 right-0">
+      <View className="absolute bottom-0 left-0 right-0 z-10">
         {/* 提示信息卡片 */}
         <View className="mx-6 mb-6 bg-black/40 backdrop-blur-sm rounded-2xl p-4">
           <View className="flex items-center justify-center gap-2">
@@ -168,11 +163,11 @@ export default function CameraPage() {
 
         {/* 操作按钮区域 */}
         <View className="bg-gradient-to-t from-black/90 via-black/50 to-transparent pt-8 pb-12 px-6">
-          <View className="flex items-center justify-between">
+          <View className="flex items-center justify-between gap-4">
             {/* 切换摄像头按钮 */}
             <View
               onClick={handleSwitchCamera}
-              className="bg-white/20 w-14 h-14 flex items-center justify-center rounded-2xl active:bg-white/30 transition-colors"
+              className="bg-white/20 w-14 h-14 flex items-center justify-center rounded-2xl active:bg-white/30 transition-colors flex-shrink-0"
             >
               <Text className="text-2xl block">🔄</Text>
             </View>
@@ -180,14 +175,21 @@ export default function CameraPage() {
             {/* 拍照按钮 */}
             <View
               onClick={handleTakePhoto}
-              className="relative w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform"
+              className="relative w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform flex-shrink-0"
             >
               <View className="absolute inset-0 bg-white rounded-full" />
               <View className="w-20 h-20 bg-rose-400 rounded-full border-4 border-white" />
             </View>
 
-            {/* 占位，保持布局对称 */}
-            <View className="w-14 h-14" />
+            {/* 闪光灯切换按钮 */}
+            <View
+              onClick={handleSwitchFlash}
+              className="bg-white/20 w-14 h-14 flex items-center justify-center rounded-2xl active:bg-white/30 transition-colors flex-shrink-0"
+            >
+              <Text className="text-2xl block">
+                {flash === 'off' ? '🔴' : flash === 'on' ? '⚪' : '💡'}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
