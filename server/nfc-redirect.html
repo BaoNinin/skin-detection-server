@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正在跳转到小程序...</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 40px 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 20px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #ff9a9e;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      margin-bottom: 12px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 154, 158, 0.3);
+    }
+
+    .btn-secondary {
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e5e5;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .tips {
+      margin-top: 20px;
+      padding: 16px;
+      background: #fff5f5;
+      border-radius: 12px;
+      text-align: left;
+    }
+
+    .tips-title {
+      color: #ff6b6b;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .tips-text {
+      color: #666;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .wechat-qr {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+    }
+
+    .wechat-qr img {
+      width: 150px;
+      height: 150px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .wechat-qr p {
+      color: #666;
+      font-size: 13px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="logo">🌸</div>
+
+      <!-- 加载状态 -->
+      <div id="loading">
+        <div class="spinner"></div>
+        <h1>正在跳转到小程序</h1>
+        <p class="subtitle">智能皮肤检测小程序</p>
+      </div>
+
+      <!-- 跳转失败（非微信环境） -->
+      <div id="not-wechat" class="hidden">
+        <h1>请在微信中打开</h1>
+        <p class="subtitle">此功能需要在微信中使用</p>
+
+        <div class="wechat-qr">
+          <p style="margin-bottom: 12px;">扫描二维码在微信中打开</p>
+          <!-- 请替换为你的二维码图片 -->
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23fff' width='100' height='100' rx='8'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='%23666' font-size='12' font-family='Arial'%3E二维码%3C/text%3E%3C/svg%3E" alt="二维码">
+          <p>使用微信扫一扫打开</p>
+        </div>
+
+        <div class="tips">
+          <div class="tips-title">💡 使用提示</div>
+          <div class="tips-text">
+            1. 点击上方按钮复制链接<br>
+            2. 打开微信粘贴链接<br>
+            3. 或扫描二维码在微信中打开
+          </div>
+        </div>
+
+        <button class="btn" onclick="copyLink()">复制链接</button>
+        <a href="#" onclick="manualJump(event)" class="btn btn-secondary">手动跳转</a>
+      </div>
+
+      <!-- 跳转成功提示 -->
+      <div id="success" class="hidden">
+        <h1>跳转成功</h1>
+        <p class="subtitle">即将打开小程序...</p>
+        <p style="color: #999; font-size: 13px;">如未自动打开，请点击下方按钮</p>
+        <button class="btn" onclick="manualJump()">立即打开</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 配置小程序 URL Scheme
+    // 格式：weixin://dl/business/?t=TICKET
+    // 或 URL Link：https://wxaurl.cn/xxxxx
+    const MINIPRAM_URL = 'weixin://dl/business/?t=YOUR_TICKET_HERE';
+
+    // 判断是否在微信环境中
+    function isWeChat() {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.indexOf('micromessenger') !== -1;
+    }
+
+    // 跳转到小程序
+    function jumpToMiniprogram() {
+      if (isWeChat()) {
+        // 在微信中，直接跳转
+        window.location.href = MINIPRAM_URL;
+
+        // 5秒后显示手动跳转按钮
+        setTimeout(() => {
+          document.getElementById('loading').classList.add('hidden');
+          document.getElementById('success').classList.remove('hidden');
+        }, 5000);
+      } else {
+        // 非微信环境，显示提示
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('not-wechat').classList.remove('hidden');
+      }
+    }
+
+    // 手动跳转
+    function manualJump(e) {
+      if (e) e.preventDefault();
+      window.location.href = MINIPRAM_URL;
+    }
+
+    // 复制链接
+    function copyLink() {
+      const url = window.location.href;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+          alert('链接已复制！请在微信中粘贴打开');
+        }).catch(err => {
+          // 降级方案
+          fallbackCopy(url);
+        });
+      } else {
+        fallbackCopy(url);
+      }
+    }
+
+    // 降级复制方案
+    function fallbackCopy(url) {
+      const textArea = document.createElement('textarea');
+      textArea.value = url;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+
+      try {
+        document.execCommand('copy');
+        alert('链接已复制！请在微信中粘贴打开');
+      } catch (err) {
+        alert('复制失败，请手动复制浏览器地址栏的链接');
+      }
+
+      document.body.removeChild(textArea);
+    }
+
+    // 页面加载后自动跳转
+    window.onload = function() {
+      // 延迟 500ms，确保页面渲染完成
+      setTimeout(() => {
+        jumpToMiniprogram();
+      }, 500);
+    };
+  </script>
+</body>
+</html>
