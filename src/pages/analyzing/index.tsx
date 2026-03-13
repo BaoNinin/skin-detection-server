@@ -22,6 +22,20 @@ export default function AnalyzingPage() {
   const [currentStep, setCurrentStep] = useState(0)
   const [analyzing, setAnalyzing] = useState(false)
   const [scanSuccess, setScanSuccess] = useState(false)
+  const [pingScale, setPingScale] = useState(1)
+  const [spinRotation, setSpinRotation] = useState(0)
+  const [pulseOpacity, setPulseOpacity] = useState(1)
+  const [loaderRotation, setLoaderRotation] = useState(0)
+
+  // AI分析时的加载动画
+  useEffect(() => {
+    if (currentStep >= 3 && analyzing) {
+      const interval = setInterval(() => {
+        setLoaderRotation(prev => prev >= 360 ? 0 : prev + 15)
+      }, 50)
+      return () => clearInterval(interval)
+    }
+  }, [currentStep, analyzing])
 
   const steps = scanSuccess
     ? [
@@ -59,11 +73,35 @@ export default function AnalyzingPage() {
     // 如果是扫描成功，显示识别成功动画
     if (scanSuccess) {
       setCurrentStep(0)
-      await sleep(1000) // 显示"识别成功"
+      setPingScale(1)
+
+      // Step 0: 识别成功 - ping动画
+      const pingInterval = setInterval(() => {
+        setPingScale(prev => prev >= 2 ? 1 : prev + 0.1)
+      }, 50)
+
+      await sleep(1000)
+      clearInterval(pingInterval)
+
+      // Step 1: 激活芯片 - spin动画
       setCurrentStep(1)
-      await sleep(2000) // 显示"正在激活芯片"
+      setSpinRotation(0)
+      const spinInterval = setInterval(() => {
+        setSpinRotation(prev => prev >= 360 ? 0 : prev + 15)
+      }, 50)
+
+      await sleep(2000)
+      clearInterval(spinInterval)
+
+      // Step 2: 芯片激活 - pulse动画
       setCurrentStep(2)
-      await sleep(2000) // 芯片激活动画
+      setPulseOpacity(1)
+      const pulseInterval = setInterval(() => {
+        setPulseOpacity(prev => prev <= 0.3 ? 1 : prev - 0.1)
+      }, 100)
+
+      await sleep(2000)
+      clearInterval(pulseInterval)
     } else {
       // 如果不是扫描成功，跳过识别动画，直接开始分析
       setCurrentStep(3)
@@ -174,21 +212,37 @@ export default function AnalyzingPage() {
         {scanSuccess && currentStep < 3 && (
           <View className="mb-8">
             {currentStep === 0 && (
-              <View className="w-32 h-32 flex items-center justify-center">
-                <View className="absolute w-32 h-32 bg-green-100 rounded-full animate-ping opacity-50" />
+              <View className="w-32 h-32 flex items-center justify-center relative">
+                <View
+                  className="absolute bg-green-100 rounded-full opacity-50 transition-all"
+                  style={{
+                    width: `${32 * pingScale}px`,
+                    height: `${32 * pingScale}px`
+                  }}
+                />
                 <Text className="text-6xl block z-10">✅</Text>
               </View>
             )}
             {currentStep === 1 && (
               <View className="w-32 h-32 flex items-center justify-center relative">
                 <View className="absolute w-32 h-32 border-4 border-rose-200 rounded-full" />
-                <View className="absolute w-32 h-32 border-4 border-rose-400 rounded-t-full animate-spin" />
+                <View
+                  className="absolute w-32 h-32 border-4 border-rose-400 rounded-t-full transition-all"
+                  style={{
+                    transform: `rotate(${spinRotation}deg)`
+                  }}
+                />
                 <Text className="text-6xl block z-10">🔌</Text>
               </View>
             )}
             {currentStep === 2 && (
-              <View className="w-32 h-32 flex items-center justify-center">
-                <View className="absolute w-32 h-32 bg-gradient-to-r from-yellow-200 to-yellow-400 rounded-full animate-pulse" />
+              <View className="w-32 h-32 flex items-center justify-center relative">
+                <View
+                  className="absolute w-32 h-32 bg-gradient-to-r from-yellow-200 to-yellow-400 rounded-full transition-all"
+                  style={{
+                    opacity: pulseOpacity
+                  }}
+                />
                 <Text className="text-6xl block z-10">⚡</Text>
               </View>
             )}
@@ -210,7 +264,7 @@ export default function AnalyzingPage() {
 
         {/* 加载动画 */}
         {currentStep >= 3 && (
-          <View className="w-16 h-16 border-4 border-rose-200 border-t-rose-400 rounded-full animate-spin mb-6" />
+          <View className="w-16 h-16 border-4 border-rose-200 border-t-rose-400 rounded-full mb-6 transition-all" style={{ transform: `rotate(${loaderRotation}deg)` }} />
         )}
 
         {/* 当前步骤文字 */}
