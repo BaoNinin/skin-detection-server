@@ -149,17 +149,17 @@ export default function HistoryPage() {
   }
 
   return (
-    <View className="min-h-screen bg-rose-50">
-      <View className="p-4 bg-white border-b border-gray-100">
+    <View className="min-h-screen bg-rose-50 flex flex-col">
+      <View className="bg-white border-b border-gray-100 p-4">
         <Text className="text-2xl font-bold text-gray-800 block">历史记录</Text>
         <Text className="text-sm text-gray-500 mt-2 block">查看您的皮肤检测历史</Text>
       </View>
 
-      <View className="p-4 flex gap-3">
+      <View className="bg-white px-4 py-3 flex gap-3">
         <View
           onClick={() => setViewType('timeline')}
           className={`flex-1 py-3 rounded-xl text-center ${
-            viewType === 'timeline' ? 'bg-rose-400 text-white' : 'bg-white text-gray-700'
+            viewType === 'timeline' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
           }`}
         >
           <Text className="text-sm font-medium block">时间轴</Text>
@@ -167,7 +167,7 @@ export default function HistoryPage() {
         <View
           onClick={() => setViewType('calendar')}
           className={`flex-1 py-3 rounded-xl text-center ${
-            viewType === 'calendar' ? 'bg-rose-400 text-white' : 'bg-white text-gray-700'
+            viewType === 'calendar' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
           }`}
         >
           <Text className="text-sm font-medium block">日历</Text>
@@ -175,7 +175,7 @@ export default function HistoryPage() {
       </View>
 
       {selectedRecords.length > 0 && (
-        <View className="px-4 mb-4">
+        <View className="px-4 py-3 bg-white">
           <View className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center justify-between">
             <Text className="text-sm text-blue-700 block">
               已选择 {selectedRecords.length} 条记录
@@ -191,7 +191,7 @@ export default function HistoryPage() {
         </View>
       )}
 
-      <ScrollView scrollY className="h-[calc(100vh-200px)]">
+      <ScrollView scrollY className="flex-1 bg-rose-50">
         {loading && (
           <View className="flex flex-col items-center justify-center py-20 px-4">
             <View className="w-12 h-12 border-4 border-rose-200 border-t-rose-400 rounded-full animate-spin mb-4" />
@@ -229,7 +229,7 @@ export default function HistoryPage() {
         )}
 
         {!loading && historyList.length > 0 && viewType === 'timeline' && (
-          <View className="px-4 space-y-4">
+          <View className="px-4 py-4 space-y-4">
             {historyList.map((record, index) => {
               const score = calculateScore(record)
               const isSelected = selectedRecords.some(r => r.id === record.id)
@@ -301,11 +301,12 @@ export default function HistoryPage() {
                 </View>
               )
             })}
+            <View className="h-4" />
           </View>
         )}
 
         {!loading && historyList.length > 0 && viewType === 'calendar' && (
-          <View className="px-4">
+          <View className="px-4 py-4">
             <View className="bg-white rounded-2xl p-6 shadow-sm">
               <Text className="text-base text-gray-500 text-center block">
                 日历视图开发中...
