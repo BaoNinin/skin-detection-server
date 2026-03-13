@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 export default function CameraPage() {
   const [isWeapp, setIsWeapp] = useState(false)
   const [devicePosition, setDevicePosition] = useState<'front' | 'back'>('front')
-  const [flash, setFlash] = useState<'off' | 'on' | 'auto'>('off')
+  const [flash, setFlash] = useState<'off' | 'on' | 'torch'>('off')
 
   useEffect(() => {
     setIsWeapp(Taro.getEnv() === Taro.ENV_TYPE.WEAPP)
@@ -16,7 +16,8 @@ export default function CameraPage() {
   }
 
   const handleSwitchFlash = () => {
-    const flashModes: Array<'off' | 'on' | 'auto'> = ['off', 'on', 'auto']
+    // 微信小程序只支持 off、on、torch 三种模式
+    const flashModes: Array<'off' | 'on' | 'torch'> = ['off', 'on', 'torch']
     const currentIndex = flashModes.indexOf(flash)
     const nextIndex = (currentIndex + 1) % flashModes.length
     const newFlash = flashModes[nextIndex]
@@ -24,7 +25,7 @@ export default function CameraPage() {
     setFlash(newFlash)
 
     // 显示当前闪光灯状态
-    const statusText = newFlash === 'off' ? '闪光灯已关闭' : newFlash === 'on' ? '闪光灯已开启' : '闪光灯设为自动'
+    const statusText = newFlash === 'off' ? '闪光灯已关闭' : newFlash === 'on' ? '闪光灯已开启' : '闪光灯常亮'
     Taro.showToast({
       title: statusText,
       icon: 'none',
@@ -70,6 +71,18 @@ export default function CameraPage() {
     })
   }
 
+  const handleCameraReady = () => {
+    console.log('相机已就绪，当前闪光灯状态:', flash)
+  }
+
+  const handleCameraError = (err: any) => {
+    console.error('相机错误:', err)
+    Taro.showToast({
+      title: '相机启动失败',
+      icon: 'none'
+    })
+  }
+
   const handleCancel = () => {
     Taro.navigateBack()
   }
@@ -98,6 +111,8 @@ export default function CameraPage() {
         devicePosition={devicePosition}
         mode="normal"
         flash={flash}
+        onReady={handleCameraReady}
+        onError={handleCameraError}
       />
 
       {/* 人脸检测框 */}
@@ -141,7 +156,7 @@ export default function CameraPage() {
           {/* 闪光灯状态指示器 */}
           <View className="flex items-center gap-2 bg-black/30 px-4 py-2 rounded-full">
             <Text className="text-white text-sm block">
-              {flash === 'off' ? '闪光灯：关' : flash === 'on' ? '闪光灯：开' : '闪光灯：自动'}
+              {flash === 'off' ? '闪光灯：关' : flash === 'on' ? '闪光灯：开' : '闪光灯：常亮'}
             </Text>
           </View>
 
