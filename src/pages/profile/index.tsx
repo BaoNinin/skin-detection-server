@@ -1,5 +1,5 @@
 import { View, Text, Button, Image, Input } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import { Network } from '@/network'
 
@@ -20,6 +20,11 @@ export default function ProfilePage() {
   const [nickname, setNickname] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
 
+  // 页面显示时加载用户信息
+  useDidShow(() => {
+    loadUserInfo()
+  })
+
   useEffect(() => {
     loadUserInfo()
   }, [])
@@ -27,6 +32,7 @@ export default function ProfilePage() {
   const loadUserInfo = async () => {
     const userId = Taro.getStorageSync('userId')
     if (!userId) {
+      setUserInfo(null)
       return
     }
 
@@ -38,6 +44,8 @@ export default function ProfilePage() {
 
       if (res.data.code === 200) {
         setUserInfo(res.data.data)
+        // 同时更新本地存储
+        Taro.setStorageSync('userInfo', res.data.data)
       }
     } catch (err) {
       console.error('获取用户信息失败:', err)

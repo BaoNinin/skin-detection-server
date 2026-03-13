@@ -83,9 +83,26 @@ export default function AnalyzingPage() {
               ...result,
               imageUrl: path
             }
-          }).catch(err => {
-            console.error('保存历史记录失败:', err)
           })
+            .then(async () => {
+              // 保存历史记录成功后，更新用户信息
+              try {
+                const userRes = await Network.request({
+                  url: `/api/user/${userId}`,
+                  method: 'GET'
+                })
+
+                if (userRes.data.code === 200) {
+                  Taro.setStorageSync('userInfo', userRes.data.data)
+                  console.log('用户信息已更新，检测次数:', userRes.data.data.detectionCount)
+                }
+              } catch (err) {
+                console.error('更新用户信息失败:', err)
+              }
+            })
+            .catch(err => {
+              console.error('保存历史记录失败:', err)
+            })
         }
 
         Taro.redirectTo({
