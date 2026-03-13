@@ -46,7 +46,7 @@ export default function CameraPage() {
       quality: 'high',
       success: (res) => {
         console.log('拍照成功:', res.tempImagePath)
-        Taro.navigateTo({
+        Taro.redirectTo({
           url: `/pages/analyzing/index?imagePath=${encodeURIComponent(res.tempImagePath)}`
         })
       },
