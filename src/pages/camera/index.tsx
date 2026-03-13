@@ -19,7 +19,17 @@ export default function CameraPage() {
     const flashModes: Array<'off' | 'on' | 'auto'> = ['off', 'on', 'auto']
     const currentIndex = flashModes.indexOf(flash)
     const nextIndex = (currentIndex + 1) % flashModes.length
-    setFlash(flashModes[nextIndex])
+    const newFlash = flashModes[nextIndex]
+
+    setFlash(newFlash)
+
+    // 显示当前闪光灯状态
+    const statusText = newFlash === 'off' ? '闪光灯已关闭' : newFlash === 'on' ? '闪光灯已开启' : '闪光灯设为自动'
+    Taro.showToast({
+      title: statusText,
+      icon: 'none',
+      duration: 1500
+    })
   }
 
   const handleTakePhoto = () => {
@@ -120,12 +130,13 @@ export default function CameraPage() {
       {/* 顶部控制栏 */}
       <View className="absolute top-0 left-0 right-0 p-6">
         <View className="flex justify-between items-center">
-          <Button
+          {/* 取消按钮 */}
+          <View
             onClick={handleCancel}
-            className="bg-black/30 text-white border-0 w-10 h-10 flex items-center justify-center rounded-full"
+            className="bg-black/30 w-10 h-10 flex items-center justify-center rounded-full active:bg-black/50 transition-colors"
           >
-            ✕
-          </Button>
+            <Text className="text-white text-xl block">✕</Text>
+          </View>
 
           {/* 闪光灯状态指示器 */}
           <View className="flex items-center gap-2 bg-black/30 px-4 py-2 rounded-full">
@@ -134,12 +145,13 @@ export default function CameraPage() {
             </Text>
           </View>
 
-          <Button
+          {/* 闪光灯切换按钮 */}
+          <View
             onClick={handleSwitchFlash}
-            className="bg-black/30 text-white border-0 w-10 h-10 flex items-center justify-center rounded-full"
+            className="bg-black/30 w-10 h-10 flex items-center justify-center rounded-full active:bg-black/50 transition-colors"
           >
-            {flash === 'off' ? '🔴' : flash === 'on' ? '⚪' : '💡'}
-          </Button>
+            <Text className="text-xl block">{flash === 'off' ? '🔴' : flash === 'on' ? '⚪' : '💡'}</Text>
+          </View>
         </View>
       </View>
 
@@ -158,12 +170,12 @@ export default function CameraPage() {
         <View className="bg-gradient-to-t from-black/90 via-black/50 to-transparent pt-8 pb-12 px-6">
           <View className="flex items-center justify-between">
             {/* 切换摄像头按钮 */}
-            <Button
+            <View
               onClick={handleSwitchCamera}
-              className="bg-white/20 text-white border-0 w-14 h-14 flex items-center justify-center rounded-2xl"
+              className="bg-white/20 w-14 h-14 flex items-center justify-center rounded-2xl active:bg-white/30 transition-colors"
             >
               <Text className="text-2xl block">🔄</Text>
-            </Button>
+            </View>
 
             {/* 拍照按钮 */}
             <View
