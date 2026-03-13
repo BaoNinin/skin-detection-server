@@ -39,8 +39,8 @@ export default function AnalyzingPage() {
 
   const steps = scanSuccess
     ? [
-        { icon: '✅', text: '识别成功' },
         { icon: '🔌', text: '正在激活芯片...' },
+        { icon: '✅', text: '识别成功' },
         { icon: '⚡', text: '芯片激活中...' },
         { icon: '🔬', text: 'AI 正在分析肤质...' },
         { icon: '✨', text: '分析完成！' }
@@ -78,9 +78,21 @@ export default function AnalyzingPage() {
     if (isScanSuccess) {
       console.log('开始显示识别成功动画')
       setCurrentStep(0)
-      setPingScale(1)
+      setSpinRotation(0)
 
-      // Step 0: 识别成功 - ping动画
+      // Step 0: 激活芯片 - spin动画
+      const spinInterval = setInterval(() => {
+        setSpinRotation(prev => prev >= 360 ? 0 : prev + 15)
+      }, 50)
+
+      await sleep(2000)
+      clearInterval(spinInterval)
+      console.log('Step 0 完成，spin动画结束')
+
+      // Step 1: 识别成功 - ping动画
+      setCurrentStep(1)
+      console.log('currentStep:', 1)
+      setPingScale(1)
       const pingInterval = setInterval(() => {
         setPingScale(prev => {
           const newScale = prev >= 2 ? 1 : prev + 0.1
@@ -90,19 +102,7 @@ export default function AnalyzingPage() {
 
       await sleep(1000)
       clearInterval(pingInterval)
-      console.log('Step 0 完成，ping动画结束')
-
-      // Step 1: 激活芯片 - spin动画
-      setCurrentStep(1)
-      console.log('currentStep:', 1)
-      setSpinRotation(0)
-      const spinInterval = setInterval(() => {
-        setSpinRotation(prev => prev >= 360 ? 0 : prev + 15)
-      }, 50)
-
-      await sleep(2000)
-      clearInterval(spinInterval)
-      console.log('Step 1 完成，spin动画结束')
+      console.log('Step 1 完成，ping动画结束')
 
       // Step 2: 芯片激活 - pulse动画
       setCurrentStep(2)
@@ -226,18 +226,6 @@ export default function AnalyzingPage() {
           <View className="mb-8">
             {currentStep === 0 && (
               <View className="w-32 h-32 flex items-center justify-center relative">
-                <View
-                  className="absolute bg-green-100 rounded-full opacity-50 transition-all"
-                  style={{
-                    width: `${32 * pingScale}px`,
-                    height: `${32 * pingScale}px`
-                  }}
-                />
-                <Text className="text-6xl block z-10">✅</Text>
-              </View>
-            )}
-            {currentStep === 1 && (
-              <View className="w-32 h-32 flex items-center justify-center relative">
                 <View className="absolute w-32 h-32 border-4 border-rose-200 rounded-full" />
                 <View
                   className="absolute w-32 h-32 border-4 border-rose-400 rounded-t-full transition-all"
@@ -246,6 +234,18 @@ export default function AnalyzingPage() {
                   }}
                 />
                 <Text className="text-6xl block z-10">🔌</Text>
+              </View>
+            )}
+            {currentStep === 1 && (
+              <View className="w-32 h-32 flex items-center justify-center relative">
+                <View
+                  className="absolute bg-green-100 rounded-full opacity-50 transition-all"
+                  style={{
+                    width: `${32 * pingScale}px`,
+                    height: `${32 * pingScale}px`
+                  }}
+                />
+                <Text className="text-6xl block z-10">✅</Text>
               </View>
             )}
             {currentStep === 2 && (
