@@ -81,71 +81,102 @@ export default function CameraPage() {
   }
 
   return (
-    <View className="h-screen bg-black relative">
+    <View className="h-screen bg-black relative flex flex-col">
+      {/* 相机预览区域 */}
       <Camera
-        className="w-full h-full"
+        className="flex-1"
         devicePosition={devicePosition}
         mode="normal"
         flash={flash}
       />
 
-      <View className="absolute inset-0 flex items-center justify-center">
-        <View className="relative">
-          <View className="w-[280px] h-[360px] border-4 border-white/50 rounded-[50%] border-dashed" />
-          <View className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2">
-            <View className="w-6 h-6 border-t-4 border-l-4 border-rose-400 rounded-tl-lg" />
+      {/* 人脸检测框 */}
+      <View className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <View className="relative w-[300px] h-[400px]">
+          {/* 四个角落的装饰 */}
+          <View className="absolute top-0 left-0 w-16 h-16">
+            <View className="w-8 h-8 border-t-4 border-l-4 border-white rounded-tl-lg" />
           </View>
-          <View className="absolute top-0 right-0 translate-x-2 -translate-y-2">
-            <View className="w-6 h-6 border-t-4 border-r-4 border-rose-400 rounded-tr-lg" />
+          <View className="absolute top-0 right-0 w-16 h-16">
+            <View className="w-8 h-8 border-t-4 border-r-4 border-white rounded-tr-lg" />
           </View>
-          <View className="absolute bottom-0 left-0 -translate-x-2 translate-y-2">
-            <View className="w-6 h-6 border-b-4 border-l-4 border-rose-400 rounded-bl-lg" />
+          <View className="absolute bottom-0 left-0 w-16 h-16">
+            <View className="w-8 h-8 border-b-4 border-l-4 border-white rounded-bl-lg" />
           </View>
-          <View className="absolute bottom-0 right-0 translate-x-2 translate-y-2">
-            <View className="w-6 h-6 border-b-4 border-r-4 border-rose-400 rounded-br-lg" />
+          <View className="absolute bottom-0 right-0 w-16 h-16">
+            <View className="w-8 h-8 border-b-4 border-r-4 border-white rounded-br-lg" />
+          </View>
+
+          {/* 内部虚线框 */}
+          <View className="absolute inset-4 border-2 border-white/30 rounded-lg" />
+
+          {/* 中心提示点 */}
+          <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <View className="w-3 h-3 bg-white/50 rounded-full" />
           </View>
         </View>
       </View>
 
-      <View className="absolute top-0 left-0 right-0 p-4 flex justify-between items-start bg-gradient-to-b from-black/50 to-transparent">
-        <Button
-          onClick={handleCancel}
-          size="mini"
-          className="bg-white/20 text-white border-0"
-        >
-          ✕
-        </Button>
-        <Button
-          onClick={handleSwitchFlash}
-          size="mini"
-          className="bg-white/20 text-white border-0"
-        >
-          {flash === 'off' ? '⚫' : flash === 'on' ? '⚪' : '💡'}
-        </Button>
-      </View>
-
-      <View className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent pt-8 pb-12 px-4">
-        <Text className="text-white text-center text-sm mb-8 block">
-          请将面部对准框内，保持光线充足
-        </Text>
-
-        <View className="flex items-center justify-between px-4">
+      {/* 顶部控制栏 */}
+      <View className="absolute top-0 left-0 right-0 p-6">
+        <View className="flex justify-between items-center">
           <Button
-            onClick={handleSwitchCamera}
-            size="mini"
-            className="bg-white/20 text-white border-0 text-2xl w-12 h-12 flex items-center justify-center"
+            onClick={handleCancel}
+            className="bg-black/30 text-white border-0 w-10 h-10 flex items-center justify-center rounded-full"
           >
-            🔄
+            ✕
           </Button>
 
-          <View
-            onClick={handleTakePhoto}
-            className="w-20 h-20 bg-white rounded-full border-4 border-white/50 flex items-center justify-center shadow-lg"
-          >
-            <View className="w-16 h-16 bg-rose-400 rounded-full" />
+          {/* 闪光灯状态指示器 */}
+          <View className="flex items-center gap-2 bg-black/30 px-4 py-2 rounded-full">
+            <Text className="text-white text-sm block">
+              {flash === 'off' ? '闪光灯：关' : flash === 'on' ? '闪光灯：开' : '闪光灯：自动'}
+            </Text>
           </View>
 
-          <View className="w-12 h-12" />
+          <Button
+            onClick={handleSwitchFlash}
+            className="bg-black/30 text-white border-0 w-10 h-10 flex items-center justify-center rounded-full"
+          >
+            {flash === 'off' ? '🔴' : flash === 'on' ? '⚪' : '💡'}
+          </Button>
+        </View>
+      </View>
+
+      {/* 底部操作区域 */}
+      <View className="absolute bottom-0 left-0 right-0">
+        {/* 提示信息卡片 */}
+        <View className="mx-6 mb-6 bg-black/40 backdrop-blur-sm rounded-2xl p-4">
+          <View className="flex items-center justify-center gap-2">
+            <Text className="text-white text-sm text-center">
+              💡 请将面部对准框内，保持光线充足，表情自然
+            </Text>
+          </View>
+        </View>
+
+        {/* 操作按钮区域 */}
+        <View className="bg-gradient-to-t from-black/90 via-black/50 to-transparent pt-8 pb-12 px-6">
+          <View className="flex items-center justify-between">
+            {/* 切换摄像头按钮 */}
+            <Button
+              onClick={handleSwitchCamera}
+              className="bg-white/20 text-white border-0 w-14 h-14 flex items-center justify-center rounded-2xl"
+            >
+              <Text className="text-2xl block">🔄</Text>
+            </Button>
+
+            {/* 拍照按钮 */}
+            <View
+              onClick={handleTakePhoto}
+              className="relative w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform"
+            >
+              <View className="absolute inset-0 bg-white rounded-full" />
+              <View className="w-20 h-20 bg-rose-400 rounded-full border-4 border-white" />
+            </View>
+
+            {/* 占位，保持布局对称 */}
+            <View className="w-14 h-14" />
+          </View>
         </View>
       </View>
     </View>
