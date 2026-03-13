@@ -2,8 +2,8 @@
   "version": "2.0",
   "env": {
     "variables": {
-      "COZE_SUPABASE_URL": "请替换为你的 Supabase URL",
-      "COZE_SUPABASE_ANON_KEY": "请替换为你的 Supabase Anonymous Key",
+      "COZE_SUPABASE_URL": "https://pacqfzvxkiobtxbjubil.supabase.co",
+      "COZE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhY3FmenZ4a2lvYnR4Ymp1YmlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzODM1ODYsImV4cCI6MjA4ODk1OTU4Nn0.CZoSjahWflEy3vhj_Ya9ddYhie9BtmvRxhNaN8JdZs4",
       "WECHAT_APPID": "wxa1c57025b508e913",
       "WECHAT_APPSECRET": "056dc956b934bf58fc659c4b08bfa16e",
       "NODE_ENV": "production",
