@@ -53,9 +53,10 @@ export default function AnalyzingPage() {
   useEffect(() => {
     const params = Taro.getCurrentInstance().router?.params
     if (params?.imagePath) {
+      const isScanSuccess = params?.scanSuccess === 'true'
       setImagePath(decodeURIComponent(params.imagePath))
-      setScanSuccess(params?.scanSuccess === 'true')
-      startAnalysis(decodeURIComponent(params.imagePath))
+      setScanSuccess(isScanSuccess)
+      startAnalysis(decodeURIComponent(params.imagePath), isScanSuccess)
     } else {
       Taro.showToast({
         title: '图片参数错误',
@@ -67,24 +68,33 @@ export default function AnalyzingPage() {
     }
   }, [])
 
-  const startAnalysis = async (path: string) => {
+  const startAnalysis = async (path: string, isScanSuccess: boolean) => {
+    console.log('=== 开始分析 ===')
+    console.log('isScanSuccess:', isScanSuccess)
+    console.log('scanSuccess状态:', scanSuccess)
     setAnalyzing(true)
 
     // 如果是扫描成功，显示识别成功动画
-    if (scanSuccess) {
+    if (isScanSuccess) {
+      console.log('开始显示识别成功动画')
       setCurrentStep(0)
       setPingScale(1)
 
       // Step 0: 识别成功 - ping动画
       const pingInterval = setInterval(() => {
-        setPingScale(prev => prev >= 2 ? 1 : prev + 0.1)
+        setPingScale(prev => {
+          const newScale = prev >= 2 ? 1 : prev + 0.1
+          return newScale
+        })
       }, 50)
 
       await sleep(1000)
       clearInterval(pingInterval)
+      console.log('Step 0 完成，ping动画结束')
 
       // Step 1: 激活芯片 - spin动画
       setCurrentStep(1)
+      console.log('currentStep:', 1)
       setSpinRotation(0)
       const spinInterval = setInterval(() => {
         setSpinRotation(prev => prev >= 360 ? 0 : prev + 15)
@@ -92,9 +102,11 @@ export default function AnalyzingPage() {
 
       await sleep(2000)
       clearInterval(spinInterval)
+      console.log('Step 1 完成，spin动画结束')
 
       // Step 2: 芯片激活 - pulse动画
       setCurrentStep(2)
+      console.log('currentStep:', 2)
       setPulseOpacity(1)
       const pulseInterval = setInterval(() => {
         setPulseOpacity(prev => prev <= 0.3 ? 1 : prev - 0.1)
@@ -102,6 +114,7 @@ export default function AnalyzingPage() {
 
       await sleep(2000)
       clearInterval(pulseInterval)
+      console.log('Step 2 完成，pulse动画结束')
     } else {
       // 如果不是扫描成功，跳过识别动画，直接开始分析
       setCurrentStep(3)
@@ -209,7 +222,7 @@ export default function AnalyzingPage() {
     <View className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
       <View className="flex flex-col items-center justify-center px-8 py-12">
         {/* 识别成功动画 */}
-        {scanSuccess && currentStep < 3 && (
+        {currentStep < 3 ? (
           <View className="mb-8">
             {currentStep === 0 && (
               <View className="w-32 h-32 flex items-center justify-center relative">
@@ -247,7 +260,7 @@ export default function AnalyzingPage() {
               </View>
             )}
           </View>
-        )}
+        ) : null}
 
         {/* 上传/分析时的图片展示 */}
         {currentStep >= 3 && (
@@ -286,7 +299,7 @@ export default function AnalyzingPage() {
 
         {/* 预计时间 */}
         <Text className="text-sm text-gray-500 text-center block">
-          {scanSuccess && currentStep < 3
+          {currentStep < 3
             ? '激活芯片中，请稍候...'
             : '预计等待时间 5-10 秒'
           }
