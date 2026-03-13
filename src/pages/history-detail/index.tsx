@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from '@tarojs/components'
+import { View, Text, ScrollView, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 
@@ -63,13 +63,36 @@ export default function HistoryDetailPage() {
     return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
   }
 
+  const handleViewRecommendations = () => {
+    if (!record) return
+
+    // 将当前记录保存到 storage，推荐页面可以根据这些数据推荐产品
+    Taro.setStorageSync('historyRecordForRecommend', {
+      skinType: record.skin_type,
+      concerns: record.concerns,
+      moisture: record.moisture,
+      oiliness: record.oiliness,
+      sensitivity: record.sensitivity,
+      acne: record.acne,
+      wrinkles: record.wrinkles,
+      spots: record.spots,
+      pores: record.pores,
+      blackheads: record.blackheads
+    })
+
+    // 跳转到推荐页面（使用 redirectTo 替换当前页面）
+    Taro.redirectTo({
+      url: '/pages/recommend/index'
+    })
+  }
+
   if (type === 'detail' && record) {
     const score = calculateScore(record)
 
     return (
-      <View className="min-h-screen bg-rose-50 pb-6">
-        <ScrollView scrollY>
-          <View className="p-4">
+      <View className="min-h-screen bg-rose-50">
+        <ScrollView scrollY className="h-[calc(100vh-80px)]">
+          <View className="p-4 pb-24">
             <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
               <Text className="text-lg font-semibold text-gray-800 mb-2 block">检测时间</Text>
               <Text className="text-sm text-gray-500 block">{formatDate(record.created_at)}</Text>
@@ -149,6 +172,16 @@ export default function HistoryDetailPage() {
             )}
           </View>
         </ScrollView>
+
+        {/* 固定底部按钮区域 */}
+        <View className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4">
+          <Button
+            onClick={handleViewRecommendations}
+            className="w-full bg-rose-400 text-white rounded-full py-3 font-medium"
+          >
+            查看推荐产品
+          </Button>
+        </View>
       </View>
     )
   }

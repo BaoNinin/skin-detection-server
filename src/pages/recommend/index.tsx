@@ -37,7 +37,10 @@ export default function RecommendPage() {
   }, [selectedCategory, recommendations])
 
   const loadRecommendations = async () => {
-    const skinData = Taro.getStorageSync('skinAnalysisResult')
+    // 优先使用历史记录数据，如果没有则使用最新的检测结果
+    const historyData = Taro.getStorageSync('historyRecordForRecommend')
+    const skinData = historyData || Taro.getStorageSync('skinAnalysisResult')
+
     if (!skinData) {
       Taro.showToast({
         title: '请先进行皮肤检测',
@@ -56,6 +59,16 @@ export default function RecommendPage() {
       params.append('moisture', String(skinData.moisture))
       params.append('oiliness', String(skinData.oiliness))
       params.append('sensitivity', String(skinData.sensitivity))
+
+      // 如果有历史记录数据，也传递更多指标
+      if (historyData) {
+        if (historyData.acne !== undefined) params.append('acne', String(historyData.acne))
+        if (historyData.wrinkles !== undefined) params.append('wrinkles', String(historyData.wrinkles))
+        if (historyData.spots !== undefined) params.append('spots', String(historyData.spots))
+        if (historyData.pores !== undefined) params.append('pores', String(historyData.pores))
+        if (historyData.blackheads !== undefined) params.append('blackheads', String(historyData.blackheads))
+      }
+
       if (skinData.concerns && skinData.concerns.length > 0) {
         params.append('concerns', skinData.concerns.join(','))
       }
@@ -69,8 +82,9 @@ export default function RecommendPage() {
         setRecommendations(res.data.data)
         setFilteredProducts(res.data.data)
 
+        const recordDate = historyData ? '历史检测' : '本次检测'
         setSkinSummary(
-          `针对您的${skinData.skinType}，${
+          `基于${recordDate}结果，针对您的${skinData.skinType}，${
             skinData.concerns && skinData.concerns.length > 0
               ? skinData.concerns.join('、')
               : '无明显问题'
