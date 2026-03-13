@@ -12,17 +12,18 @@ export class HistoryService {
 
   async getHistory(userId?: number) {
     try {
-      let query = this.client
-        .from('skin_analysis_history')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50);
-
-      if (userId) {
-        query = query.eq('user_id', userId);
+      // 如果没有提供 userId，返回空数组而不是所有记录
+      if (!userId) {
+        console.warn('历史记录查询未提供用户ID，返回空数组');
+        return [];
       }
 
-      const { data, error } = await query;
+      const { data, error } = await this.client
+        .from('skin_analysis_history')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(50);
 
       if (error) {
         console.error('查询历史记录失败:', error);

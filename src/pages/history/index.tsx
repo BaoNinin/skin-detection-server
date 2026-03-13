@@ -34,17 +34,40 @@ export default function HistoryPage() {
 
   const loadHistory = async () => {
     setLoading(true)
-    try {
-      const userId = Taro.getStorageSync('userId')
-      const url = userId ? `/api/skin/history?userId=${userId}` : '/api/skin/history'
 
+    const userId = Taro.getStorageSync('userId')
+    if (!userId) {
+      console.warn('用户未登录，跳转到登录页面')
+      Taro.showModal({
+        title: '提示',
+        content: '请先登录以查看您的检测记录',
+        showCancel: false,
+        success: () => {
+          Taro.switchTab({ url: '/pages/profile/index' })
+        }
+      })
+      setLoading(false)
+      return
+    }
+
+    try {
       const res = await Network.request({
-        url,
+        url: `/api/skin/history?userId=${userId}`,
         method: 'GET'
       })
 
       if (res.data.code === 200) {
         setHistoryList(res.data.data)
+      } else if (res.data.code === 401) {
+        // 401 未登录，跳转到登录页面
+        Taro.showModal({
+          title: '提示',
+          content: '登录已过期，请重新登录',
+          showCancel: false,
+          success: () => {
+            Taro.switchTab({ url: '/pages/profile/index' })
+          }
+        })
       } else {
         Taro.showToast({
           title: res.data.msg || '加载失败',

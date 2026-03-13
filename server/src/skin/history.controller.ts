@@ -9,8 +9,17 @@ export class HistoryController {
   async getHistory(@Query('userId') userId?: string) {
     console.log('收到历史记录查询请求', userId ? `用户ID: ${userId}` : '');
 
+    // 如果没有提供 userId，返回错误提示
+    if (!userId) {
+      return {
+        code: 401,
+        msg: '请先登录',
+        data: []
+      };
+    }
+
     try {
-      const result = await this.skinService.getHistory(userId ? parseInt(userId) : undefined);
+      const result = await this.skinService.getHistory(parseInt(userId));
 
       return {
         code: 200,

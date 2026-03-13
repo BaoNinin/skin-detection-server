@@ -267,7 +267,7 @@ export default function ProfilePage() {
             <View className="p-4">
               <Text className="text-base text-gray-800 block">会员等级</Text>
               <Text className="text-sm text-gray-500 block">
-                {userInfo.detectionCount >= 10 ? '高级会员' : '普通会员'}
+                {userInfo.detectionCount >= 50 ? '高级会员' : '普通会员'}
               </Text>
             </View>
           </View>
