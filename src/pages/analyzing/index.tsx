@@ -29,7 +29,7 @@ export default function AnalyzingPage() {
 
   // AI分析时的加载动画
   useEffect(() => {
-    if (currentStep >= 3 && analyzing) {
+    if (currentStep === 2 && analyzing) {
       const interval = setInterval(() => {
         setLoaderRotation(prev => prev >= 360 ? 0 : prev + 15)
       }, 50)
@@ -41,8 +41,8 @@ export default function AnalyzingPage() {
     ? [
         { icon: '🔌', text: '正在激活芯片...' },
         { icon: '✅', text: '识别成功' },
-        { icon: '⚡', text: '芯片激活中...' },
         { icon: '🔬', text: 'AI 正在分析肤质...' },
+        { icon: '⚡', text: '芯片激活中...' },
         { icon: '✨', text: '分析完成！' }
       ]
     : [
@@ -104,25 +104,17 @@ export default function AnalyzingPage() {
       clearInterval(pingInterval)
       console.log('Step 1 完成，ping动画结束')
 
-      // Step 2: 芯片激活 - pulse动画
+      // Step 2: AI分析
       setCurrentStep(2)
-      console.log('currentStep:', 2)
-      setPulseOpacity(1)
-      const pulseInterval = setInterval(() => {
-        setPulseOpacity(prev => prev <= 0.3 ? 1 : prev - 0.1)
-      }, 100)
-
-      await sleep(2000)
-      clearInterval(pulseInterval)
-      console.log('Step 2 完成，pulse动画结束')
+      console.log('currentStep:', 2, '开始AI分析')
     } else {
       // 如果不是扫描成功，跳过识别动画，直接开始分析
-      setCurrentStep(3)
+      setCurrentStep(2)
       await sleep(500)
     }
 
-    setCurrentStep(3)
-    await sleep(1000) // 开始AI分析
+    // Step 2: AI正在分析肤质 - 执行实际的图片上传和分析
+    await sleep(500)
 
     try {
       const userId = Taro.getStorageSync('userId')
@@ -137,9 +129,6 @@ export default function AnalyzingPage() {
 
       const data = JSON.parse(res.data)
       if (data.code === 200) {
-        setCurrentStep(4)
-        await sleep(1000)
-
         const result = data.data as SkinAnalysisResult
         Taro.setStorageSync('skinAnalysisResult', result)
         Taro.setStorageSync('currentImagePath', path)
@@ -173,6 +162,25 @@ export default function AnalyzingPage() {
               console.error('保存历史记录失败:', err)
             })
         }
+
+        // 如果是扫描成功，显示芯片激活动画
+        if (isScanSuccess) {
+          // Step 3: 芯片激活中 - pulse动画
+          setCurrentStep(3)
+          console.log('currentStep:', 3, '开始芯片激活动画')
+          setPulseOpacity(1)
+          const pulseInterval = setInterval(() => {
+            setPulseOpacity(prev => prev <= 0.3 ? 1 : prev - 0.1)
+          }, 100)
+
+          await sleep(2000)
+          clearInterval(pulseInterval)
+          console.log('Step 3 完成，pulse动画结束')
+        }
+
+        // Step 4: 分析完成
+        setCurrentStep(4)
+        await sleep(1000)
 
         Taro.redirectTo({
           url: '/pages/result/index'
@@ -222,7 +230,7 @@ export default function AnalyzingPage() {
     <View className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
       <View className="flex flex-col items-center justify-center px-8 py-12">
         {/* 识别成功动画 */}
-        {currentStep < 3 ? (
+        {currentStep < 2 ? (
           <View className="mb-8">
             {currentStep === 0 && (
               <View className="w-32 h-32 flex items-center justify-center relative">
@@ -248,22 +256,23 @@ export default function AnalyzingPage() {
                 <Text className="text-6xl block z-10">✅</Text>
               </View>
             )}
-            {currentStep === 2 && (
-              <View className="w-32 h-32 flex items-center justify-center relative">
-                <View
-                  className="absolute w-32 h-32 bg-gradient-to-r from-yellow-200 to-yellow-400 rounded-full transition-all"
-                  style={{
-                    opacity: pulseOpacity
-                  }}
-                />
-                <Text className="text-6xl block z-10">⚡</Text>
-              </View>
-            )}
+          </View>
+        ) : currentStep === 3 ? (
+          <View className="mb-8">
+            <View className="w-32 h-32 flex items-center justify-center relative">
+              <View
+                className="absolute w-32 h-32 bg-gradient-to-r from-yellow-200 to-yellow-400 rounded-full transition-all"
+                style={{
+                  opacity: pulseOpacity
+                }}
+              />
+              <Text className="text-6xl block z-10">⚡</Text>
+            </View>
           </View>
         ) : null}
 
         {/* 上传/分析时的图片展示 */}
-        {currentStep >= 3 && (
+        {currentStep === 2 && (
           <View className="mb-8">
             {imagePath && (
               <Image
@@ -276,7 +285,7 @@ export default function AnalyzingPage() {
         )}
 
         {/* 加载动画 */}
-        {currentStep >= 3 && (
+        {currentStep === 2 && (
           <View className="w-16 h-16 border-4 border-rose-200 border-t-rose-400 rounded-full mb-6 transition-all" style={{ transform: `rotate(${loaderRotation}deg)` }} />
         )}
 
@@ -299,8 +308,12 @@ export default function AnalyzingPage() {
 
         {/* 预计时间 */}
         <Text className="text-sm text-gray-500 text-center block">
-          {currentStep < 3
+          {currentStep < 2
             ? '激活芯片中，请稍候...'
+            : currentStep === 2
+            ? 'AI分析中，请稍候...'
+            : currentStep === 3
+            ? '芯片激活中，请稍候...'
             : '预计等待时间 5-10 秒'
           }
         </Text>
