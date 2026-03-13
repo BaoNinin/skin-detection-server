@@ -41,62 +41,62 @@ export default function ProfilePage() {
     }
   }
 
-  const handleLogin = async () => {
-    setLoading(true)
-    try {
-      // 获取登录 code
-      const loginRes = await Taro.login()
-      console.log('登录 code:', loginRes.code)
+  const handleGetUserInfo = async (e: any) => {
+    console.log('获取用户信息事件:', e)
 
-      // 获取用户信息（新版授权方式）
-      let userProfile: { nickName: string; avatarUrl: string } | null = null
+    // 检查用户是否授权
+    if (e.detail.userInfo) {
+      // 用户已授权
+      setLoading(true)
       try {
-        const profileRes = await Taro.getUserProfile({
-          desc: '用于完善用户资料'
-        })
-        userProfile = {
-          nickName: profileRes.userInfo.nickName,
-          avatarUrl: profileRes.userInfo.avatarUrl
+        const loginRes = await Taro.login()
+        console.log('登录 code:', loginRes.code)
+
+        const userProfile = {
+          nickName: e.detail.userInfo.nickName,
+          avatarUrl: e.detail.userInfo.avatarUrl
         }
         console.log('用户信息:', userProfile)
-      } catch (err) {
-        console.log('用户取消授权或获取信息失败')
-      }
 
-      // 调用后端登录接口
-      const res = await Network.request({
-        url: '/api/user/login',
-        method: 'POST',
-        data: {
-          code: loginRes.code,
-          userInfo: userProfile
-        }
-      })
-
-      if (res.data.code === 200) {
-        // 保存用户信息
-        Taro.setStorageSync('userId', res.data.data.id)
-        Taro.setStorageSync('userInfo', res.data.data)
-        setUserInfo(res.data.data)
-
-        Taro.showToast({
-          title: '登录成功',
-          icon: 'success'
+        const res = await Network.request({
+          url: '/api/user/login',
+          method: 'POST',
+          data: {
+            code: loginRes.code,
+            userInfo: userProfile
+          }
         })
-      } else {
+
+        if (res.data.code === 200) {
+          Taro.setStorageSync('userId', res.data.data.id)
+          Taro.setStorageSync('userInfo', res.data.data)
+          setUserInfo(res.data.data)
+
+          Taro.showToast({
+            title: '登录成功',
+            icon: 'success'
+          })
+        } else {
+          Taro.showToast({
+            title: res.data.msg || '登录失败',
+            icon: 'none'
+          })
+        }
+      } catch (err) {
+        console.error('登录失败:', err)
         Taro.showToast({
-          title: res.data.msg || '登录失败',
+          title: '登录失败',
           icon: 'none'
         })
+      } finally {
+        setLoading(false)
       }
-    } catch (err) {
-      console.error('登录失败:', err)
+    } else {
+      // 用户拒绝授权
       Taro.showToast({
-        title: '登录失败',
+        title: '您拒绝了授权，无法登录',
         icon: 'none'
       })
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -179,13 +179,20 @@ export default function ProfilePage() {
           </View>
           <Text className="text-lg font-semibold text-gray-800 mb-2 block">未登录</Text>
           <Text className="text-sm text-gray-500 mb-6 block">登录后可查看检测记录和个性化推荐</Text>
-          <Button
-            onClick={handleLogin}
-            disabled={loading}
-            className="bg-rose-400 text-white rounded-xl w-full"
-          >
-            {loading ? '登录中...' : '微信授权登录'}
-          </Button>
+
+          {loading ? (
+            <View className="flex items-center justify-center py-3">
+              <Text className="text-base text-gray-600 block">登录中...</Text>
+            </View>
+          ) : (
+            <Button
+              openType="getUserInfo"
+              onGetUserInfo={handleGetUserInfo}
+              className="bg-rose-400 text-white rounded-xl w-full"
+            >
+              微信授权登录
+            </Button>
+          )}
         </View>
       )}
     </View>
