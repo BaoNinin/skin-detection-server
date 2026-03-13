@@ -28,12 +28,10 @@ export default function AnalyzingPage() {
         { icon: '✅', text: '识别成功' },
         { icon: '🔌', text: '正在激活芯片...' },
         { icon: '⚡', text: '芯片激活中...' },
-        { icon: '📤', text: '正在上传图片...' },
         { icon: '🔬', text: 'AI 正在分析肤质...' },
         { icon: '✨', text: '分析完成！' }
       ]
     : [
-        { icon: '📤', text: '正在上传图片...' },
         { icon: '🔬', text: 'AI 正在分析肤质...' },
         { icon: '✨', text: '分析完成！' }
       ]
@@ -67,13 +65,13 @@ export default function AnalyzingPage() {
       setCurrentStep(2)
       await sleep(2000) // 芯片激活动画
     } else {
-      // 如果不是扫描成功，跳过识别动画
+      // 如果不是扫描成功，跳过识别动画，直接开始分析
       setCurrentStep(3)
       await sleep(500)
     }
 
     setCurrentStep(3)
-    await sleep(1000) // 开始上传
+    await sleep(1000) // 开始AI分析
 
     try {
       const userId = Taro.getStorageSync('userId')
