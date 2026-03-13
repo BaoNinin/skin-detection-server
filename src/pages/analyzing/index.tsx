@@ -55,10 +55,14 @@ export default function AnalyzingPage() {
     setCurrentStep(2)
 
     try {
+      const userId = Taro.getStorageSync('userId')
       const res = await Network.uploadFile({
         url: '/api/skin/analyze',
         filePath: path,
-        name: 'image'
+        name: 'image',
+        formData: {
+          userId: String(userId)
+        }
       })
 
       const data = JSON.parse(res.data)
@@ -70,13 +74,19 @@ export default function AnalyzingPage() {
         Taro.setStorageSync('skinAnalysisResult', result)
         Taro.setStorageSync('currentImagePath', path)
 
-        Network.request({
-          url: '/api/skin/history',
-          method: 'POST',
-          data: result
-        }).catch(err => {
-          console.error('保存历史记录失败:', err)
-        })
+        if (userId) {
+          Network.request({
+            url: '/api/skin/history',
+            method: 'POST',
+            data: {
+              userId,
+              ...result,
+              imageUrl: path
+            }
+          }).catch(err => {
+            console.error('保存历史记录失败:', err)
+          })
+        }
 
         Taro.redirectTo({
           url: '/pages/result/index'

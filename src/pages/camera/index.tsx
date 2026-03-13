@@ -25,6 +25,22 @@ export default function CameraPage() {
   const handleTakePhoto = () => {
     if (!isWeapp) return
 
+    const userId = Taro.getStorageSync('userId')
+    if (!userId) {
+      Taro.showModal({
+        title: '提示',
+        content: '请先登录后再进行检测',
+        success: (res) => {
+          if (res.confirm) {
+            Taro.switchTab({
+              url: '/pages/profile/index'
+            })
+          }
+        }
+      })
+      return
+    }
+
     const ctx = Taro.createCameraContext()
     ctx.takePhoto({
       quality: 'high',

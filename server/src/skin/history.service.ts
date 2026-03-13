@@ -1,21 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { getSupabaseClient } from '@/storage/database/supabase-client';
+import { UserService } from '@/user/user.service';
 
 @Injectable()
 export class HistoryService {
   private client;
 
-  constructor() {
+  constructor(private readonly userService: UserService) {
     this.client = getSupabaseClient();
   }
 
-  async getHistory() {
+  async getHistory(userId?: number) {
     try {
-      const { data, error } = await this.client
+      let query = this.client
         .from('skin_analysis_history')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(50);
+
+      if (userId) {
+        query = query.eq('user_id', userId);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error('查询历史记录失败:', error);
@@ -30,6 +37,7 @@ export class HistoryService {
   }
 
   async saveHistory(record: {
+    userId: number;
     skinType: string;
     concerns: string[];
     moisture: number;
@@ -42,6 +50,7 @@ export class HistoryService {
       const { data, error } = await this.client
         .from('skin_analysis_history')
         .insert({
+          user_id: record.userId,
           skin_type: record.skinType,
           concerns: record.concerns || [],
           moisture: record.moisture,
@@ -57,6 +66,9 @@ export class HistoryService {
         console.error('保存历史记录失败:', error);
         throw error;
       }
+
+      // 增加用户的检测次数
+      await this.userService.incrementDetectionCount(record.userId);
 
       return data;
     } catch (error) {

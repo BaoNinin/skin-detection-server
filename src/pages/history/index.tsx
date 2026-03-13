@@ -35,8 +35,11 @@ export default function HistoryPage() {
   const loadHistory = async () => {
     setLoading(true)
     try {
+      const userId = Taro.getStorageSync('userId')
+      const url = userId ? `/api/skin/history?userId=${userId}` : '/api/skin/history'
+
       const res = await Network.request({
-        url: '/api/skin/history',
+        url,
         method: 'GET'
       })
 
@@ -177,13 +180,28 @@ export default function HistoryPage() {
           <View className="flex flex-col items-center justify-center py-20 px-4">
             <Text className="text-6xl mb-4 block">📋</Text>
             <Text className="text-base text-gray-400 text-center block">暂无检测记录</Text>
-            <Text className="text-sm text-gray-400 text-center mt-2 block">点击下方按钮开始您的第一次检测</Text>
-            <Button
-              onClick={handleGoToDetect}
-              className="bg-rose-400 text-white rounded-full py-3 px-8 font-medium mt-6"
-            >
-              开始检测
-            </Button>
+
+            {!Taro.getStorageSync('userId') ? (
+              <>
+                <Text className="text-sm text-gray-400 text-center mt-2 block">请先登录以查看您的检测记录</Text>
+                <Button
+                  onClick={() => Taro.switchTab({ url: '/pages/profile/index' })}
+                  className="bg-rose-400 text-white rounded-full py-3 px-8 font-medium mt-6"
+                >
+                  去登录
+                </Button>
+              </>
+            ) : (
+              <>
+                <Text className="text-sm text-gray-400 text-center mt-2 block">点击下方按钮开始您的第一次检测</Text>
+                <Button
+                  onClick={handleGoToDetect}
+                  className="bg-rose-400 text-white rounded-full py-3 px-8 font-medium mt-6"
+                >
+                  开始检测
+                </Button>
+              </>
+            )}
           </View>
         )}
 

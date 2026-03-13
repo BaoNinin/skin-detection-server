@@ -114,11 +114,12 @@ export class SkinService {
     return this.productService.recommendProducts(skinData);
   }
 
-  async getHistory() {
-    return this.historyService.getHistory();
+  async getHistory(userId?: number) {
+    return this.historyService.getHistory(userId);
   }
 
   async saveHistory(record: {
+    userId: number;
     skinType: string;
     concerns: string[];
     moisture: number;
