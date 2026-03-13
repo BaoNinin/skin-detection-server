@@ -1,0 +1,33 @@
+{
+  "version": "2.0",
+  "env": {
+    "variables": {
+      "COZE_SUPABASE_URL": "请替换为你的 Supabase URL",
+      "COZE_SUPABASE_ANON_KEY": "请替换为你的 Supabase Anonymous Key",
+      "WECHAT_APPID": "wxa1c57025b508e913",
+      "WECHAT_APPSECRET": "056dc956b934bf58fc659c4b08bfa16e",
+      "NODE_ENV": "production",
+      "PORT": "3000"
+    }
+  },
+  "services": [
+    {
+      "name": "skin-analysis-backend",
+      "type": "web",
+      "containerPort": 3000,
+      "cpu": 0.5,
+      "memory": 1,
+      "minReplicas": 0,
+      "maxReplicas": 10,
+      "envVariables": {
+        "COZE_SUPABASE_URL": "${COZE_SUPABASE_URL}",
+        "COZE_SUPABASE_ANON_KEY": "${COZE_SUPABASE_ANON_KEY}",
+        "WECHAT_APPID": "${WECHAT_APPID}",
+        "WECHAT_APPSECRET": "${WECHAT_APPSECRET}",
+        "NODE_ENV": "${NODE_ENV}",
+        "PORT": "${PORT}"
+      },
+      "dockerfile": "./Dockerfile"
+    }
+  ]
+}
