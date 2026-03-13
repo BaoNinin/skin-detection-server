@@ -1,4 +1,4 @@
-import { View, Text, Button, Image } from '@tarojs/components'
+import { View, Text, Button, Image, Input } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import { Network } from '@/network'
@@ -16,6 +16,9 @@ interface UserInfo {
 export default function ProfilePage() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
   const [loading, setLoading] = useState(false)
+  const [showEditProfile, setShowEditProfile] = useState(false)
+  const [nickname, setNickname] = useState('')
+  const [avatarUrl, setAvatarUrl] = useState('')
 
   useEffect(() => {
     loadUserInfo()
@@ -41,60 +44,90 @@ export default function ProfilePage() {
     }
   }
 
-  const handleGetUserInfo = async (e: any) => {
-    console.log('获取用户信息事件:', e)
+  const handleLogin = async () => {
+    setLoading(true)
+    try {
+      const loginRes = await Taro.login()
+      console.log('登录 code:', loginRes.code)
 
-    // 检查用户是否授权
-    if (e.detail.userInfo) {
-      // 用户已授权
-      setLoading(true)
-      try {
-        const loginRes = await Taro.login()
-        console.log('登录 code:', loginRes.code)
-
-        const userProfile = {
-          nickName: e.detail.userInfo.nickName,
-          avatarUrl: e.detail.userInfo.avatarUrl
+      const res = await Network.request({
+        url: '/api/user/login',
+        method: 'POST',
+        data: {
+          code: loginRes.code,
+          userInfo: null // 暂时不获取用户信息
         }
-        console.log('用户信息:', userProfile)
+      })
 
-        const res = await Network.request({
-          url: '/api/user/login',
-          method: 'POST',
-          data: {
-            code: loginRes.code,
-            userInfo: userProfile
-          }
-        })
+      if (res.data.code === 200) {
+        const userData = res.data.data
+        Taro.setStorageSync('userId', userData.id)
+        Taro.setStorageSync('userInfo', userData)
+        setUserInfo(userData)
 
-        if (res.data.code === 200) {
-          Taro.setStorageSync('userId', res.data.data.id)
-          Taro.setStorageSync('userInfo', res.data.data)
-          setUserInfo(res.data.data)
-
-          Taro.showToast({
-            title: '登录成功',
-            icon: 'success'
-          })
-        } else {
-          Taro.showToast({
-            title: res.data.msg || '登录失败',
-            icon: 'none'
-          })
-        }
-      } catch (err) {
-        console.error('登录失败:', err)
         Taro.showToast({
-          title: '登录失败',
+          title: '登录成功',
+          icon: 'success'
+        })
+      } else {
+        Taro.showToast({
+          title: res.data.msg || '登录失败',
           icon: 'none'
         })
-      } finally {
-        setLoading(false)
       }
-    } else {
-      // 用户拒绝授权
+    } catch (err) {
+      console.error('登录失败:', err)
       Taro.showToast({
-        title: '您拒绝了授权，无法登录',
+        title: '登录失败',
+        icon: 'none'
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleChooseAvatar = (e: any) => {
+    console.log('选择头像:', e.detail.avatarUrl)
+    setAvatarUrl(e.detail.avatarUrl)
+  }
+
+  const handleSaveProfile = async () => {
+    if (!nickname.trim()) {
+      Taro.showToast({
+        title: '请输入昵称',
+        icon: 'none'
+      })
+      return
+    }
+
+    try {
+      const userId = Taro.getStorageSync('userId')
+      const res = await Network.request({
+        url: `/api/user/${userId}`,
+        method: 'PUT',
+        data: {
+          nickname: nickname.trim(),
+          avatarUrl: avatarUrl || null
+        }
+      })
+
+      if (res.data.code === 200) {
+        setUserInfo(res.data.data)
+        setShowEditProfile(false)
+        Taro.showToast({
+          title: '保存成功',
+          icon: 'success'
+        })
+      } else {
+        Taro.showToast({
+          title: res.data.msg || '保存失败',
+          icon: 'none'
+        })
+      }
+    } catch (err) {
+      console.error('保存失败:', err)
+      Taro.showToast({
+        title: '保存失败',
         icon: 'none'
       })
     }
@@ -122,29 +155,97 @@ export default function ProfilePage() {
     <View className="min-h-screen bg-rose-50 p-4">
       <Text className="text-2xl font-bold text-gray-800 mb-6 block">我的</Text>
 
-      {userInfo ? (
+      {showEditProfile ? (
+        <View className="bg-white rounded-2xl p-6 shadow-sm">
+          <Text className="text-xl font-semibold text-gray-800 mb-6 block text-center">完善个人信息</Text>
+
+          <View className="flex flex-col items-center mb-6">
+            <View className="relative">
+              {avatarUrl ? (
+                <Image
+                  src={avatarUrl}
+                  mode="aspectFill"
+                  className="w-24 h-24 rounded-full"
+                />
+              ) : (
+                <View className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                  <Text className="text-4xl">👤</Text>
+                </View>
+              )}
+              <View className="absolute bottom-0 right-0">
+                <Button
+                  openType="chooseAvatar"
+                  onChooseAvatar={handleChooseAvatar}
+                  size="mini"
+                  className="rounded-full bg-rose-400 text-white border-0"
+                >
+                  📷
+                </Button>
+              </View>
+            </View>
+          </View>
+
+          <View className="bg-gray-50 rounded-xl px-4 py-3 mb-4">
+            <Text className="text-sm text-gray-500 block mb-2">昵称</Text>
+            <Input
+              type="nickname"
+              value={nickname}
+              onInput={(e) => setNickname(e.detail.value)}
+              placeholder="请输入您的昵称"
+              className="w-full bg-transparent"
+              maxlength={20}
+            />
+          </View>
+
+          <View className="flex gap-3">
+            <Button
+              onClick={() => setShowEditProfile(false)}
+              className="flex-1 bg-gray-200 text-gray-700 rounded-xl"
+            >
+              取消
+            </Button>
+            <Button
+              onClick={handleSaveProfile}
+              className="flex-1 bg-rose-400 text-white rounded-xl"
+            >
+              保存
+            </Button>
+          </View>
+        </View>
+      ) : userInfo ? (
         <>
           <View className="bg-white rounded-2xl p-5 shadow-sm mb-4">
-            <View className="flex items-center">
-              <View className="w-16 h-16 bg-rose-200 rounded-full flex items-center justify-center mr-4 overflow-hidden">
-                {userInfo.avatarUrl ? (
-                  <Image
-                    src={userInfo.avatarUrl}
-                    mode="aspectFill"
-                    className="w-full h-full"
-                  />
-                ) : (
-                  <Text className="text-2xl">👩</Text>
-                )}
+            <View className="flex items-center justify-between">
+              <View className="flex items-center">
+                <View className="w-16 h-16 bg-rose-200 rounded-full flex items-center justify-center mr-4 overflow-hidden">
+                  {userInfo.avatarUrl ? (
+                    <Image
+                      src={userInfo.avatarUrl}
+                      mode="aspectFill"
+                      className="w-full h-full"
+                    />
+                  ) : (
+                    <Text className="text-2xl">👩</Text>
+                  )}
+                </View>
+                <View>
+                  <Text className="text-lg font-semibold text-gray-800 block">
+                    {userInfo.nickname || '用户'}
+                  </Text>
+                  <Text className="text-sm text-gray-500 block">
+                    开始您的皮肤检测之旅
+                  </Text>
+                </View>
               </View>
-              <View>
-                <Text className="text-lg font-semibold text-gray-800 block">
-                  {userInfo.nickname || '用户'}
-                </Text>
-                <Text className="text-sm text-gray-500 block">
-                  开始您的皮肤检测之旅
-                </Text>
-              </View>
+              {!userInfo.nickname && (
+                <Button
+                  size="mini"
+                  onClick={() => setShowEditProfile(true)}
+                  className="bg-rose-400 text-white rounded-full"
+                >
+                  完善信息
+                </Button>
+              )}
             </View>
           </View>
 
@@ -186,11 +287,10 @@ export default function ProfilePage() {
             </View>
           ) : (
             <Button
-              openType="getUserInfo"
-              onGetUserInfo={handleGetUserInfo}
+              onClick={handleLogin}
               className="bg-rose-400 text-white rounded-xl w-full"
             >
-              微信授权登录
+              微信快速登录
             </Button>
           )}
         </View>
