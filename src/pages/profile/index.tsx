@@ -371,24 +371,12 @@ export default function ProfilePage() {
               <Text className="text-base text-gray-600 block">登录中...</Text>
             </View>
           ) : (
-            <View className="space-y-3">
-              <Button
-                openType="getPhoneNumber"
-                onGetPhoneNumber={handleGetPhoneNumber}
-                className="bg-rose-400 text-white rounded-xl w-full"
-              >
-                📱 手机号快速登录
-              </Button>
-              <Text className="text-xs text-gray-400 block text-center">
-                或使用传统微信登录
-              </Text>
-              <Button
-                onClick={handleLogin}
-                className="bg-white text-rose-400 border border-rose-400 rounded-xl w-full"
-              >
-                微信登录
-              </Button>
-            </View>
+            <Button
+              onClick={handleLogin}
+              className="bg-rose-400 text-white rounded-xl w-full"
+            >
+              微信快速登录
+            </Button>
           )}
         </View>
       )}
