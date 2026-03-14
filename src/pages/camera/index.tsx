@@ -138,24 +138,21 @@ export default function CameraPage() {
       />
 
       {/* 中间显示区域 */}
-      <View className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <View className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
         {showFaceOutline ? (
           // 人脸检测框 - 开始检测后显示
           <View className="relative w-[280px] h-[380px]">
-            {/* 面部轮廓 - 优化的形状 */}
-            <View className="absolute inset-0">
-              {/* 头顶轮廓 */}
-              <View className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-16 border-t-4 border-l-4 border-r-4 border-rose-400 rounded-t-[60px]" />
+            {/* 面部轮廓 - 头顶 */}
+            <View className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-16 border-t-4 border-l-4 border-r-4 border-rose-400 rounded-t-[60px] bg-transparent z-10" style={{ boxShadow: '0 0 10px rgba(251, 113, 133, 0.5)' }} />
 
-            {/* 左侧脸颊轮廓 */}
-            <View className="absolute top-12 left-0 w-16 h-48 border-l-4 border-rose-400 rounded-l-[80px]" />
+            {/* 面部轮廓 - 左侧脸颊 */}
+            <View className="absolute top-12 left-0 w-16 h-48 border-l-4 border-rose-400 rounded-l-[80px] bg-transparent z-10" style={{ boxShadow: '0 0 10px rgba(251, 113, 133, 0.5)' }} />
 
-            {/* 右侧脸颊轮廓 */}
-            <View className="absolute top-12 right-0 w-16 h-48 border-r-4 border-rose-400 rounded-r-[80px]" />
+            {/* 面部轮廓 - 右侧脸颊 */}
+            <View className="absolute top-12 right-0 w-16 h-48 border-r-4 border-rose-400 rounded-r-[80px] bg-transparent z-10" style={{ boxShadow: '0 0 10px rgba(251, 113, 133, 0.5)' }} />
 
-            {/* 下巴轮廓 */}
-            <View className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-16 border-b-4 border-l-4 border-r-4 border-rose-400 rounded-b-[40px]" />
-          </View>
+            {/* 面部轮廓 - 下巴 */}
+            <View className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-16 border-b-4 border-l-4 border-r-4 border-rose-400 rounded-b-[40px] bg-transparent z-10" style={{ boxShadow: '0 0 10px rgba(251, 113, 133, 0.5)' }} />
 
           {/* 扫描线动画 */}
           {isScanning && (
@@ -266,7 +263,9 @@ export default function CameraPage() {
             <Text className="text-white text-sm text-center">
               {isScanning
                 ? '💡 请保持面部在轮廓内，不要移动'
-                : '💡 请将面部对准轮廓，保持光线充足，表情自然'
+                : showFaceOutline
+                ? '💡 请将面部对准轮廓，保持光线充足，表情自然'
+                : '💡 点击下方「开始检测」按钮，等待人脸轮廓出现后对准'
               }
             </Text>
           </View>
