@@ -27,6 +27,11 @@ export default function HistoryPage() {
   const [loading, setLoading] = useState(false)
   const [viewType, setViewType] = useState<ViewType>('timeline')
   const [selectedRecords, setSelectedRecords] = useState<HistoryRecord[]>([])
+  
+  // 日历视图相关状态
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1)
+  const [selectedDate, setSelectedDate] = useState<string>('')
 
   useEffect(() => {
     loadHistory()
@@ -146,6 +151,67 @@ export default function HistoryPage() {
 
   const handleGoToDetect = () => {
     Taro.switchTab({ url: '/pages/landing/index' })
+  }
+
+  // 日历相关函数
+  const getMonthData = (year: number, month: number) => {
+    const firstDay = new Date(year, month - 1, 1)
+    const lastDay = new Date(year, month, 0)
+    const daysInMonth = lastDay.getDate()
+    const firstDayOfWeek = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1 // 将周日(0)转为6，其他减1
+    
+    return { daysInMonth, firstDayOfWeek }
+  }
+
+  const getRecordsByDate = (dateStr: string) => {
+    return historyList.filter(record => {
+      const recordDate = new Date(record.created_at)
+      const [y, m, d] = dateStr.split('-').map(Number)
+      return (
+        recordDate.getFullYear() === y &&
+        recordDate.getMonth() + 1 === m &&
+        recordDate.getDate() === d
+      )
+    })
+  }
+
+  const getDatesWithRecords = () => {
+    const dateSet = new Set<string>()
+    historyList.forEach(record => {
+      const date = new Date(record.created_at)
+      const dateStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      dateSet.add(dateStr)
+    })
+    return dateSet
+  }
+
+  const handlePrevMonth = () => {
+    if (currentMonth === 1) {
+      setCurrentYear(currentYear - 1)
+      setCurrentMonth(12)
+    } else {
+      setCurrentMonth(currentMonth - 1)
+    }
+    setSelectedDate('')
+  }
+
+  const handleNextMonth = () => {
+    if (currentMonth === 12) {
+      setCurrentYear(currentYear + 1)
+      setCurrentMonth(1)
+    } else {
+      setCurrentMonth(currentMonth + 1)
+    }
+    setSelectedDate('')
+  }
+
+  const handleDateClick = (day: number) => {
+    const dateStr = `${currentYear}-${currentMonth}-${day}`
+    setSelectedDate(dateStr)
+  }
+
+  const getWeekDays = () => {
+    return ['一', '二', '三', '四', '五', '六', '日']
   }
 
   return (
@@ -306,13 +372,159 @@ export default function HistoryPage() {
         )}
 
         {!loading && historyList.length > 0 && viewType === 'calendar' && (
-          <View className="px-4 py-4">
-            <View className="bg-white rounded-2xl p-6 shadow-sm">
-              <Text className="text-base text-gray-500 text-center block">
-                日历视图开发中...
-              </Text>
-              <Text className="text-sm text-gray-400 text-center mt-2 block">请切换到时间轴视图</Text>
+          <View className="px-4 py-4 space-y-4">
+            {/* 月份切换 */}
+            <View className="bg-white rounded-2xl p-4 shadow-sm">
+              <View className="flex items-center justify-between">
+                <View
+                  onClick={handlePrevMonth}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 active:bg-gray-200"
+                >
+                  <Text className="text-lg text-gray-600 block">‹</Text>
+                </View>
+                <Text className="text-lg font-semibold text-gray-800 block">
+                  {currentYear}年{currentMonth}月
+                </Text>
+                <View
+                  onClick={handleNextMonth}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 active:bg-gray-200"
+                >
+                  <Text className="text-lg text-gray-600 block">›</Text>
+                </View>
+              </View>
+
+              {/* 星期标题 */}
+              <View className="grid grid-cols-7 gap-1 mt-4">
+                {getWeekDays().map((day) => (
+                  <View key={day} className="flex items-center justify-center py-2">
+                    <Text className="text-sm text-gray-500 block">{day}</Text>
+                  </View>
+                ))}
+              </View>
+
+              {/* 日期网格 */}
+              <View className="grid grid-cols-7 gap-1 mt-2">
+                {(() => {
+                  const { daysInMonth, firstDayOfWeek } = getMonthData(currentYear, currentMonth)
+                  const datesWithRecords = getDatesWithRecords()
+                  const today = new Date()
+                  const isCurrentMonth = today.getFullYear() === currentYear && today.getMonth() + 1 === currentMonth
+
+                  return (
+                    <>
+                      {/* 空白占位 */}
+                      {Array.from({ length: firstDayOfWeek }).map((_, index) => (
+                        <View key={`empty-${index}`} className="aspect-square" />
+                      ))}
+
+                      {/* 日期 */}
+                      {Array.from({ length: daysInMonth }).map((_, index) => {
+                        const day = index + 1
+                        const dateStr = `${currentYear}-${currentMonth}-${day}`
+                        const hasRecords = datesWithRecords.has(dateStr)
+                        const isSelected = selectedDate === dateStr
+                        const isToday = isCurrentMonth && day === today.getDate()
+                        const recordsCount = getRecordsByDate(dateStr).length
+
+                        return (
+                          <View
+                            key={day}
+                            onClick={() => hasRecords && handleDateClick(day)}
+                            className={`aspect-square flex flex-col items-center justify-center rounded-xl ${
+                              hasRecords ? 'active:bg-rose-50 cursor-pointer' : 'opacity-30'
+                            } ${isSelected ? 'bg-rose-400' : ''} ${isToday && !isSelected ? 'border-2 border-rose-400' : ''}`}
+                          >
+                            <Text
+                              className={`text-sm font-medium block ${
+                                isSelected ? 'text-white' : 'text-gray-800'
+                              }`}
+                            >
+                              {day}
+                            </Text>
+                            {hasRecords && recordsCount > 0 && (
+                              <View
+                                className={`w-1.5 h-1.5 rounded-full mt-1 ${
+                                  isSelected ? 'bg-white' : 'bg-rose-400'
+                                }`}
+                              />
+                            )}
+                          </View>
+                        )
+                      })}
+                    </>
+                  )
+                })()}
+              </View>
             </View>
+
+            {/* 选中日期的记录 */}
+            {selectedDate && (
+              <View className="bg-white rounded-2xl p-4 shadow-sm">
+                <View className="flex items-center justify-between mb-4">
+                  <Text className="text-base font-semibold text-gray-800 block">
+                    {selectedDate} 的检测记录
+                  </Text>
+                  <Text className="text-sm text-gray-500 block">
+                    共 {getRecordsByDate(selectedDate).length} 条
+                  </Text>
+                </View>
+
+                <View className="space-y-3">
+                  {getRecordsByDate(selectedDate).map((record) => {
+                    const score = calculateScore(record)
+
+                    return (
+                      <View
+                        key={record.id}
+                        onClick={() => handleViewDetail(record)}
+                        className="bg-gray-50 rounded-xl p-4"
+                      >
+                        <View className="flex items-center justify-between mb-2">
+                          <Text className="text-sm font-semibold text-gray-800 block">
+                            {record.skin_type}
+                          </Text>
+                          <Text className="text-lg font-bold text-rose-400 block">{score}分</Text>
+                        </View>
+
+                        <Text className="text-xs text-gray-500 block mb-3">
+                          {formatTime(record.created_at)}
+                        </Text>
+
+                        <View className="flex gap-2">
+                          <View className="flex-1 bg-white rounded-lg p-2">
+                            <Text className="text-xs text-gray-500 block">水分</Text>
+                            <Text className="text-sm font-bold text-blue-500 block">
+                              {record.moisture}%
+                            </Text>
+                          </View>
+                          <View className="flex-1 bg-white rounded-lg p-2">
+                            <Text className="text-xs text-gray-500 block">油性</Text>
+                            <Text className="text-sm font-bold text-yellow-500 block">
+                              {record.oiliness}%
+                            </Text>
+                          </View>
+                          <View className="flex-1 bg-white rounded-lg p-2">
+                            <Text className="text-xs text-gray-500 block">敏感度</Text>
+                            <Text className="text-sm font-bold text-rose-500 block">
+                              {record.sensitivity}%
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    )
+                  })}
+                </View>
+              </View>
+            )}
+
+            {/* 提示信息 */}
+            {!selectedDate && (
+              <View className="bg-white rounded-2xl p-4 shadow-sm">
+                <Text className="text-sm text-gray-500 text-center block">
+                  点击有标记的日期查看检测记录
+                </Text>
+              </View>
+            )}
           </View>
         )}
       </ScrollView>
