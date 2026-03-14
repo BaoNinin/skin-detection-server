@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, Put, Param } from '@nestjs/common'
 import { UserService } from './user.service'
-import { WechatLoginDto, UserInfoDto, UpdateUserInfoDto } from './user.types'
+import { WechatLoginDto, PhoneNumberLoginDto, UserInfoDto, UpdateUserInfoDto } from './user.types'
 
 @Controller('user')
 export class UserController {
@@ -9,6 +9,16 @@ export class UserController {
   @Post('login')
   async login(@Body() wechatLoginDto: WechatLoginDto) {
     const result = await this.userService.login(wechatLoginDto)
+    return {
+      code: 200,
+      msg: result.isNewUser ? '登录成功，欢迎新用户' : '登录成功',
+      data: result.userInfo
+    }
+  }
+
+  @Post('login/phone')
+  async loginWithPhone(@Body() phoneNumberLoginDto: PhoneNumberLoginDto) {
+    const result = await this.userService.loginWithPhoneNumber(phoneNumberLoginDto)
     return {
       code: 200,
       msg: result.isNewUser ? '登录成功，欢迎新用户' : '登录成功',

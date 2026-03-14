@@ -23,7 +23,8 @@ export const skinAnalysisHistory = pgTable("skin_analysis_history", {
 
 export const users = pgTable("users", {
 	id: serial().notNull(),
-	openid: text("openid").notNull().unique(),
+	openid: text("openid"),
+	phoneNumber: text("phone_number").unique(),
 	nickname: text("nickname"),
 	avatarUrl: text("avatar_url"),
 	detectionCount: integer("detection_count").notNull().default(0),

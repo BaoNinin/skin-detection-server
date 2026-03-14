@@ -6,9 +6,16 @@ export interface WechatLoginDto {
   }
 }
 
+export interface PhoneNumberLoginDto {
+  code: string
+  encryptedData: string
+  iv: string
+}
+
 export interface UserInfoDto {
   id: number
-  openid: string
+  openid: string | null
+  phoneNumber: string | null
   nickname: string | null
   avatarUrl: string | null
   detectionCount: number
@@ -19,4 +26,5 @@ export interface UserInfoDto {
 export interface UpdateUserInfoDto {
   nickname?: string
   avatarUrl?: string
+  phoneNumber?: string
 }

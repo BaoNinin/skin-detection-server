@@ -5,7 +5,8 @@ import { Network } from '@/network'
 
 interface UserInfo {
   id: number
-  openid: string
+  openid: string | null
+  phoneNumber: string | null
   nickname: string | null
   avatarUrl: string | null
   detectionCount: number
@@ -87,6 +88,75 @@ export default function ProfilePage() {
       console.error('登录失败:', err)
       Taro.showToast({
         title: '登录失败',
+        icon: 'none'
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleGetPhoneNumber = async (e: any) => {
+    const isWeapp = Taro.getEnv() === Taro.ENV_TYPE.WEAPP
+
+    if (!isWeapp) {
+      Taro.showToast({
+        title: '手机号登录仅在小程序中可用',
+        icon: 'none'
+      })
+      return
+    }
+
+    if (e.detail.errMsg !== 'getPhoneNumber:ok') {
+      console.error('获取手机号失败:', e.detail.errMsg)
+      if (e.detail.errMsg === 'getPhoneNumber:fail user deny') {
+        Taro.showToast({
+          title: '您取消了授权',
+          icon: 'none'
+        })
+      } else {
+        Taro.showToast({
+          title: '获取手机号失败，请重试',
+          icon: 'none'
+        })
+      }
+      return
+    }
+
+    setLoading(true)
+    try {
+      const loginRes = await Taro.login()
+      console.log('登录 code:', loginRes.code)
+
+      const res = await Network.request({
+        url: '/api/user/login/phone',
+        method: 'POST',
+        data: {
+          code: loginRes.code,
+          encryptedData: e.detail.encryptedData,
+          iv: e.detail.iv
+        }
+      })
+
+      if (res.data.code === 200) {
+        const userData = res.data.data
+        Taro.setStorageSync('userId', userData.id)
+        Taro.setStorageSync('userInfo', userData)
+        setUserInfo(userData)
+
+        Taro.showToast({
+          title: '登录成功',
+          icon: 'success'
+        })
+      } else {
+        Taro.showToast({
+          title: res.data.msg || '登录失败',
+          icon: 'none'
+        })
+      }
+    } catch (err) {
+      console.error('手机号登录失败:', err)
+      Taro.showToast({
+        title: '登录失败，请重试',
         icon: 'none'
       })
     } finally {
@@ -240,9 +310,16 @@ export default function ProfilePage() {
                   <Text className="text-lg font-semibold text-gray-800 block">
                     {userInfo.nickname || '用户'}
                   </Text>
-                  <Text className="text-sm text-gray-500 block">
-                    开始您的皮肤检测之旅
-                  </Text>
+                  {userInfo.phoneNumber && (
+                    <Text className="text-sm text-gray-500 block">
+                      📱 {userInfo.phoneNumber}
+                    </Text>
+                  )}
+                  {!userInfo.phoneNumber && (
+                    <Text className="text-sm text-gray-500 block">
+                      开始您的皮肤检测之旅
+                    </Text>
+                  )}
                 </View>
               </View>
               {!userInfo.nickname && (
@@ -294,12 +371,24 @@ export default function ProfilePage() {
               <Text className="text-base text-gray-600 block">登录中...</Text>
             </View>
           ) : (
-            <Button
-              onClick={handleLogin}
-              className="bg-rose-400 text-white rounded-xl w-full"
-            >
-              微信快速登录
-            </Button>
+            <View className="space-y-3">
+              <Button
+                openType="getPhoneNumber"
+                onGetPhoneNumber={handleGetPhoneNumber}
+                className="bg-rose-400 text-white rounded-xl w-full"
+              >
+                📱 手机号快速登录
+              </Button>
+              <Text className="text-xs text-gray-400 block text-center">
+                或使用传统微信登录
+              </Text>
+              <Button
+                onClick={handleLogin}
+                className="bg-white text-rose-400 border border-rose-400 rounded-xl w-full"
+              >
+                微信登录
+              </Button>
+            </View>
           )}
         </View>
       )}
