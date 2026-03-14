@@ -7,6 +7,7 @@ export default function CameraPage() {
   const [devicePosition, setDevicePosition] = useState<'front' | 'back'>('front')
   const [flash, setFlash] = useState<'off' | 'on' | 'torch'>('off')
   const [isScanning, setIsScanning] = useState(false)
+  const [showFaceOutline, setShowFaceOutline] = useState(false)
   const [scanProgress, setScanProgress] = useState(0)
 
   const handleSwitchCamera = () => {
@@ -50,7 +51,8 @@ export default function CameraPage() {
       return
     }
 
-    // 开始扫描
+    // 显示人脸轮廓并开始扫描
+    setShowFaceOutline(true)
     setIsScanning(true)
     setScanProgress(0)
 
@@ -82,6 +84,7 @@ export default function CameraPage() {
       fail: (err) => {
         console.error('拍照失败:', err)
         setIsScanning(false)
+        setShowFaceOutline(false)
         Taro.showToast({
           title: '拍照失败，请重试',
           icon: 'none'
@@ -134,13 +137,15 @@ export default function CameraPage() {
         onError={handleCameraError}
       />
 
-      {/* 人脸检测框 - 改进的面部轮廓 */}
+      {/* 中间显示区域 */}
       <View className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <View className="relative w-[280px] h-[380px]">
-          {/* 面部轮廓 - 优化的形状 */}
-          <View className="absolute inset-0">
-            {/* 头顶轮廓 */}
-            <View className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-16 border-t-4 border-l-4 border-r-4 border-rose-400 rounded-t-[60px]" />
+        {showFaceOutline ? (
+          // 人脸检测框 - 开始检测后显示
+          <View className="relative w-[280px] h-[380px]">
+            {/* 面部轮廓 - 优化的形状 */}
+            <View className="absolute inset-0">
+              {/* 头顶轮廓 */}
+              <View className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-16 border-t-4 border-l-4 border-r-4 border-rose-400 rounded-t-[60px]" />
 
             {/* 左侧脸颊轮廓 */}
             <View className="absolute top-12 left-0 w-16 h-48 border-l-4 border-rose-400 rounded-l-[80px]" />
@@ -186,6 +191,48 @@ export default function CameraPage() {
             <View className="w-2 h-2 bg-rose-400 rounded-full shadow-lg shadow-rose-400/50" />
           </View>
         </View>
+        ) : (
+          // 未开始检测时的引导UI
+          <View className="flex flex-col items-center justify-center gap-4">
+            {/* 引导图标 */}
+            <View className="relative w-32 h-32">
+              {/* 外圈脉冲动画 */}
+              <View className="absolute inset-0 border-4 border-rose-400/30 rounded-full animate-ping" />
+              {/* 中圈 */}
+              <View className="absolute inset-4 border-2 border-rose-400/50 rounded-full" />
+              {/* 内圈 */}
+              <View className="absolute inset-8 bg-rose-400/10 border-2 border-rose-400 rounded-full flex items-center justify-center">
+                <Text className="text-4xl">👤</Text>
+              </View>
+            </View>
+
+            {/* 引导文字 */}
+            <View className="bg-black/40 backdrop-blur-sm rounded-2xl px-6 py-4">
+              <Text className="text-white text-base text-center block">
+                准备好开始检测了吗？
+              </Text>
+              <Text className="text-rose-300 text-sm text-center block mt-2">
+                点击下方「开始检测」按钮
+              </Text>
+            </View>
+
+            {/* 提示要点 */}
+            <View className="flex flex-col gap-2 mt-2">
+              <View className="flex items-center gap-2">
+                <Text className="text-rose-400 text-lg">✓</Text>
+                <Text className="text-white/80 text-xs block">保持光线充足</Text>
+              </View>
+              <View className="flex items-center gap-2">
+                <Text className="text-rose-400 text-lg">✓</Text>
+                <Text className="text-white/80 text-xs block">表情自然放松</Text>
+              </View>
+              <View className="flex items-center gap-2">
+                <Text className="text-rose-400 text-lg">✓</Text>
+                <Text className="text-white/80 text-xs block">不要移动头部</Text>
+              </View>
+            </View>
+          </View>
+        )}
       </View>
 
       {/* 顶部控制栏 - 只显示取消按钮和闪光灯状态 */}
