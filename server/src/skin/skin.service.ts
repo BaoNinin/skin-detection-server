@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import OpenAI from 'openai';  // 使用 OpenAI SDK（DeepSeek-VL API 兼容）
+import { LLMClient, Config } from 'coze-coding-dev-sdk';
 import * as fs from 'fs';
 import { UploadedFile, SkinAnalysisResult } from './skin.types';
 import { ProductService } from './product.service';
@@ -7,23 +7,16 @@ import { HistoryService } from './history.service';
 
 @Injectable()
 export class SkinService {
-  private client: OpenAI;
+  private client: LLMClient;
 
   constructor(
     private readonly productService: ProductService,
     private readonly historyService: HistoryService
   ) {
-    const apiUrl = process.env.DEEPSEEK_VL_API_URL || 'http://localhost:8000';
-    const modelName = process.env.DEEPSEEK_VL_MODEL_NAME || 'deepseek-vl-7b-chat';
-    
-    this.client = new OpenAI({
-      apiKey: 'dummy-key',  // 自部署 API 不需要真实 Key
-      baseURL: `${apiUrl}/v1`,
-      defaultQuery: { model: modelName },
-    });
-    
-    console.log(`DeepSeek-VL API URL: ${apiUrl}`);
-    console.log(`DeepSeek-VL Model: ${modelName}`);
+    const config = new Config();
+    this.client = new LLMClient(config);
+    console.log('SkinService 初始化完成');
+    console.log('使用豆包视觉模型进行皮肤分析');
   }
 
   async analyzeSkinImage(file: UploadedFile): Promise<SkinAnalysisResult> {
@@ -133,18 +126,16 @@ export class SkinService {
         }
       ];
 
-      console.log('调用 DeepSeek-VL API...');
-      const modelName = process.env.DEEPSEEK_VL_MODEL_NAME || 'deepseek-vl-7b-chat';
+      console.log('调用豆包视觉模型...');
       
-      const completion = await this.client.chat.completions.create({
-        model: modelName,
-        messages: messages,
+      // 使用 coze-coding-dev-sdk 的 LLMClient 调用豆包视觉模型
+      const response = await this.client.invoke(messages, {
+        model: 'doubao-seed-1-6-vision-250815',
         temperature: 0.3,
-        max_tokens: 2048
       });
 
-      console.log('DeepSeek-VL 响应长度:', completion.choices[0].message.content?.length);
-      const responseContent = completion.choices[0].message.content || '{}';
+      console.log('豆包模型响应长度:', response.content?.length);
+      const responseContent = response.content || '{}';
       console.log('响应前 200 字符:', responseContent.substring(0, 200));
 
       const jsonMatch = responseContent.match(/\{[\s\S]*\}/);
