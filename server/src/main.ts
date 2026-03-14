@@ -12,6 +12,11 @@ function parsePort(): number {
       return port;
     }
   }
+  // 云托管环境默认使用 80 端口
+  // 如果设置了 CLOUDBASE_ENV_ID 或 NODE_ENV 为 production，则使用 80 端口
+  if (process.env.CLOUDBASE_ENV_ID || process.env.NODE_ENV === 'production') {
+    return 80;
+  }
   return 3000;
 }
 
