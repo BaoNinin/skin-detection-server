@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LLMClient, Config, HeaderUtils } from 'coze-coding-dev-sdk';
+import OpenAI from 'openai';  // 使用 OpenAI SDK（DeepSeek-VL API 兼容）
 import * as fs from 'fs';
 import { UploadedFile, SkinAnalysisResult } from './skin.types';
 import { ProductService } from './product.service';
@@ -7,14 +7,23 @@ import { HistoryService } from './history.service';
 
 @Injectable()
 export class SkinService {
-  private client: LLMClient;
+  private client: OpenAI;
 
   constructor(
     private readonly productService: ProductService,
     private readonly historyService: HistoryService
   ) {
-    const config = new Config();
-    this.client = new LLMClient(config);
+    const apiUrl = process.env.DEEPSEEK_VL_API_URL || 'http://localhost:8000';
+    const modelName = process.env.DEEPSEEK_VL_MODEL_NAME || 'deepseek-vl-7b-chat';
+    
+    this.client = new OpenAI({
+      apiKey: 'dummy-key',  // 自部署 API 不需要真实 Key
+      baseURL: `${apiUrl}/v1`,
+      defaultQuery: { model: modelName },
+    });
+    
+    console.log(`DeepSeek-VL API URL: ${apiUrl}`);
+    console.log(`DeepSeek-VL Model: ${modelName}`);
   }
 
   async analyzeSkinImage(file: UploadedFile): Promise<SkinAnalysisResult> {
@@ -124,16 +133,21 @@ export class SkinService {
         }
       ];
 
-      console.log('调用 LLM...');
-      const response = await this.client.invoke(messages, {
-        model: 'doubao-seed-1-6-vision-250815',
-        temperature: 0.3
+      console.log('调用 DeepSeek-VL API...');
+      const modelName = process.env.DEEPSEEK_VL_MODEL_NAME || 'deepseek-vl-7b-chat';
+      
+      const completion = await this.client.chat.completions.create({
+        model: modelName,
+        messages: messages,
+        temperature: 0.3,
+        max_tokens: 2048
       });
 
-      console.log('LLM 响应长度:', response.content.length);
-      console.log('LLM 响应前 200 字符:', response.content.substring(0, 200));
+      console.log('DeepSeek-VL 响应长度:', completion.choices[0].message.content?.length);
+      const responseContent = completion.choices[0].message.content || '{}';
+      console.log('响应前 200 字符:', responseContent.substring(0, 200));
 
-      const jsonMatch = response.content.match(/\{[\s\S]*\}/);
+      const jsonMatch = responseContent.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
         throw new Error('无法解析 LLM 响应为 JSON');
       }
