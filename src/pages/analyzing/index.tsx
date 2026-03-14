@@ -26,6 +26,11 @@ export default function AnalyzingPage() {
   const [spinRotation, setSpinRotation] = useState(0)
   const [pulseOpacity, setPulseOpacity] = useState(1)
   const [loaderRotation, setLoaderRotation] = useState(0)
+  
+  // 芯片激活相关
+  const [activationCountdown, setActivationCountdown] = useState(10)
+  const [activationProgress, setActivationProgress] = useState(0)
+  const [chipPointsPulse, setChipPointsPulse] = useState(Array(9).fill(false))
 
   // AI分析时的加载动画
   useEffect(() => {
@@ -34,6 +39,44 @@ export default function AnalyzingPage() {
         setLoaderRotation(prev => prev >= 360 ? 0 : prev + 15)
       }, 50)
       return () => clearInterval(interval)
+    }
+  }, [currentStep, analyzing])
+
+  // 芯片激活时的动画
+  useEffect(() => {
+    if (currentStep === 3 && analyzing) {
+      // 芯片点脉冲动画
+      const pulseInterval = setInterval(() => {
+        setChipPointsPulse(prev => {
+          const newPulse = [...prev]
+          const randomIndex = Math.floor(Math.random() * 9)
+          newPulse[randomIndex] = !newPulse[randomIndex]
+          return newPulse
+        })
+      }, 300)
+
+      // 倒计时动画
+      const countdownInterval = setInterval(() => {
+        setActivationCountdown(prev => {
+          if (prev > 0) {
+            const newCountdown = prev - 1
+            setActivationProgress(100 - (newCountdown * 10))
+            return newCountdown
+          }
+          return 0
+        })
+      }, 1000)
+
+      // Pulse opacity动画
+      const pulseOpacityInterval = setInterval(() => {
+        setPulseOpacity(prev => prev <= 0.3 ? 1 : prev - 0.1)
+      }, 100)
+
+      return () => {
+        clearInterval(pulseInterval)
+        clearInterval(countdownInterval)
+        clearInterval(pulseOpacityInterval)
+      }
     }
   }, [currentStep, analyzing])
 
@@ -258,15 +301,61 @@ export default function AnalyzingPage() {
             )}
           </View>
         ) : currentStep === 3 ? (
-          <View className="mb-8">
-            <View className="w-32 h-32 flex items-center justify-center relative">
+          // 芯片激活中 - 改进版
+          <View className="mb-8 flex flex-col items-center">
+            <View className="w-36 h-36 flex items-center justify-center relative">
+              {/* 3x3 芯片网格 */}
+              <View className="absolute inset-0 grid grid-cols-3 grid-rows-3 gap-2 p-4">
+                {Array.from({ length: 9 }).map((_, index) => (
+                  <View
+                    key={index}
+                    className={`w-6 h-6 bg-rose-400 rounded-full transition-all duration-300 ${
+                      chipPointsPulse[index] ? 'opacity-100 scale-110' : 'opacity-50 scale-100'
+                    }`}
+                    style={{
+                      boxShadow: chipPointsPulse[index] ? '0 0 12px rgba(251, 113, 133, 0.8)' : 'none'
+                    }}
+                  />
+                ))}
+              </View>
+
+              {/* 外圈脉冲效果 */}
               <View
-                className="absolute w-32 h-32 bg-gradient-to-r from-yellow-200 to-yellow-400 rounded-full transition-all"
+                className="absolute w-32 h-32 border-2 border-rose-400/50 rounded-full transition-all"
                 style={{
-                  opacity: pulseOpacity
+                  opacity: pulseOpacity,
+                  animation: 'pulse 2s infinite'
                 }}
               />
-              <Text className="text-6xl block z-10">⚡</Text>
+
+              {/* 中心芯片图标 */}
+              <View
+                className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center relative z-10"
+                style={{
+                  opacity: pulseOpacity,
+                  boxShadow: `0 0 ${pulseOpacity * 20}px rgba(251, 113, 133, 0.5)`
+                }}
+              >
+                <Text className="text-5xl block">⚡</Text>
+              </View>
+            </View>
+
+            {/* 倒计时 */}
+            <View className="mt-6 text-center">
+              <Text className="text-6xl font-bold text-rose-400 block" style={{ textShadow: '0 0 20px rgba(251, 113, 133, 0.8)' }}>
+                {activationCountdown}
+              </Text>
+              <Text className="text-sm text-gray-600 mt-2 block">AI芯片激活中</Text>
+            </View>
+
+            {/* 激活进度条 */}
+            <View className="mt-4 w-64">
+              <View className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <View
+                  className="h-full bg-gradient-to-r from-rose-400 via-pink-500 to-rose-400 transition-all duration-1000"
+                  style={{ width: `${activationProgress}%` }}
+                />
+              </View>
             </View>
           </View>
         ) : null}
