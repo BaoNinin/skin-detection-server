@@ -1,4 +1,4 @@
-export default defineAppConfig({
+const appConfig = {
   pages: [
     'pages/landing/index',
     'pages/camera/index',
@@ -19,7 +19,7 @@ export default defineAppConfig({
     color: '#9CA3AF',
     selectedColor: '#E8B4BC',
     backgroundColor: '#ffffff',
-    borderStyle: 'black',
+    borderStyle: 'black' as const,
     list: [
       {
         pagePath: 'pages/landing/index',
@@ -41,4 +41,8 @@ export default defineAppConfig({
       }
     ]
   }
-})
+}
+
+export default typeof defineAppConfig === 'function'
+  ? defineAppConfig(appConfig)
+  : appConfig
