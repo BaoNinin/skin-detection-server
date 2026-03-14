@@ -1,4 +1,4 @@
-import cloud from 'wx-server-sdk';
+const cloud = require('wx-server-sdk');
 
 // 初始化云开发环境
 cloud.init({

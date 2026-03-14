@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import cloud from 'wx-server-sdk';
+const cloud = require('wx-server-sdk');
 import * as fs from 'fs';
 import { UploadedFile } from '@/skin/skin.types';
 
