@@ -28,7 +28,7 @@ cloudbase login
 
 ```bash
 cat server/.env.production
-```
+```cat E:/美容小程序1/projects/server/.env.production
 
 应该看到：
 ```bash
