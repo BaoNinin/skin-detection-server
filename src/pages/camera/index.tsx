@@ -176,24 +176,24 @@ export default function CameraPage() {
       {/* 中间显示区域 */}
       <View className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
         {showFaceOutline ? (
-          // 人脸检测框 - 开始检测后显示（改进版）
+          // 人脸检测框 - 开始检测后显示（修复版）
           <View className="relative w-[280px] h-[380px]">
-            {/* 面部轮廓 - 椭圆形 */}
+            {/* 面部轮廓 - 改为标准椭圆，与扫描点匹配 */}
             <View 
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-64 border-4 border-rose-400 rounded-[50%_50%_45%_45%]"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-64 border-4 border-rose-400 rounded-[50%]"
               style={{ 
                 boxShadow: '0 0 20px rgba(251, 113, 133, 0.5)',
               }}
             />
 
-            {/* 扫描点 - 12个点椭圆形分布 - 修复对准问题 */}
+            {/* 扫描点 - 12个点椭圆形分布 - 完美匹配标准椭圆 */}
             {isScanning && Array.from({ length: 12 }).map((_, index) => {
               // 从 -PI/2 开始，让第一个点在椭圆顶部
               const angle = (index / 12) * 2 * Math.PI - Math.PI / 2
-              const radiusX = 96
-              const radiusY = 128
-              const centerX = 140
-              const centerY = 190
+              const radiusX = 96  // w-48 的一半
+              const radiusY = 128 // h-64 的一半
+              const centerX = 140 // w-280 的一半
+              const centerY = 190 // h-380 的一半
               const x = centerX + radiusX * Math.cos(angle) - 3
               const y = centerY + radiusY * Math.sin(angle) - 3
               
