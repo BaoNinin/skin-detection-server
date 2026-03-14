@@ -4,6 +4,9 @@ FROM node:18-alpine
 # 设置工作目录
 WORKDIR /app
 
+# 设置环境变量
+ENV NODE_ENV=production
+
 # 复制 package.json 和 pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
 
@@ -20,7 +23,7 @@ COPY . .
 RUN pnpm build
 
 # 暴露端口
-EXPOSE 3000
+EXPOSE 80
 
 # 启动应用
 CMD ["pnpm", "start:prod"]
