@@ -146,7 +146,7 @@ export default function ResultPage() {
 
   return (
     <View className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
-      <ScrollView scrollY className="h-[calc(100vh-120px)]">
+      <ScrollView scrollY className="h-screen">
         <View className="p-4">
           <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
             <View className="flex items-center mb-4">
@@ -217,32 +217,33 @@ export default function ResultPage() {
               ))}
             </View>
           )}
+
+          {/* 操作按钮区域 - 随页面滚动 */}
+          <View className="bg-white border-t border-gray-100 p-4 space-y-3 mt-4">
+            <Button
+              onClick={handleViewRecommendations}
+              className="w-full bg-rose-400 text-white rounded-full py-3 font-medium"
+            >
+              查看推荐产品
+            </Button>
+
+            <View className="flex gap-3">
+              <Button
+                onClick={handleReDetect}
+                className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
+              >
+                重新检测
+              </Button>
+              <Button
+                onClick={handleSaveRecord}
+                className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
+              >
+                保存记录
+              </Button>
+            </View>
+          </View>
         </View>
       </ScrollView>
-
-      <View className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 space-y-3">
-        <Button
-          onClick={handleViewRecommendations}
-          className="w-full bg-rose-400 text-white rounded-full py-3 font-medium"
-        >
-          查看推荐产品
-        </Button>
-
-        <View className="flex gap-3">
-          <Button
-            onClick={handleReDetect}
-            className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
-          >
-            重新检测
-          </Button>
-          <Button
-            onClick={handleSaveRecord}
-            className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
-          >
-            保存记录
-          </Button>
-        </View>
-      </View>
     </View>
   )
 }
