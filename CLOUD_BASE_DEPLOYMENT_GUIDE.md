@@ -30,7 +30,7 @@
 
 ```bash
 # 豆包视觉模型配置
-COZE_API_KEY=pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh
+COZE_API_KEY=pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh 
 COZE_MODEL=doubao-vision
 
 # 微信云开发环境配置
