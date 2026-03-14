@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import { UploadedFile, SkinAnalysisResult } from './skin.types';
 import { ProductService } from './product.service';
 import { HistoryService } from './history.service';
+import { CloudStorageService } from '@/config/cloud-storage.service';
 
 @Injectable()
 export class SkinService {
@@ -11,12 +12,14 @@ export class SkinService {
 
   constructor(
     private readonly productService: ProductService,
-    private readonly historyService: HistoryService
+    private readonly historyService: HistoryService,
+    private readonly cloudStorageService: CloudStorageService
   ) {
     const config = new Config();
     this.client = new LLMClient(config);
     console.log('SkinService 初始化完成');
     console.log('使用豆包视觉模型进行皮肤分析');
+    console.log('使用云存储保存图片');
   }
 
   async analyzeSkinImage(file: UploadedFile): Promise<SkinAnalysisResult> {
@@ -195,7 +198,24 @@ export class SkinService {
     sensitivity: number;
     recommendations: string[];
     imageUrl?: string;
+    imageFile?: UploadedFile; // 新增：支持上传原始文件到云存储
   }) {
+    // 如果提供了原始文件，上传到云存储
+    if (record.imageFile) {
+      try {
+        console.log('上传图片到云存储...');
+        const cloudImageUrl = await this.cloudStorageService.uploadFile(
+          record.imageFile,
+          `skin-images/${record.userId}/${Date.now()}.jpg`
+        );
+        record.imageUrl = cloudImageUrl;
+        console.log('云存储上传成功:', cloudImageUrl);
+      } catch (error) {
+        console.error('云存储上传失败，继续保存历史记录:', error);
+        // 即使上传失败，也继续保存历史记录
+      }
+    }
+
     return this.historyService.saveHistory(record);
   }
 }

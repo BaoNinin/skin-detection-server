@@ -1,33 +1,29 @@
 {
+  "envId": "{{env.CLOUDBASE_ENV_ID}}",
   "version": "2.0",
-  "env": {
-    "variables": {
-      "COZE_SUPABASE_URL": "https://pacqfzvxkiobtxbjubil.supabase.co",
-      "COZE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhY3FmenZ4a2lvYnR4Ymp1YmlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzODM1ODYsImV4cCI6MjA4ODk1OTU4Nn0.CZoSjahWflEy3vhj_Ya9ddYhie9BtmvRxhNaN8JdZs4",
-      "WECHAT_APPID": "wxa1c57025b508e913",
-      "WECHAT_APPSECRET": "056dc956b934bf58fc659c4b08bfa16e",
-      "NODE_ENV": "production",
-      "PORT": "3000"
-    }
+  "$schema": "https://framework-1258016615.tcloudbaseapp.com/schema/latest.json",
+  "framework": {
+    "name": "skin-analysis-backend",
+    "plugins": {}
   },
   "services": [
     {
-      "name": "skin-analysis-backend",
-      "type": "web",
+      "name": "nestjs-server",
+      "type": "container",
       "containerPort": 3000,
       "cpu": 0.5,
-      "memory": 1,
-      "minReplicas": 0,
-      "maxReplicas": 10,
+      "mem": 1.0,
+      "minNum": 0,
+      "maxNum": 10,
+      "dockerfile": "./Dockerfile",
       "envVariables": {
-        "COZE_SUPABASE_URL": "${COZE_SUPABASE_URL}",
-        "COZE_SUPABASE_ANON_KEY": "${COZE_SUPABASE_ANON_KEY}",
-        "WECHAT_APPID": "${WECHAT_APPID}",
-        "WECHAT_APPSECRET": "${WECHAT_APPSECRET}",
-        "NODE_ENV": "${NODE_ENV}",
-        "PORT": "${PORT}"
+        "COZE_API_KEY": "{{env.COZE_API_KEY}}",
+        "COZE_MODEL": "doubao-vision",
+        "CLOUDBASE_ENV_ID": "{{env.CLOUDBASE_ENV_ID}}",
+        "NODE_ENV": "production"
       },
-      "dockerfile": "./Dockerfile"
+      "customLogs": "./logs",
+      "volumeMounts": []
     }
   ]
 }

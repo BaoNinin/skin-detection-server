@@ -1,34 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { getSupabaseClient } from '@/storage/database/supabase-client';
+import { db, COLLECTIONS } from '@/config/cloud.config';
 import { UserService } from '@/user/user.service';
 
 @Injectable()
 export class HistoryService {
-  private client;
-
   constructor(private readonly userService: UserService) {
-    this.client = getSupabaseClient();
+    console.log('HistoryService 初始化完成，使用云数据库');
   }
 
   async getHistory(userId?: number) {
     try {
-      // 如果没有提供 userId，返回空数组而不是所有记录
+      // 如果没有提供 userId，返回空数组
       if (!userId) {
         console.warn('历史记录查询未提供用户ID，返回空数组');
         return [];
       }
 
-      const { data, error } = await this.client
-        .from('skin_analysis_history')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(50);
-
-      if (error) {
-        console.error('查询历史记录失败:', error);
-        throw error;
-      }
+      const { data } = await db
+        .collection(COLLECTIONS.HISTORY)
+        .where({
+          userId: userId
+        })
+        .orderBy('createdAt', 'desc')
+        .limit(50)
+        .get();
 
       return data || [];
     } catch (error) {
@@ -48,25 +43,22 @@ export class HistoryService {
     imageUrl?: string;
   }) {
     try {
-      const { data, error } = await this.client
-        .from('skin_analysis_history')
-        .insert({
-          user_id: record.userId,
-          skin_type: record.skinType,
+      const timestamp = new Date().getTime();
+
+      const { data } = await db
+        .collection(COLLECTIONS.HISTORY)
+        .add({
+          userId: record.userId,
+          skinType: record.skinType,
           concerns: record.concerns || [],
           moisture: record.moisture,
           oiliness: record.oiliness,
           sensitivity: record.sensitivity,
           recommendations: record.recommendations || [],
-          image_url: record.imageUrl || null
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error('保存历史记录失败:', error);
-        throw error;
-      }
+          imageUrl: record.imageUrl || null,
+          createdAt: timestamp,
+          updatedAt: timestamp
+        });
 
       // 增加用户的检测次数
       await this.userService.incrementDetectionCount(record.userId);
@@ -74,6 +66,20 @@ export class HistoryService {
       return data;
     } catch (error) {
       console.error('保存历史记录失败:', error);
+      throw error;
+    }
+  }
+
+  async deleteHistory(id: string) {
+    try {
+      const { data } = await db
+        .collection(COLLECTIONS.HISTORY)
+        .doc(id)
+        .remove();
+
+      return data;
+    } catch (error) {
+      console.error('删除历史记录失败:', error);
       throw error;
     }
   }

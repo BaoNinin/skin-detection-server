@@ -1,11 +1,11 @@
-# 微信云托管 Dockerfile
+# 使用官方 Node.js 18 镜像
 FROM node:18-alpine
 
 # 设置工作目录
 WORKDIR /app
 
 # 复制 package.json 和 pnpm-lock.yaml
-COPY package*.json pnpm-lock.yaml* ./
+COPY package.json pnpm-lock.yaml ./
 
 # 安装 pnpm
 RUN npm install -g pnpm
@@ -17,10 +17,10 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # 构建项目
-RUN pnpm run build
+RUN pnpm build
 
 # 暴露端口
 EXPOSE 3000
 
 # 启动应用
-CMD ["node", "dist/server/main.js"]
+CMD ["pnpm", "start:prod"]

@@ -6,6 +6,7 @@ import { HistoryController } from './history.controller';
 import { SkinService } from './skin.service';
 import { ProductService } from './product.service';
 import { HistoryService } from './history.service';
+import { CloudStorageService } from '../config/cloud-storage.service';
 import { UserModule } from '../user/user.module';
 
 @Module({
@@ -19,6 +20,6 @@ import { UserModule } from '../user/user.module';
     }),
   ],
   controllers: [SkinController, ProductController, HistoryController],
-  providers: [SkinService, ProductService, HistoryService],
+  providers: [SkinService, ProductService, HistoryService, CloudStorageService],
 })
 export class SkinModule {}

@@ -1,37 +1,8 @@
-# Node_modules
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Build output
-dist/
-*.tsbuildinfo
-
-# Environment files
+node_modules
+dist
 .env
 .env.local
 .env.*.local
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Git
-.git/
-.gitignore
-
-# Test coverage
-coverage/
-
-# Logs
-logs/
 *.log
+.git
+.DS_Store
