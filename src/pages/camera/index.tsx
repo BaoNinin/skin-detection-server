@@ -186,20 +186,21 @@ export default function CameraPage() {
               }}
             />
 
-            {/* 扫描点 - 12个点椭圆形分布 */}
+            {/* 扫描点 - 12个点椭圆形分布 - 修复对准问题 */}
             {isScanning && Array.from({ length: 12 }).map((_, index) => {
-              const angle = (index / 12) * 2 * Math.PI
+              // 从 -PI/2 开始，让第一个点在椭圆顶部
+              const angle = (index / 12) * 2 * Math.PI - Math.PI / 2
               const radiusX = 96
               const radiusY = 128
               const centerX = 140
               const centerY = 190
-              const x = centerX + radiusX * Math.cos(angle) - 4
-              const y = centerY + radiusY * Math.sin(angle) - 4
+              const x = centerX + radiusX * Math.cos(angle) - 3
+              const y = centerY + radiusY * Math.sin(angle) - 3
               
               return (
                 <View
                   key={index}
-                  className="absolute w-2 h-2 bg-rose-400 rounded-full"
+                  className="absolute w-1.5 h-1.5 bg-rose-400 rounded-full"
                   style={{
                     left: `${x}px`,
                     top: `${y}px`,
@@ -229,65 +230,12 @@ export default function CameraPage() {
             </View>
           )}
 
-          {/* 扫描数据展示 - 新增 */}
+          {/* 扫描进度文字 - 移到顶部，不遮挡面部 */}
           {isScanning && (
-            <View className="absolute -bottom-40 left-0 right-0 bg-black/70 backdrop-blur-sm rounded-2xl p-4 mx-4">
-              <View className="flex flex-col gap-2">
-                {/* 面部轮廓扫描 */}
-                <View className="flex items-center gap-3">
-                  <Text className="text-white text-xs w-20 block">面部轮廓</Text>
-                  <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                    <View 
-                      className="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-300"
-                      style={{ width: `${scanData.faceOutline}%` }}
-                    />
-                  </View>
-                  <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.faceOutline)}%</Text>
-                </View>
-
-                {/* 肤质特征分析 */}
-                <View className="flex items-center gap-3">
-                  <Text className="text-white text-xs w-20 block">肤质特征</Text>
-                  <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                    <View 
-                      className="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-300"
-                      style={{ width: `${scanData.skinFeatures}%` }}
-                    />
-                  </View>
-                  <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.skinFeatures)}%</Text>
-                </View>
-
-                {/* 水分含量检测 */}
-                <View className="flex items-center gap-3">
-                  <Text className="text-white text-xs w-20 block">水分含量</Text>
-                  <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                    <View 
-                      className="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-300"
-                      style={{ width: `${scanData.moisture}%` }}
-                    />
-                  </View>
-                  <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.moisture)}%</Text>
-                </View>
-
-                {/* 皮肤纹理识别 */}
-                <View className="flex items-center gap-3">
-                  <Text className="text-white text-xs w-20 block">皮肤纹理</Text>
-                  <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                    <View 
-                      className="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-300"
-                      style={{ width: `${scanData.texture}%` }}
-                    />
-                  </View>
-                  <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.texture)}%</Text>
-                </View>
-              </View>
-
-              {/* 扫描进度文字 */}
-              <View className="mt-3 text-center">
-                <Text className="text-white text-xs block">
-                  正在扫描面部... {Math.round(scanProgress)}%
-                </Text>
-              </View>
+            <View className="absolute -top-16 left-0 right-0 text-center">
+              <Text className="text-white text-sm block">
+                正在扫描面部... {Math.round(scanProgress)}%
+              </Text>
             </View>
           )}
 
@@ -365,8 +313,63 @@ export default function CameraPage() {
 
       {/* 底部操作区域 */}
       <View className="absolute bottom-0 left-0 right-0 z-10">
+        {/* 扫描数据展示 - 移到底部，不遮挡面部 */}
+        {isScanning && (
+          <View className="mx-6 mb-4 bg-black/70 backdrop-blur-sm rounded-2xl p-4">
+            <View className="flex flex-col gap-2">
+              {/* 面部轮廓扫描 */}
+              <View className="flex items-center gap-3">
+                <Text className="text-white text-xs w-20 block">面部轮廓</Text>
+                <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                  <View 
+                    className="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-300"
+                    style={{ width: `${scanData.faceOutline}%` }}
+                  />
+                </View>
+                <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.faceOutline)}%</Text>
+              </View>
+
+              {/* 肤质特征分析 */}
+              <View className="flex items-center gap-3">
+                <Text className="text-white text-xs w-20 block">肤质特征</Text>
+                <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                  <View 
+                    className="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-300"
+                    style={{ width: `${scanData.skinFeatures}%` }}
+                  />
+                </View>
+                <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.skinFeatures)}%</Text>
+              </View>
+
+              {/* 水分含量检测 */}
+              <View className="flex items-center gap-3">
+                <Text className="text-white text-xs w-20 block">水分含量</Text>
+                <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                  <View 
+                    className="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-300"
+                    style={{ width: `${scanData.moisture}%` }}
+                  />
+                </View>
+                <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.moisture)}%</Text>
+              </View>
+
+              {/* 皮肤纹理识别 */}
+              <View className="flex items-center gap-3">
+                <Text className="text-white text-xs w-20 block">皮肤纹理</Text>
+                <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                  <View 
+                    className="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-300"
+                    style={{ width: `${scanData.texture}%` }}
+                  />
+                </View>
+                <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.texture)}%</Text>
+              </View>
+            </View>
+          </View>
+        )}
+
         {/* 提示信息卡片 */}
-        <View className="mx-6 mb-6 bg-black/40 backdrop-blur-sm rounded-2xl p-4">
+        <View className="mx-6 mb-4 bg-black/40 backdrop-blur-sm rounded-2xl p-4">
           <View className="flex items-center justify-center gap-2">
             <Text className="text-white text-sm text-center">
               {isScanning
