@@ -34,11 +34,6 @@ export default function CameraPage() {
   const [guideText, setGuideText] = useState('请将面部对准轮廓')
   const [countdown, setCountdown] = useState(5)
 
-  // 调试日志：监听扫描进度变化
-  useEffect(() => {
-    console.log('扫描进度更新:', scanProgress, '%')
-  }, [scanProgress])
-
   // 人脸追踪相关状态
   const facePositionHistoryRef = useRef<Array<FacePosition>>([])
   const smoothedPositionRef = useRef<FacePosition | null>(null)
@@ -59,6 +54,16 @@ export default function CameraPage() {
   const audioContextRef = useRef<any>(null)
   const lastVoiceTimeRef = useRef<number>(0)
   const lastGuideTextRef = useRef<string>('')
+
+  // 调试日志：监听扫描进度变化
+  useEffect(() => {
+    console.log('扫描进度更新:', scanProgress, '%')
+  }, [scanProgress])
+
+  // 调试日志：监听皮肤指标变化
+  useEffect(() => {
+    console.log('皮肤指标更新:', skinMetrics)
+  }, [skinMetrics])
 
   // 初始化语音播报
   useEffect(() => {
@@ -488,15 +493,30 @@ export default function CameraPage() {
         setSkinMetrics(skinData)
       } catch (err) {
         console.error('实时皮肤检测失败:', err)
-        // 使用模拟数据降级
-        setSkinMetrics({
-          brightness: 50 + Math.random() * 30,
-          texture: 50 + Math.random() * 30,
-          pores: 50 + Math.random() * 30,
-          moisture: 50 + Math.random() * 30,
-          tone: '中性',
-          confidence: 50
-        })
+        
+        // 使用模拟数据降级（根据扫描进度动态生成）
+        // 扫描进度越大，数据越趋于稳定
+        const progressFactor = scanProgress / 100
+        const randomFactor = (1 - progressFactor) * 20 // 随着扫描进行，随机性降低
+        
+        const brightness = 40 + (scanProgress * 0.4) + Math.random() * randomFactor
+        const texture = 30 + (scanProgress * 0.5) + Math.random() * randomFactor
+        const pores = 35 + (scanProgress * 0.4) + Math.random() * randomFactor
+        const moisture = 45 + (scanProgress * 0.3) + Math.random() * randomFactor
+        
+        const newSkinData = {
+          brightness: Math.min(100, Math.round(brightness)),
+          texture: Math.min(100, Math.round(texture)),
+          pores: Math.min(100, Math.round(pores)),
+          moisture: Math.min(100, Math.round(moisture)),
+          tone: skinMetrics.tone,
+          confidence: Math.min(100, Math.round(scanProgress * 0.9))
+        }
+        
+        setSkinMetrics(newSkinData)
+        
+        // 调试日志
+        console.log('实时皮肤检测（模拟）:', newSkinData)
       }
     }
   }
@@ -559,6 +579,17 @@ export default function CameraPage() {
     setShowFaceOutline(true)
     setIsScanning(true)
     setScanProgress(0)
+    
+    // 初始化皮肤指标为 0
+    setSkinMetrics({
+      brightness: 0,
+      texture: 0,
+      pores: 0,
+      moisture: 0,
+      tone: '中性',
+      confidence: 0
+    })
+    
     setGuideText('请将面部对准轮廓')
     playVoice('请将面部对准轮廓')
 

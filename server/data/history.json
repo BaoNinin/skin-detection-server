@@ -617,5 +617,55 @@
     "imageUrl": "wxfile://tmp_964c0cd145adefdbfeba1d0818087fda14d67ec58ee5f2ed.jpg",
     "createdAt": "2026-03-15T09:37:52.179Z",
     "updatedAt": "2026-03-15T09:37:52.179Z"
+  },
+  {
+    "id": 26,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 10,
+    "blackheads": 0,
+    "recommendations": [
+      "日常使用温和的洁面产品，保持皮肤清洁",
+      "唇部可涂抹滋润型唇膏，缓解干燥起皮问题",
+      "注意防晒，减少紫外线对皮肤的伤害，预防色斑加重"
+    ],
+    "imageUrl": "wxfile://tmp_db8bd1f9c4623e280348148a5fd7478ff3cb7a114d5e243b.jpg",
+    "createdAt": "2026-03-15T09:39:51.185Z",
+    "updatedAt": "2026-03-15T09:39:51.185Z"
+  },
+  {
+    "id": 27,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "少量色斑"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 20,
+    "wrinkles": 0,
+    "spots": 20,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "使用温和的洁面产品，避免过度清洁",
+      "注意防晒，减少色斑加重的可能",
+      "对于轻微痘痘，可使用含有水杨酸的护肤品进行调理"
+    ],
+    "imageUrl": "wxfile://tmp_53c310cd812950c4dcfa230274ed0346e06793020e76965d.jpg",
+    "createdAt": "2026-03-15T09:41:09.175Z",
+    "updatedAt": "2026-03-15T09:41:09.175Z"
   }
 ]
