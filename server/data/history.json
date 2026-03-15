@@ -373,5 +373,29 @@
     "imageUrl": "wxfile://tmp_00e35a9780c8a06d7a944dadd032632d3942b84e90a2a470.jpg",
     "createdAt": "2026-03-15T09:11:16.120Z",
     "updatedAt": "2026-03-15T09:11:16.120Z"
+  },
+  {
+    "id": 16,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "无明显问题"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 10,
+    "blackheads": 10,
+    "recommendations": [
+      "继续保持良好的护肤习惯，维持皮肤水油平衡",
+      "注意防晒，预防色斑形成",
+      "定期进行温和的皮肤清洁，防止黑头和毛孔问题加重"
+    ],
+    "imageUrl": "wxfile://tmp_8ece3d4dcfa65d7d178d2636082604a74e2312c9e91cb71c.jpg",
+    "createdAt": "2026-03-15T09:15:01.729Z",
+    "updatedAt": "2026-03-15T09:15:01.729Z"
   }
 ]
