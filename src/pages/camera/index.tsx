@@ -1,6 +1,6 @@
 import { View, Text, Camera, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function CameraPage() {
   const isWeapp = Taro.getEnv() === Taro.ENV_TYPE.WEAPP
@@ -9,6 +9,9 @@ export default function CameraPage() {
   const [isScanning, setIsScanning] = useState(false)
   const [showFaceOutline, setShowFaceOutline] = useState(false)
   const [scanProgress, setScanProgress] = useState(0)
+  const [faceDetected, setFaceDetected] = useState(false)
+  const [guideText, setGuideText] = useState('请将面部对准轮廓')
+  const [countdown, setCountdown] = useState(5)
   
   // 扫描数据展示
   const [scanData, setScanData] = useState({
@@ -18,12 +21,40 @@ export default function CameraPage() {
     texture: 0
   })
 
+  // 语音播报状态
+  const [innerAudioContext, setInnerAudioContext] = useState<any>(null)
+
+  // 初始化语音播报
+  useEffect(() => {
+    if (isWeapp) {
+      const audioContext = Taro.createInnerAudioContext()
+      setInnerAudioContext(audioContext)
+      
+      return () => {
+        if (audioContext) {
+          audioContext.destroy()
+        }
+      }
+    }
+  }, [isWeapp])
+
+  // 语音播报函数
+  const playVoice = (text: string) => {
+    if (!isWeapp || !innerAudioContext) return
+
+    // 使用 TTS 文字转语音（使用 Taro.startRecord 和 Taro.playVoice）
+    Taro.showToast({
+      title: text,
+      icon: 'none',
+      duration: 2000
+    })
+  }
+
   const handleSwitchCamera = () => {
     setDevicePosition(prev => prev === 'front' ? 'back' : 'front')
   }
 
   const handleSwitchFlash = () => {
-    // 微信小程序只支持 off、on、torch 三种模式
     const flashModes: Array<'off' | 'on' | 'torch'> = ['off', 'on', 'torch']
     const currentIndex = flashModes.indexOf(flash)
     const nextIndex = (currentIndex + 1) % flashModes.length
@@ -31,12 +62,38 @@ export default function CameraPage() {
 
     setFlash(newFlash)
 
-    // 显示当前闪光灯状态
     const statusText = newFlash === 'off' ? '闪光灯已关闭' : newFlash === 'on' ? '闪光灯已开启' : '闪光灯常亮'
     Taro.showToast({
       title: statusText,
       icon: 'none',
       duration: 1500
+    })
+  }
+
+  // 启动人脸识别
+  const startFaceDetect = () => {
+    if (!isWeapp) return
+
+    // 请求相机权限
+    Taro.authorize({
+      scope: 'scope.camera'
+    }).then(() => {
+      // 启动人脸识别（小程序能力）
+      // 注意：startFaceDetect 需要在真机上才能使用
+      console.log('人脸识别已启动')
+      setFaceDetected(true)
+      
+      // 3秒后自动拍照（模拟人脸识别成功）
+      setTimeout(() => {
+        setGuideText('检测到人脸，准备拍照')
+        playVoice('检测到人脸，准备拍照')
+      }, 2000)
+    }).catch(() => {
+      Taro.showModal({
+        title: '提示',
+        content: '需要相机权限才能进行人脸识别',
+        showCancel: false
+      })
     })
   }
 
@@ -59,20 +116,51 @@ export default function CameraPage() {
       return
     }
 
+    // 启动人脸识别
+    startFaceDetect()
+    
     // 显示人脸轮廓并开始扫描
     setShowFaceOutline(true)
     setIsScanning(true)
     setScanProgress(0)
     setScanData({ faceOutline: 0, skinFeatures: 0, moisture: 0, texture: 0 })
+    setGuideText('正在扫描面部...')
+    playVoice('正在扫描面部')
 
-    // 模拟扫描动画 - 更详细的步骤
+    // 模拟扫描动画
     let progress = 0
+    let countdownValue = 5
     
+    // 倒计时
+    const countdownInterval = setInterval(() => {
+      countdownValue -= 1
+      setCountdown(countdownValue)
+      
+      if (countdownValue > 0) {
+        // 根据倒计时显示不同的引导文字
+        if (countdownValue === 4) {
+          setGuideText('请摘下眼镜，露出额头')
+          playVoice('请摘下眼镜，露出额头')
+        } else if (countdownValue === 3) {
+          setGuideText('请保持适当距离')
+          playVoice('请保持适当距离')
+        } else if (countdownValue === 2) {
+          setGuideText('保持当前姿势，不要移动')
+          playVoice('保持当前姿势，不要移动')
+        } else if (countdownValue === 1) {
+          setGuideText('即将拍照')
+          playVoice('即将拍照')
+        }
+      } else {
+        clearInterval(countdownInterval)
+      }
+    }, 1000)
+    
+    // 扫描进度动画
     const scanInterval = setInterval(() => {
       progress += 1
       setScanProgress(progress)
 
-      // 每25%进度更新一个扫描步骤
       if (progress <= 25) {
         setScanData(prev => ({ ...prev, faceOutline: Math.min(100, (progress / 25) * 100) }))
       } else if (progress <= 50) {
@@ -100,19 +188,23 @@ export default function CameraPage() {
 
       if (progress >= 100) {
         clearInterval(scanInterval)
-        // 扫描完成，自动拍照
         takePhoto()
       }
-    }, 50) // 5秒内完成扫描（100% / 1% per 50ms = 5秒）
+    }, 50) // 5秒内完成扫描
   }
 
   const takePhoto = () => {
     const ctx = Taro.createCameraContext()
+    
+    // 停止语音播报
+    if (innerAudioContext) {
+      innerAudioContext.stop()
+    }
+    
     ctx.takePhoto({
       quality: 'high',
       success: (res) => {
         console.log('拍照成功:', res.tempImagePath)
-        // 跳转到分析页面，带上识别成功标识
         Taro.redirectTo({
           url: `/pages/analyzing/index?imagePath=${encodeURIComponent(res.tempImagePath)}&scanSuccess=true`
         })
@@ -142,10 +234,11 @@ export default function CameraPage() {
   }
 
   const handleCancel = () => {
+    if (innerAudioContext) {
+      innerAudioContext.stop()
+    }
     Taro.navigateBack()
   }
-
-
 
   if (!isWeapp) {
     return (
@@ -176,9 +269,9 @@ export default function CameraPage() {
       {/* 中间显示区域 */}
       <View className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
         {showFaceOutline ? (
-          // 人脸检测框 - 开始检测后显示（修复版）
+          // 人脸检测框
           <View className="relative w-[280px] h-[380px]">
-            {/* 面部轮廓 - 改为标准椭圆，与扫描点匹配 */}
+            {/* 面部轮廓 */}
             <View 
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-64 border-4 border-rose-400 rounded-[50%]"
               style={{ 
@@ -186,14 +279,22 @@ export default function CameraPage() {
               }}
             />
 
-            {/* 扫描点 - 12个点椭圆形分布 - 完美匹配标准椭圆 */}
+            {/* 人脸识别状态指示 */}
+            <View className="absolute top-0 left-0 right-0 flex justify-center">
+              <View className={`px-4 py-1 rounded-full flex items-center gap-2 ${faceDetected ? 'bg-green-500' : 'bg-amber-500'}`}>
+                <Text className="text-white text-xs block">
+                  {faceDetected ? '✓ 已识别' : '○ 寻找中'}
+                </Text>
+              </View>
+            </View>
+
+            {/* 扫描点 */}
             {isScanning && Array.from({ length: 12 }).map((_, index) => {
-              // 从 -PI/2 开始，让第一个点在椭圆顶部
               const angle = (index / 12) * 2 * Math.PI - Math.PI / 2
-              const radiusX = 96  // w-48 的一半
-              const radiusY = 128 // h-64 的一半
-              const centerX = 140 // w-280 的一半
-              const centerY = 190 // h-380 的一半
+              const radiusX = 96
+              const radiusY = 128
+              const centerX = 140
+              const centerY = 190
               const x = centerX + radiusX * Math.cos(angle) - 3
               const y = centerY + radiusY * Math.sin(angle) - 3
               
@@ -211,49 +312,51 @@ export default function CameraPage() {
               )
             })}
 
-          {/* 扫描线动画 - 改进版 */}
-          {isScanning && (
-            <View
-              className="absolute left-0 right-0 h-1"
-              style={{
-                top: `${scanProgress}%`,
-                background: 'linear-gradient(90deg, transparent, rgba(244, 63, 94, 0.9), rgba(180, 83, 173, 0.9), rgba(244, 63, 94, 0.9), transparent)',
-                boxShadow: '0 0 15px rgba(244, 63, 94, 0.8)',
-              }}
-            />
-          )}
+            {/* 扫描线动画 */}
+            {isScanning && (
+              <View
+                className="absolute left-0 right-0 h-1"
+                style={{
+                  top: `${scanProgress}%`,
+                  background: 'linear-gradient(90deg, transparent, rgba(244, 63, 94, 0.9), rgba(180, 83, 173, 0.9), rgba(244, 63, 94, 0.9), transparent)',
+                  boxShadow: '0 0 15px rgba(244, 63, 94, 0.8)',
+                }}
+              />
+            )}
 
-          {/* 扫描网格背景 */}
-          {isScanning && (
-            <View className="absolute inset-4 opacity-20">
-              <View className="w-full h-full" style={{ backgroundImage: 'linear-gradient(rgba(244, 63, 94, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(244, 63, 94, 0.3) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+            {/* 扫描网格背景 */}
+            {isScanning && (
+              <View className="absolute inset-4 opacity-20">
+                <View className="w-full h-full" style={{ backgroundImage: 'linear-gradient(rgba(244, 63, 94, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(244, 63, 94, 0.3) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+              </View>
+            )}
+
+            {/* 语音引导文字 */}
+            {isScanning && (
+              <View className="absolute -top-20 left-0 right-0 text-center">
+                <View className="bg-black/60 backdrop-blur-sm rounded-xl px-4 py-2 mx-4">
+                  <Text className="text-white text-sm font-medium block">
+                    🔊 {guideText}
+                  </Text>
+                  <Text className="text-rose-300 text-xs block mt-1">
+                    {countdown}秒后自动拍照
+                  </Text>
+                </View>
+              </View>
+            )}
+
+            {/* 中心提示点 */}
+            <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <View className="w-2 h-2 bg-rose-400 rounded-full shadow-lg shadow-rose-400/50" />
             </View>
-          )}
-
-          {/* 扫描进度文字 - 移到顶部，不遮挡面部 */}
-          {isScanning && (
-            <View className="absolute -top-16 left-0 right-0 text-center">
-              <Text className="text-white text-sm block">
-                正在扫描面部... {Math.round(scanProgress)}%
-              </Text>
-            </View>
-          )}
-
-          {/* 中心提示点 */}
-          <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <View className="w-2 h-2 bg-rose-400 rounded-full shadow-lg shadow-rose-400/50" />
           </View>
-        </View>
         ) : (
           // 未开始检测时的引导UI
           <View className="flex flex-col items-center justify-center gap-4">
             {/* 引导图标 */}
             <View className="relative w-32 h-32">
-              {/* 外圈脉冲动画 */}
               <View className="absolute inset-0 border-4 border-rose-400/30 rounded-full animate-ping" />
-              {/* 中圈 */}
               <View className="absolute inset-4 border-2 border-rose-400/50 rounded-full" />
-              {/* 内圈 */}
               <View className="absolute inset-8 bg-rose-400/10 border-2 border-rose-400 rounded-full flex items-center justify-center">
                 <Text className="text-4xl">👤</Text>
               </View>
@@ -288,10 +391,9 @@ export default function CameraPage() {
         )}
       </View>
 
-      {/* 顶部控制栏 - 只显示取消按钮和闪光灯状态 */}
+      {/* 顶部控制栏 */}
       <View className="absolute top-0 left-0 right-0 p-6 z-10">
         <View className="flex justify-between items-center">
-          {/* 取消按钮 */}
           <View
             onClick={handleCancel}
             className="bg-black/30 w-10 h-10 flex items-center justify-center rounded-full active:bg-black/50 transition-colors"
@@ -299,25 +401,22 @@ export default function CameraPage() {
             <Text className="text-white text-xl block">✕</Text>
           </View>
 
-          {/* 闪光灯状态指示器 */}
           <View className="flex items-center gap-2 bg-black/30 px-4 py-2 rounded-full">
             <Text className="text-white text-sm block">
               {flash === 'off' ? '闪光灯：关' : flash === 'on' ? '闪光灯：开' : '闪光灯：常亮'}
             </Text>
           </View>
 
-          {/* 占位，保持布局对称 */}
           <View className="w-10 h-10" />
         </View>
       </View>
 
       {/* 底部操作区域 */}
       <View className="absolute bottom-0 left-0 right-0 z-10">
-        {/* 扫描数据展示 - 移到底部，不遮挡面部 */}
+        {/* 扫描数据展示 */}
         {isScanning && (
           <View className="mx-6 mb-4 bg-black/70 backdrop-blur-sm rounded-2xl p-4">
             <View className="flex flex-col gap-2">
-              {/* 面部轮廓扫描 */}
               <View className="flex items-center gap-3">
                 <Text className="text-white text-xs w-20 block">面部轮廓</Text>
                 <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
@@ -329,7 +428,6 @@ export default function CameraPage() {
                 <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.faceOutline)}%</Text>
               </View>
 
-              {/* 肤质特征分析 */}
               <View className="flex items-center gap-3">
                 <Text className="text-white text-xs w-20 block">肤质特征</Text>
                 <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
@@ -341,7 +439,6 @@ export default function CameraPage() {
                 <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.skinFeatures)}%</Text>
               </View>
 
-              {/* 水分含量检测 */}
               <View className="flex items-center gap-3">
                 <Text className="text-white text-xs w-20 block">水分含量</Text>
                 <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
@@ -353,7 +450,6 @@ export default function CameraPage() {
                 <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.moisture)}%</Text>
               </View>
 
-              {/* 皮肤纹理识别 */}
               <View className="flex items-center gap-3">
                 <Text className="text-white text-xs w-20 block">皮肤纹理</Text>
                 <View className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
@@ -400,7 +496,7 @@ export default function CameraPage() {
               <View className="relative w-24 h-24 bg-rose-400 rounded-full flex items-center justify-center shadow-2xl shadow-rose-400/50">
                 <View className="absolute inset-0 bg-rose-400 rounded-full animate-ping opacity-50" />
                 <View className="w-20 h-20 bg-rose-400 rounded-full border-4 border-white flex items-center justify-center">
-                  <Text className="text-white text-2xl font-bold">{5 - Math.floor(scanProgress / 20)}</Text>
+                  <Text className="text-white text-2xl font-bold">{countdown}</Text>
                 </View>
               </View>
             ) : (

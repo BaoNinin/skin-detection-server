@@ -190,5 +190,57 @@
     "imageUrl": "wxfile://tmp_b3375bbaed8a643a56bcc542c5deffb8b3206828800ddab5.jpg",
     "createdAt": "2026-03-15T07:50:36.340Z",
     "updatedAt": "2026-03-15T07:50:36.340Z"
+  },
+  {
+    "id": 9,
+    "userId": 15,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "痘痘",
+      "毛孔粗大",
+      "黑头"
+    ],
+    "moisture": 55,
+    "oiliness": 50,
+    "sensitivity": 20,
+    "acne": 30,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 40,
+    "blackheads": 30,
+    "recommendations": [
+      "使用温和的洁面产品，避免过度清洁导致皮肤屏障受损",
+      "定期使用含有水杨酸或果酸的护肤品，帮助疏通毛孔，减少黑头和痘痘",
+      "注意饮食清淡，减少高糖、高油食物的摄入，多喝水，保持充足的睡眠"
+    ],
+    "imageUrl": "wxfile://tmp_c71778a57885821e2fdaaa50714443f41c8ca0c150fbdff7.jpg",
+    "createdAt": "2026-03-15T08:10:54.227Z",
+    "updatedAt": "2026-03-15T08:10:54.227Z"
+  },
+  {
+    "id": 10,
+    "userId": 15,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "毛孔问题",
+      "轻微色斑"
+    ],
+    "moisture": 65,
+    "oiliness": 45,
+    "sensitivity": 20,
+    "acne": 15,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 25,
+    "blackheads": 10,
+    "recommendations": [
+      "使用温和的洁面产品，避免过度清洁T区",
+      "T区使用控油爽肤水，两颊使用保湿精华",
+      "定期去角质，注意防晒以减少色斑生成"
+    ],
+    "imageUrl": "wxfile://tmp_e61a767603049d416fd75ffa6cef860e3fecb1531551f28b.jpg",
+    "createdAt": "2026-03-15T08:11:47.984Z",
+    "updatedAt": "2026-03-15T08:11:47.984Z"
   }
 ]
