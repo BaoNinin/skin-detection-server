@@ -18,10 +18,9 @@ export default function ProfilePage() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
   const [loading, setLoading] = useState(false)
   const [showEditProfile, setShowEditProfile] = useState(false)
-  const [nickname, setNickname] = useState('')
-  const [avatarUrl, setAvatarUrl] = useState('')
+  const [tempAvatarUrl, setTempAvatarUrl] = useState('')
+  const [tempNickname, setTempNickname] = useState('')
 
-  // 页面显示时加载用户信息
   useDidShow(() => {
     loadUserInfo()
   })
@@ -45,7 +44,6 @@ export default function ProfilePage() {
 
       if (res.data.code === 200) {
         setUserInfo(res.data.data)
-        // 同时更新本地存储
         Taro.setStorageSync('userInfo', res.data.data)
       }
     } catch (err) {
@@ -53,23 +51,7 @@ export default function ProfilePage() {
     }
   }
 
-  const handleGetUserInfo = (e: any) => {
-    console.log('获取用户信息:', e.detail.userInfo)
-    const userDetail = e.detail.userInfo
-
-    if (!userDetail) {
-      Taro.showToast({
-        title: '获取用户信息失败',
-        icon: 'none'
-      })
-      return
-    }
-
-    // 获取用户信息后，调用登录接口
-    performLogin(userDetail)
-  }
-
-  const performLogin = async (userDetail?: any) => {
+  const handleLogin = async () => {
     setLoading(true)
     try {
       const loginRes = await Taro.login()
@@ -80,7 +62,7 @@ export default function ProfilePage() {
         method: 'POST',
         data: {
           code: loginRes.code,
-          userInfo: userDetail || null
+          userInfo: null
         }
       })
 
@@ -90,10 +72,18 @@ export default function ProfilePage() {
         Taro.setStorageSync('userInfo', userData)
         setUserInfo(userData)
 
-        Taro.showToast({
-          title: '登录成功',
-          icon: 'success'
-        })
+        // 登录成功后，检查是否需要完善信息
+        if (!userData.nickname || !userData.avatarUrl) {
+          // 显示完善信息弹窗
+          setShowEditProfile(true)
+          setTempNickname(userData.nickname || '')
+          setTempAvatarUrl(userData.avatarUrl || '')
+        } else {
+          Taro.showToast({
+            title: '登录成功',
+            icon: 'success'
+          })
+        }
       } else {
         Taro.showToast({
           title: res.data.msg || '登录失败',
@@ -112,12 +102,26 @@ export default function ProfilePage() {
   }
 
   const handleChooseAvatar = (e: any) => {
-    console.log('选择头像:', e.detail.avatarUrl)
-    setAvatarUrl(e.detail.avatarUrl)
+    console.log('选择微信头像:', e.detail.avatarUrl)
+    if (e.detail.avatarUrl) {
+      setTempAvatarUrl(e.detail.avatarUrl)
+    }
+  }
+
+  const handleChooseImage = () => {
+    Taro.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album'],
+      success: (res) => {
+        console.log('选择相册图片:', res.tempFilePaths[0])
+        setTempAvatarUrl(res.tempFilePaths[0])
+      }
+    })
   }
 
   const handleSaveProfile = async () => {
-    if (!nickname.trim()) {
+    if (!tempNickname.trim()) {
       Taro.showToast({
         title: '请输入昵称',
         icon: 'none'
@@ -131,13 +135,14 @@ export default function ProfilePage() {
         url: `/api/user/${userId}`,
         method: 'PUT',
         data: {
-          nickname: nickname.trim(),
-          avatarUrl: avatarUrl || null
+          nickname: tempNickname.trim(),
+          avatarUrl: tempAvatarUrl || null
         }
       })
 
       if (res.data.code === 200) {
         setUserInfo(res.data.data)
+        Taro.setStorageSync('userInfo', res.data.data)
         setShowEditProfile(false)
         Taro.showToast({
           title: '保存成功',
@@ -155,6 +160,14 @@ export default function ProfilePage() {
         title: '保存失败',
         icon: 'none'
       })
+    }
+  }
+
+  const handleEditProfile = () => {
+    if (userInfo) {
+      setTempNickname(userInfo.nickname || '')
+      setTempAvatarUrl(userInfo.avatarUrl || '')
+      setShowEditProfile(true)
     }
   }
 
@@ -180,64 +193,77 @@ export default function ProfilePage() {
     <View className="min-h-screen bg-rose-50 p-4">
       <Text className="text-2xl font-bold text-gray-800 mb-6 block">我的</Text>
 
-      {showEditProfile ? (
-        <View className="bg-white rounded-2xl p-6 shadow-sm">
-          <Text className="text-xl font-semibold text-gray-800 mb-6 block text-center">完善个人信息</Text>
+      {/* 完善信息弹窗 */}
+      {showEditProfile && (
+        <View className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <View className="bg-white rounded-2xl p-6 w-80 mx-4">
+            <Text className="text-xl font-semibold text-gray-800 mb-6 block text-center">完善个人信息</Text>
 
-          <View className="flex flex-col items-center mb-6">
-            <View className="relative">
-              {avatarUrl ? (
-                <Image
-                  src={avatarUrl}
-                  mode="aspectFill"
-                  className="w-24 h-24 rounded-full"
-                />
-              ) : (
-                <View className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
-                  <Text className="text-4xl">👤</Text>
-                </View>
-              )}
-              <View className="absolute bottom-0 right-0">
+            <View className="flex flex-col items-center mb-6">
+              <View className="relative">
+                {tempAvatarUrl ? (
+                  <Image
+                    src={tempAvatarUrl}
+                    mode="aspectFill"
+                    className="w-24 h-24 rounded-full"
+                  />
+                ) : (
+                  <View className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                    <Text className="text-4xl">👤</Text>
+                  </View>
+                )}
+              </View>
+
+              <View className="flex gap-2 mt-4">
                 <Button
                   openType="chooseAvatar"
                   onChooseAvatar={handleChooseAvatar}
                   size="mini"
-                  className="rounded-full bg-rose-400 text-white border-0"
+                  className="flex-1 bg-rose-400 text-white rounded-full border-0"
                 >
-                  📷
+                  微信头像
+                </Button>
+                <Button
+                  onClick={handleChooseImage}
+                  size="mini"
+                  className="flex-1 bg-white text-rose-400 border-2 border-rose-400 rounded-full"
+                >
+                  相册选择
                 </Button>
               </View>
             </View>
-          </View>
 
-          <View className="bg-gray-50 rounded-xl px-4 py-3 mb-4">
-            <Text className="text-sm text-gray-500 block mb-2">昵称</Text>
-            <Input
-              type="nickname"
-              value={nickname}
-              onInput={(e) => setNickname(e.detail.value)}
-              placeholder="请输入您的昵称"
-              className="w-full bg-transparent"
-              maxlength={20}
-            />
-          </View>
+            <View className="bg-gray-50 rounded-xl px-4 py-3 mb-4">
+              <Text className="text-sm text-gray-500 block mb-2">昵称</Text>
+              <Input
+                type="nickname"
+                value={tempNickname}
+                onInput={(e) => setTempNickname(e.detail.value)}
+                placeholder="请输入您的昵称"
+                className="w-full bg-transparent"
+                maxlength={20}
+              />
+            </View>
 
-          <View className="flex gap-3">
-            <Button
-              onClick={() => setShowEditProfile(false)}
-              className="flex-1 bg-gray-200 text-gray-700 rounded-xl"
-            >
-              取消
-            </Button>
-            <Button
-              onClick={handleSaveProfile}
-              className="flex-1 bg-rose-400 text-white rounded-xl"
-            >
-              保存
-            </Button>
+            <View className="flex gap-3">
+              <Button
+                onClick={() => setShowEditProfile(false)}
+                className="flex-1 bg-gray-200 text-gray-700 rounded-xl"
+              >
+                取消
+              </Button>
+              <Button
+                onClick={handleSaveProfile}
+                className="flex-1 bg-rose-400 text-white rounded-xl"
+              >
+                保存
+              </Button>
+            </View>
           </View>
         </View>
-      ) : userInfo ? (
+      )}
+
+      {userInfo ? (
         <>
           <View className="bg-white rounded-2xl p-5 shadow-sm mb-4">
             <View className="flex items-center justify-between">
@@ -269,15 +295,13 @@ export default function ProfilePage() {
                   )}
                 </View>
               </View>
-              {!userInfo.nickname && (
-                <Button
-                  size="mini"
-                  onClick={() => setShowEditProfile(true)}
-                  className="bg-rose-400 text-white rounded-full"
-                >
-                  完善信息
-                </Button>
-              )}
+              <Button
+                size="mini"
+                onClick={handleEditProfile}
+                className="bg-rose-400 text-white rounded-full"
+              >
+                编辑
+              </Button>
             </View>
           </View>
 
@@ -319,8 +343,7 @@ export default function ProfilePage() {
             </View>
           ) : (
             <Button
-              openType="getUserInfo"
-              onGetUserInfo={handleGetUserInfo}
+              onClick={handleLogin}
               className="bg-rose-400 text-white rounded-xl w-full"
             >
               微信快速登录
