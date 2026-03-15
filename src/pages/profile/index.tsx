@@ -267,7 +267,10 @@ export default function ProfilePage() {
         <>
           <View className="bg-white rounded-2xl p-5 shadow-sm mb-4">
             <View className="flex items-center justify-between">
-              <View className="flex items-center">
+              <View
+                className="flex items-center cursor-pointer active:opacity-70"
+                onClick={handleEditProfile}
+              >
                 <View className="w-16 h-16 bg-rose-200 rounded-full flex items-center justify-center mr-4 overflow-hidden">
                   {userInfo.avatarUrl ? (
                     <Image
@@ -280,9 +283,12 @@ export default function ProfilePage() {
                   )}
                 </View>
                 <View>
-                  <Text className="text-lg font-semibold text-gray-800 block">
-                    {userInfo.nickname || '用户'}
-                  </Text>
+                  <View className="flex items-center">
+                    <Text className="text-lg font-semibold text-gray-800 block">
+                      {userInfo.nickname || '用户'}
+                    </Text>
+                    <Text className="text-gray-400 text-sm ml-2">✎</Text>
+                  </View>
                   {userInfo.phoneNumber && (
                     <Text className="text-sm text-gray-500 block">
                       📱 {userInfo.phoneNumber}
