@@ -715,5 +715,53 @@
     "imageUrl": "wxfile://tmp_f75ac14ed5b80e75d3ee5887f6c1ef48b8425d430ff989e8.jpg",
     "createdAt": "2026-03-15T09:47:16.065Z",
     "updatedAt": "2026-03-15T09:47:16.065Z"
+  },
+  {
+    "id": 30,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "皮肤整体状态良好"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "使用润唇膏保持唇部滋润，避免舔唇等不良习惯",
+      "日常注意防晒，减少色斑加深风险",
+      "继续保持良好的护肤习惯，维持水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_c5ad3802a6e9c0fb57415c1b754bcfa76c337c7342a99640.jpg",
+    "createdAt": "2026-03-15T09:52:21.616Z",
+    "updatedAt": "2026-03-15T09:52:21.616Z"
+  },
+  {
+    "id": 31,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "继续保持良好的护肤习惯，维持水油平衡",
+      "注意防晒，预防皮肤光老化",
+      "可适当使用具有抗氧化功效的护肤品，提升皮肤健康度"
+    ],
+    "imageUrl": "wxfile://tmp_dced35a73b592f0f8405ce9f64053f07e6b54c018af850e8.jpg",
+    "createdAt": "2026-03-15T10:06:09.722Z",
+    "updatedAt": "2026-03-15T10:06:09.722Z"
   }
 ]
