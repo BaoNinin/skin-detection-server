@@ -397,5 +397,80 @@
     "imageUrl": "wxfile://tmp_8ece3d4dcfa65d7d178d2636082604a74e2312c9e91cb71c.jpg",
     "createdAt": "2026-03-15T09:15:01.729Z",
     "updatedAt": "2026-03-15T09:15:01.729Z"
+  },
+  {
+    "id": 17,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 20,
+    "pores": 10,
+    "blackheads": 10,
+    "recommendations": [
+      "日常注意唇部护理，可使用滋润型润唇膏保持唇部水分",
+      "对于面部色斑，可适当使用含有美白淡斑成分（如维生素C、烟酰胺）的护肤品，同时注意防晒，减少紫外线对皮肤的刺激以预防色斑加重",
+      "整体肤质较好，可维持现有的基础护肤流程，使用温和的洁面产品和保湿护肤品，保持皮肤水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_b7d19436e442bfa9bacef7a9f457e01d95f4326c6466cabc.jpg",
+    "createdAt": "2026-03-15T09:18:32.265Z",
+    "updatedAt": "2026-03-15T09:18:32.265Z"
+  },
+  {
+    "id": 18,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好唇部保湿，可使用滋润型润唇膏",
+      "对于面部的轻微色斑，可使用含有美白淡斑成分（如维生素C、烟酰胺）的护肤品进行护理",
+      "继续保持良好的护肤习惯，维持皮肤的水油平衡状态"
+    ],
+    "imageUrl": "wxfile://tmp_30708fcfab68ac2713963f57d5759902a0654a9f941a0921.jpg",
+    "createdAt": "2026-03-15T09:20:15.657Z",
+    "updatedAt": "2026-03-15T09:20:15.657Z"
+  },
+  {
+    "id": 19,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常注意唇部保湿，可使用无刺激的润唇膏",
+      "对于面部的轻微色斑，可使用含有美白成分如维生素C的护肤品进行护理",
+      "继续保持良好的护肤习惯，维持皮肤的水油平衡状态"
+    ],
+    "imageUrl": "wxfile://tmp_cf15920431364a0c1c24d1696a3c3725574d6b0eca5ca971.jpg",
+    "createdAt": "2026-03-15T09:20:25.800Z",
+    "updatedAt": "2026-03-15T09:20:25.800Z"
   }
 ]

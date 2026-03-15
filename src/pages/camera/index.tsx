@@ -23,6 +23,14 @@ export default function CameraPage() {
   const [guideText, setGuideText] = useState('请将面部对准轮廓')
   const [countdown, setCountdown] = useState(5)
 
+  // 扫描数据展示
+  const [scanData, setScanData] = useState({
+    faceOutline: 0,
+    skinFeatures: 0,
+    moisture: 0,
+    texture: 0
+  })
+
   // 语音播报状态
   const audioContextRef = useRef<any>(null)
   const lastVoiceTimeRef = useRef<number>(0)
@@ -286,6 +294,7 @@ export default function CameraPage() {
     setShowFaceOutline(true)
     setIsScanning(true)
     setScanProgress(0)
+    setScanData({ faceOutline: 0, skinFeatures: 0, moisture: 0, texture: 0 })
     setGuideText('请将面部对准轮廓')
     playVoice('请将面部对准轮廓')
 
@@ -322,6 +331,31 @@ export default function CameraPage() {
     const scanInterval = setInterval(() => {
       progress += 1
       setScanProgress(progress)
+
+      if (progress <= 25) {
+        setScanData(prev => ({ ...prev, faceOutline: Math.min(100, (progress / 25) * 100) }))
+      } else if (progress <= 50) {
+        setScanData(prev => ({ 
+          ...prev,
+          faceOutline: 100,
+          skinFeatures: Math.min(100, ((progress - 25) / 25) * 100) 
+        }))
+      } else if (progress <= 75) {
+        setScanData(prev => ({ 
+          ...prev,
+          faceOutline: 100,
+          skinFeatures: 100,
+          moisture: Math.min(100, ((progress - 50) / 25) * 100) 
+        }))
+      } else if (progress <= 100) {
+        setScanData(prev => ({ 
+          ...prev,
+          faceOutline: 100,
+          skinFeatures: 100,
+          moisture: 100,
+          texture: Math.min(100, ((progress - 75) / 25) * 100) 
+        }))
+      }
 
       if (progress >= 100) {
         clearInterval(scanInterval)
@@ -428,30 +462,6 @@ export default function CameraPage() {
                   : '0 0 20px rgba(251, 191, 36, 0.5)',
               }}
             />
-
-            {/* 人脸识别状态指示 */}
-            <View className="absolute top-0 left-0 right-0 flex justify-center">
-              <View className={`px-4 py-1 rounded-full flex items-center gap-2 ${
-                faceDetected ? (isAligned ? 'bg-green-500' : 'bg-amber-500') : 'bg-gray-500'
-              }`}
-              >
-                <Text className="text-white text-xs block">
-                  {faceDetected ? (isAligned ? '✓ 位置正确' : '○ 需要调整') : '○ 寻找中'}
-                </Text>
-              </View>
-            </View>
-
-            {/* 方向指示箭头 */}
-            {faceDetected && !isAligned && facePosition?.direction && (
-              <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl animate-bounce">
-                {facePosition.direction === 'up' && '⬇️'}
-                {facePosition.direction === 'down' && '⬆️'}
-                {facePosition.direction === 'left' && '➡️'}
-                {facePosition.direction === 'right' && '⬅️'}
-                {facePosition.direction === 'far' && '🔍➡️'}
-                {facePosition.direction === 'near' && '🔍⬅️'}
-              </View>
-            )}
 
             {/* 扫描点 */}
             {isScanning && Array.from({ length: 12 }).map((_, index) => {
@@ -580,27 +590,76 @@ export default function CameraPage() {
 
       {/* 底部操作区域 */}
       <View className="absolute bottom-0 left-0 right-0 z-10">
+        {/* 扫描数据展示 - 紧凑透明版 */}
+        {isScanning && (
+          <View className="mx-6 mb-2 bg-black/10 backdrop-blur-sm rounded-xl p-3">
+            <View className="flex flex-col gap-1.5">
+              <View className="flex items-center gap-2">
+                <Text className="text-white text-[10px] w-14 block">面部轮廓</Text>
+                <View className="flex-1 h-1 bg-gray-600/50 rounded-full overflow-hidden">
+                  <View 
+                    className={`h-full transition-all duration-300 ${
+                      isAligned ? 'bg-green-400' : 'bg-rose-400'
+                    }`}
+                    style={{ width: `${scanData.faceOutline}%` }}
+                  />
+                </View>
+                <Text className="text-white text-[10px] w-8 text-right block">{Math.round(scanData.faceOutline)}%</Text>
+              </View>
+
+              <View className="flex items-center gap-2">
+                <Text className="text-white text-[10px] w-14 block">肤质特征</Text>
+                <View className="flex-1 h-1 bg-gray-600/50 rounded-full overflow-hidden">
+                  <View 
+                    className={`h-full transition-all duration-300 ${
+                      isAligned ? 'bg-green-400' : 'bg-rose-400'
+                    }`}
+                    style={{ width: `${scanData.skinFeatures}%` }}
+                  />
+                </View>
+                <Text className="text-white text-[10px] w-8 text-right block">{Math.round(scanData.skinFeatures)}%</Text>
+              </View>
+
+              <View className="flex items-center gap-2">
+                <Text className="text-white text-[10px] w-14 block">水分含量</Text>
+                <View className="flex-1 h-1 bg-gray-600/50 rounded-full overflow-hidden">
+                  <View 
+                    className={`h-full transition-all duration-300 ${
+                      isAligned ? 'bg-green-400' : 'bg-rose-400'
+                    }`}
+                    style={{ width: `${scanData.moisture}%` }}
+                  />
+                </View>
+                <Text className="text-white text-[10px] w-8 text-right block">{Math.round(scanData.moisture)}%</Text>
+              </View>
+
+              <View className="flex items-center gap-2">
+                <Text className="text-white text-[10px] w-14 block">皮肤纹理</Text>
+                <View className="flex-1 h-1 bg-gray-600/50 rounded-full overflow-hidden">
+                  <View 
+                    className={`h-full transition-all duration-300 ${
+                      isAligned ? 'bg-green-400' : 'bg-rose-400'
+                    }`}
+                    style={{ width: `${scanData.texture}%` }}
+                  />
+                </View>
+                <Text className="text-white text-[10px] w-8 text-right block">{Math.round(scanData.texture)}%</Text>
+              </View>
+            </View>
+          </View>
+        )}
+
         {/* 扫描时的引导文字 - 简洁版 */}
         {isScanning && (
-          <View className="mx-6 mb-3 bg-black/30 backdrop-blur-sm rounded-full px-4 py-2">
-            <View className="flex items-center justify-center gap-2">
-              <Text className={`text-xs font-medium ${
+          <View className="mx-6 mb-2 bg-black/20 backdrop-blur-sm rounded-full px-3 py-1.5">
+            <View className="flex items-center justify-center gap-1.5">
+              <Text className={`text-[10px] font-medium ${
                 isAligned ? 'text-green-400' : 'text-white'
               }`}
               >
                 {guideText}
               </Text>
-              {faceDetected && !isAligned && facePosition?.direction && (
-                <Text className="text-base">
-                  {facePosition.direction === 'up' && '⬇️'}
-                  {facePosition.direction === 'down' && '⬆️'}
-                  {facePosition.direction === 'left' && '➡️'}
-                  {facePosition.direction === 'right' && '⬅️'}
-                  {facePosition.direction === 'far' && '🔍➡️'}
-                  {facePosition.direction === 'near' && '🔍⬅️'}
-                </Text>
-              )}
-              <Text className={`text-xs ${
+              <Text className={`text-[10px] ${
                 isAligned ? 'text-green-300' : 'text-rose-300'
               }`}
               >
