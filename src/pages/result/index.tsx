@@ -1,6 +1,8 @@
 import { View, Text, Image, Button, ScrollView } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
+import RadarChart from '@/components/RadarChart'
+import OverallScore from '@/components/OverallScore'
 
 interface SkinAnalysisResult {
   skinType: string
@@ -16,18 +18,9 @@ interface SkinAnalysisResult {
   recommendations: string[]
 }
 
-interface Indicator {
-  icon: string
-  name: string
-  value: number
-  evaluation: string
-  color: string
-}
-
 export default function ResultPage() {
   const [result, setResult] = useState<SkinAnalysisResult | null>(null)
   const [imagePath, setImagePath] = useState('')
-  const [indicators, setIndicators] = useState<Indicator[]>([])
 
   useEffect(() => {
     const analysisResult = Taro.getStorageSync('skinAnalysisResult')
@@ -36,66 +29,6 @@ export default function ResultPage() {
     if (analysisResult) {
       setResult(analysisResult)
       setImagePath(currentImage || '')
-
-      const inds: Indicator[] = [
-        {
-          icon: '💧',
-          name: '水分',
-          value: analysisResult.moisture,
-          evaluation: analysisResult.moisture >= 60 ? '充足' : analysisResult.moisture >= 30 ? '偏低' : '严重缺水',
-          color: analysisResult.moisture >= 60 ? '#10B981' : analysisResult.moisture >= 30 ? '#F59E0B' : '#EF4444'
-        },
-        {
-          icon: '🛢️',
-          name: '油分',
-          value: analysisResult.oiliness,
-          evaluation: analysisResult.oiliness <= 30 ? '低' : analysisResult.oiliness <= 70 ? '适中' : '偏高',
-          color: analysisResult.oiliness <= 30 ? '#10B981' : analysisResult.oiliness <= 70 ? '#F59E0B' : '#EF4444'
-        },
-        {
-          icon: '🌡️',
-          name: '敏感度',
-          value: analysisResult.sensitivity,
-          evaluation: analysisResult.sensitivity <= 20 ? '不敏感' : analysisResult.sensitivity <= 50 ? '轻度敏感' : '高度敏感',
-          color: analysisResult.sensitivity <= 20 ? '#10B981' : analysisResult.sensitivity <= 50 ? '#F59E0B' : '#EF4444'
-        },
-        {
-          icon: '🔴',
-          name: '痘痘',
-          value: analysisResult.acne ?? 0,
-          evaluation: (analysisResult.acne ?? 0) <= 10 ? '几乎无' : (analysisResult.acne ?? 0) <= 40 ? '轻微' : (analysisResult.acne ?? 0) <= 70 ? '中度' : '严重',
-          color: (analysisResult.acne ?? 0) <= 10 ? '#10B981' : (analysisResult.acne ?? 0) <= 40 ? '#F59E0B' : (analysisResult.acne ?? 0) <= 70 ? '#F97316' : '#EF4444'
-        },
-        {
-          icon: '🌀',
-          name: '皱纹',
-          value: analysisResult.wrinkles ?? 0,
-          evaluation: (analysisResult.wrinkles ?? 0) <= 20 ? '几乎无' : (analysisResult.wrinkles ?? 0) <= 50 ? '轻微' : (analysisResult.wrinkles ?? 0) <= 80 ? '中度' : '严重',
-          color: (analysisResult.wrinkles ?? 0) <= 20 ? '#10B981' : (analysisResult.wrinkles ?? 0) <= 50 ? '#F59E0B' : (analysisResult.wrinkles ?? 0) <= 80 ? '#F97316' : '#EF4444'
-        },
-        {
-          icon: '🟤',
-          name: '色斑',
-          value: analysisResult.spots ?? 0,
-          evaluation: (analysisResult.spots ?? 0) <= 10 ? '几乎无' : (analysisResult.spots ?? 0) <= 40 ? '轻微' : (analysisResult.spots ?? 0) <= 70 ? '中度' : '严重',
-          color: (analysisResult.spots ?? 0) <= 10 ? '#10B981' : (analysisResult.spots ?? 0) <= 40 ? '#F59E0B' : (analysisResult.spots ?? 0) <= 70 ? '#F97316' : '#EF4444'
-        },
-        {
-          icon: '⚫',
-          name: '毛孔',
-          value: analysisResult.pores ?? 0,
-          evaluation: (analysisResult.pores ?? 0) <= 30 ? '几乎无' : (analysisResult.pores ?? 0) <= 60 ? '轻微' : (analysisResult.pores ?? 0) <= 80 ? '中度' : '粗大',
-          color: (analysisResult.pores ?? 0) <= 30 ? '#10B981' : (analysisResult.pores ?? 0) <= 60 ? '#F59E0B' : (analysisResult.pores ?? 0) <= 80 ? '#F97316' : '#EF4444'
-        },
-        {
-          icon: '⚫',
-          name: '黑头',
-          value: analysisResult.blackheads ?? 0,
-          evaluation: (analysisResult.blackheads ?? 0) <= 20 ? '几乎无' : (analysisResult.blackheads ?? 0) <= 50 ? '轻微' : (analysisResult.blackheads ?? 0) <= 80 ? '中度' : '严重',
-          color: (analysisResult.blackheads ?? 0) <= 20 ? '#10B981' : (analysisResult.blackheads ?? 0) <= 50 ? '#F59E0B' : (analysisResult.blackheads ?? 0) <= 80 ? '#F97316' : '#EF4444'
-        }
-      ]
-      setIndicators(inds)
     } else {
       Taro.showToast({
         title: '未找到检测结果',
@@ -121,6 +54,18 @@ export default function ResultPage() {
   const overallScore = calculateOverallScore()
   const scoreRating = overallScore >= 80 ? '优秀' : overallScore >= 60 ? '良好' : '需改善'
 
+  const getRadarData = () => {
+    if (!result) return []
+
+    return [
+      { name: '水分', value: result.moisture, color: '#3B82F6' },
+      { name: '油性', value: 100 - result.oiliness, color: '#10B981' },
+      { name: '敏感度', value: 100 - result.sensitivity, color: '#F59E0B' },
+      { name: '痘痘', value: 100 - (result.acne || 0), color: '#EF4444' },
+      { name: '皱纹', value: 100 - (result.wrinkles || 0), color: '#8B5CF6' }
+    ]
+  }
+
   const handleViewRecommendations = () => {
     Taro.navigateTo({
       url: '/pages/recommend/index'
@@ -133,10 +78,15 @@ export default function ResultPage() {
     })
   }
 
-  const handleSaveRecord = () => {
-    Taro.showToast({
-      title: '记录已保存',
-      icon: 'success'
+  const handleViewDetail = () => {
+    Taro.navigateTo({
+      url: '/pages/result-detail/index'
+    })
+  }
+
+  const handleViewHistory = () => {
+    Taro.switchTab({
+      url: '/pages/history/index'
     })
   }
 
@@ -145,102 +95,147 @@ export default function ResultPage() {
   }
 
   return (
-    <View className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
+    <View className="min-h-screen bg-rose-50">
       <ScrollView scrollY className="h-screen">
         <View className="p-4">
+          {/* 综合评分 */}
+          <OverallScore score={overallScore} rating={scoreRating} />
+
+          {/* 皮肤类型和图片 */}
           <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
-            <View className="flex items-center mb-4">
+            <View className="flex items-center gap-4">
               {imagePath && (
                 <Image
                   src={imagePath}
                   mode="aspectFill"
-                  className="w-20 h-20 rounded-xl mr-4"
+                  className="w-24 h-24 rounded-xl"
                 />
               )}
               <View className="flex-1">
-                <Text className="text-sm text-gray-500 block">综合评分</Text>
-                <Text className="text-4xl font-bold text-rose-400 block">{overallScore}分</Text>
-                <Text className="text-base text-gray-600 block">{scoreRating}</Text>
-              </View>
-              <View className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: overallScore >= 80 ? '#10B981' : overallScore >= 60 ? '#F59E0B' : '#EF4444' }}>
-                <Text className="text-3xl">🌟</Text>
-              </View>
-            </View>
-
-            <View className="border-t border-gray-100 pt-4">
-              <Text className="text-sm text-gray-500 mb-2 block">皮肤类型</Text>
-              <View className="inline-flex items-center px-3 py-1 rounded-full bg-rose-100">
-                <Text className="text-base text-rose-600 font-medium block">{result.skinType}</Text>
+                <Text className="text-sm text-gray-500 mb-2 block">皮肤类型</Text>
+                <View className="inline-flex items-center px-4 py-2 rounded-full bg-rose-100">
+                  <Text className="text-lg text-rose-600 font-semibold block">{result.skinType}</Text>
+                </View>
               </View>
             </View>
           </View>
 
+          {/* 五维雷达图 */}
           <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
-            <Text className="text-lg font-semibold text-gray-800 mb-4 block">各项指标</Text>
-            <ScrollView scrollX className="whitespace-nowrap">
-              <View className="inline-flex gap-3 pb-2">
-                {indicators.map((indicator, index) => (
-                  <View key={index} className="bg-gray-50 rounded-xl p-4 min-w-[120px]">
-                    <Text className="text-2xl mb-2 block">{indicator.icon}</Text>
-                    <Text className="text-sm text-gray-600 block">{indicator.name}</Text>
-                    <Text className="text-2xl font-bold mb-1 block" style={{ color: indicator.color }}>
-                      {indicator.value}
-                    </Text>
-                    <Text className="text-xs" style={{ color: indicator.color }}>{indicator.evaluation}</Text>
-                  </View>
-                ))}
-              </View>
-            </ScrollView>
+            <View className="flex items-center justify-between mb-4">
+              <Text className="text-lg font-semibold text-gray-800 block">五维雷达图</Text>
+              <Text className="text-sm text-gray-500 block">基于 2000 万数据分析</Text>
+            </View>
+            <RadarChart data={getRadarData()} width={280} height={280} />
+            <View className="mt-4 text-center">
+              <Text className="text-sm text-gray-500 block">
+                您的肌肤综合指数为 <Text className="font-bold text-rose-400">{overallScore}分</Text>
+              </Text>
+            </View>
           </View>
 
+          {/* 五大指标详情 */}
+          <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
+            <Text className="text-lg font-semibold text-gray-800 mb-4 block">五大指标详情</Text>
+            <View className="space-y-3">
+              <View className="flex items-center justify-between">
+                <View className="flex items-center gap-2">
+                  <View className="w-3 h-3 rounded-full bg-blue-500" />
+                  <Text className="text-sm text-gray-700 block">水分</Text>
+                </View>
+                <View className="flex items-center gap-2">
+                  <Text className="text-2xl font-bold text-blue-500 block">{result.moisture}</Text>
+                  <Text className="text-xs text-gray-500 block">分</Text>
+                </View>
+              </View>
+              <View className="flex items-center justify-between">
+                <View className="flex items-center gap-2">
+                  <View className="w-3 h-3 rounded-full bg-green-500" />
+                  <Text className="text-sm text-gray-700 block">控油</Text>
+                </View>
+                <View className="flex items-center gap-2">
+                  <Text className="text-2xl font-bold text-green-500 block">{100 - result.oiliness}</Text>
+                  <Text className="text-xs text-gray-500 block">分</Text>
+                </View>
+              </View>
+              <View className="flex items-center justify-between">
+                <View className="flex items-center gap-2">
+                  <View className="w-3 h-3 rounded-full bg-yellow-500" />
+                  <Text className="text-sm text-gray-700 block">舒缓</Text>
+                </View>
+                <View className="flex items-center gap-2">
+                  <Text className="text-2xl font-bold text-yellow-500 block">{100 - result.sensitivity}</Text>
+                  <Text className="text-xs text-gray-500 block">分</Text>
+                </View>
+              </View>
+              <View className="flex items-center justify-between">
+                <View className="flex items-center gap-2">
+                  <View className="w-3 h-3 rounded-full bg-red-500" />
+                  <Text className="text-sm text-gray-700 block">祛痘</Text>
+                </View>
+                <View className="flex items-center gap-2">
+                  <Text className="text-2xl font-bold text-red-500 block">{100 - (result.acne || 0)}</Text>
+                  <Text className="text-xs text-gray-500 block">分</Text>
+                </View>
+              </View>
+              <View className="flex items-center justify-between">
+                <View className="flex items-center gap-2">
+                  <View className="w-3 h-3 rounded-full bg-purple-500" />
+                  <Text className="text-sm text-gray-700 block">抗皱</Text>
+                </View>
+                <View className="flex items-center gap-2">
+                  <Text className="text-2xl font-bold text-purple-500 block">{100 - (result.wrinkles || 0)}</Text>
+                  <Text className="text-xs text-gray-500 block">分</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* 主要问题 */}
           {result.concerns && result.concerns.length > 0 && (
             <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
               <Text className="text-lg font-semibold text-gray-800 mb-3 block">主要问题</Text>
               <View className="flex flex-wrap gap-2">
                 {result.concerns.map((concern, index) => (
-                  <View key={index} className="inline-flex items-center px-3 py-1 rounded-full bg-amber-100">
-                    <Text className="text-sm text-amber-600 block">{concern}</Text>
+                  <View key={index} className="inline-flex items-center px-3 py-1.5 rounded-full bg-amber-100">
+                    <Text className="text-sm text-amber-700 block">{concern}</Text>
                   </View>
                 ))}
               </View>
             </View>
           )}
 
-          {result.recommendations && result.recommendations.length > 0 && (
-            <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
-              <Text className="text-lg font-semibold text-gray-800 mb-3 block">护肤建议</Text>
-              {result.recommendations.map((rec, index) => (
-                <View key={index} className="flex items-start mb-2">
-                  <Text className="text-rose-400 mr-2 block">•</Text>
-                  <Text className="text-sm text-gray-700 flex-1 block">{rec}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-
-          {/* 操作按钮区域 - 随页面滚动 */}
-          <View className="bg-white border-t border-gray-100 p-4 space-y-3 mt-4">
+          {/* 操作按钮 */}
+          <View className="space-y-3 mb-8">
             <Button
-              onClick={handleViewRecommendations}
-              className="w-full bg-rose-400 text-white rounded-full py-3 font-medium"
+              onClick={handleViewDetail}
+              className="w-full bg-rose-400 text-white rounded-full py-4 font-medium"
             >
-              查看推荐产品
+              下一步
             </Button>
+            <Text className="text-sm text-gray-500 text-center block">查看详细报告</Text>
 
             <View className="flex gap-3">
               <Button
-                onClick={handleReDetect}
-                className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
+                onClick={handleViewRecommendations}
+                className="flex-1 bg-white text-rose-400 border-2 border-rose-400 rounded-full py-3"
               >
-                重新检测
+                查看推荐
               </Button>
               <Button
-                onClick={handleSaveRecord}
+                onClick={handleViewHistory}
                 className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
               >
-                保存记录
+                历史记录
               </Button>
             </View>
+
+            <Button
+              onClick={handleReDetect}
+              className="w-full bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
+            >
+              重新检测
+            </Button>
           </View>
         </View>
       </ScrollView>
