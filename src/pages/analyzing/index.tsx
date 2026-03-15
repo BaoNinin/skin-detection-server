@@ -171,22 +171,46 @@ export default function AnalyzingPage() {
       })
 
       const data = JSON.parse(res.data)
+      console.log('=== 分析结果 ===')
+      console.log('响应数据:', data)
+      
       if (data.code === 200) {
         const result = data.data as SkinAnalysisResult
+        console.log('皮肤分析结果:', result)
         Taro.setStorageSync('skinAnalysisResult', result)
         Taro.setStorageSync('currentImagePath', path)
 
         if (userId) {
+          console.log('=== 开始保存历史记录 ===')
+          console.log('userId:', userId)
+          console.log('皮肤类型:', result.skinType)
+          console.log('问题:', result.concerns)
+          
+          const historyData = {
+            userId,
+            skinType: result.skinType,
+            concerns: result.concerns,
+            moisture: result.moisture,
+            oiliness: result.oiliness,
+            sensitivity: result.sensitivity,
+            acne: result.acne || 0,
+            wrinkles: result.wrinkles || 0,
+            spots: result.spots || 0,
+            pores: result.pores || 0,
+            blackheads: result.blackheads || 0,
+            recommendations: result.recommendations,
+            imageUrl: path
+          }
+          console.log('历史记录数据:', historyData)
+          
           Network.request({
             url: '/api/skin/history',
             method: 'POST',
-            data: {
-              userId,
-              ...result,
-              imageUrl: path
-            }
+            data: historyData
           })
-            .then(async () => {
+            .then(async (historyRes) => {
+              console.log('=== 历史记录保存成功 ===')
+              console.log('保存响应:', historyRes.data)
               try {
                 const userRes = await Network.request({
                   url: `/api/user/${userId}`,
@@ -202,8 +226,11 @@ export default function AnalyzingPage() {
               }
             })
             .catch(err => {
-              console.error('保存历史记录失败:', err)
+              console.error('=== 历史记录保存失败 ===')
+              console.error('错误信息:', err)
             })
+        } else {
+          console.warn('=== 用户未登录，跳过保存历史记录 ===')
         }
 
         // 如果是扫描成功，显示芯片激活动画

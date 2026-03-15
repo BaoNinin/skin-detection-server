@@ -293,5 +293,31 @@
     "imageUrl": "wxfile://tmp_01e7e20779cdd7e0b1c541f0d780885a8d2f1835d7893072.jpg",
     "createdAt": "2026-03-15T08:34:39.385Z",
     "updatedAt": "2026-03-15T08:34:39.385Z"
+  },
+  {
+    "id": 13,
+    "userId": 22,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "面部轻度色素沉着",
+      "T区轻微出油"
+    ],
+    "moisture": 65,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 15,
+    "pores": 10,
+    "blackheads": 5,
+    "recommendations": [
+      "唇部使用滋润型唇膏，如含凡士林、角鲨烷成分的产品，保持唇部湿润",
+      "面部色素沉着处可使用含有烟酰胺、维生素C成分的护肤品，帮助提亮肤色",
+      "T区可适当使用控油爽肤水，保持皮肤水油平衡，整体护肤以温和保湿为主"
+    ],
+    "imageUrl": "wxfile://tmp_59528115278a897e5d037f6e467e90345d9117e054c86a6e.jpg",
+    "createdAt": "2026-03-15T08:54:25.499Z",
+    "updatedAt": "2026-03-15T08:54:25.499Z"
   }
 ]

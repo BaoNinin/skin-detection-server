@@ -44,7 +44,10 @@ export default function HistoryPage() {
     setLoading(true)
 
     const userId = Taro.getStorageSync('userId')
-    console.log('历史记录页面 - userId:', userId, '类型:', typeof userId, '是否有效:', !!userId)
+    console.log('=== 历史记录加载 ===')
+    console.log('userId:', userId, '类型:', typeof userId, '是否有效:', !!userId)
+    console.log('userId is number:', typeof userId === 'number')
+    console.log('userId value:', userId)
 
     if (!userId) {
       console.warn('用户未登录，跳转到登录页面')
@@ -62,18 +65,20 @@ export default function HistoryPage() {
 
     try {
       const url = `/api/skin/history?userId=${userId}`
-      console.log('历史记录页面 - 请求 URL:', url)
+      console.log('请求 URL:', url)
 
       const res = await Network.request({
         url: url,
         method: 'GET'
       })
 
-      console.log('历史记录页面 - 响应数据:', res.data)
+      console.log('响应状态:', res.data.code)
+      console.log('响应数据:', res.data)
+      console.log('记录数量:', res.data.data?.length || 0)
 
       if (res.data.code === 200) {
-        console.log('历史记录页面 - 查询成功，记录数:', res.data.data?.length || 0)
         setHistoryList(res.data.data)
+        console.log('查询成功，历史记录已更新')
       } else if (res.data.code === 401) {
         Taro.showModal({
           title: '提示',
@@ -399,6 +404,9 @@ export default function HistoryPage() {
           <View className="flex flex-col items-center justify-center py-20 px-4">
             <View className="w-12 h-12 border-4 border-rose-200 border-t-rose-400 rounded-full animate-spin mb-4" />
             <Text className="text-base text-gray-600 block">加载中...</Text>
+            {Taro.getStorageSync('userId') && (
+              <Text className="text-xs text-gray-400 mt-2 block">用户 ID: {Taro.getStorageSync('userId')}</Text>
+            )}
           </View>
         )}
 
@@ -419,9 +427,19 @@ export default function HistoryPage() {
                   去登录
                 </Button>
               </>
+            ) : searchKeyword ? (
+              <>
+                <Text className="text-sm text-gray-400 text-center mt-2 block">请尝试其他搜索关键词</Text>
+                <Button
+                  onClick={() => setSearchKeyword('')}
+                  className="bg-gray-200 text-gray-700 rounded-full py-3 px-8 font-medium mt-6"
+                >
+                  清除搜索
+                </Button>
+              </>
             ) : (
               <>
-                <Text className="text-sm text-gray-400 text-center mt-2 block">点击下方按钮开始您的第一次检测</Text>
+                <Text className="text-sm text-gray-400 text-center mt-2 block">点击下方按钮开始您的第一次皮肤检测</Text>
                 <Button
                   onClick={handleGoToDetect}
                   className="bg-rose-400 text-white rounded-full py-3 px-8 font-medium mt-6"
