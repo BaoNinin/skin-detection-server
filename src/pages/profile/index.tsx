@@ -53,7 +53,23 @@ export default function ProfilePage() {
     }
   }
 
-  const handleLogin = async () => {
+  const handleGetUserInfo = (e: any) => {
+    console.log('获取用户信息:', e.detail.userInfo)
+    const userDetail = e.detail.userInfo
+
+    if (!userDetail) {
+      Taro.showToast({
+        title: '获取用户信息失败',
+        icon: 'none'
+      })
+      return
+    }
+
+    // 获取用户信息后，调用登录接口
+    performLogin(userDetail)
+  }
+
+  const performLogin = async (userDetail?: any) => {
     setLoading(true)
     try {
       const loginRes = await Taro.login()
@@ -64,7 +80,7 @@ export default function ProfilePage() {
         method: 'POST',
         data: {
           code: loginRes.code,
-          userInfo: null // 暂时不获取用户信息
+          userInfo: userDetail || null
         }
       })
 
@@ -303,7 +319,8 @@ export default function ProfilePage() {
             </View>
           ) : (
             <Button
-              onClick={handleLogin}
+              openType="getUserInfo"
+              onGetUserInfo={handleGetUserInfo}
               className="bg-rose-400 text-white rounded-xl w-full"
             >
               微信快速登录

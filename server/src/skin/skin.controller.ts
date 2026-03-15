@@ -1,4 +1,4 @@
-import { Controller, Post, UseInterceptors, UploadedFile, BadRequestException, Body } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, BadRequestException, Body, Get, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SkinService } from './skin.service';
 import { UploadedFile as UploadedFileType } from './skin.types';
@@ -34,6 +34,36 @@ export class SkinController {
       };
     } catch (error) {
       console.error('皮肤分析失败:', error);
+      throw error;
+    }
+  }
+
+  @Get('recommend')
+  async recommendProducts(@Query() query: any) {
+    const { skinType, moisture, oiliness, sensitivity, concerns, acne, wrinkles, spots, pores, blackheads } = query;
+
+    const skinData = {
+      skinType: skinType || '中性皮肤',
+      concerns: concerns ? concerns.split(',').map((c: string) => c.trim()) : [],
+      moisture: parseInt(moisture) || 70,
+      oiliness: parseInt(oiliness) || 50,
+      sensitivity: parseInt(sensitivity) || 30,
+      acne: acne !== undefined ? parseInt(acne) : undefined,
+      wrinkles: wrinkles !== undefined ? parseInt(wrinkles) : undefined,
+      spots: spots !== undefined ? parseInt(spots) : undefined,
+      pores: pores !== undefined ? parseInt(pores) : undefined,
+      blackheads: blackheads !== undefined ? parseInt(blackheads) : undefined
+    };
+
+    try {
+      const products = await this.skinService.recommendProducts(skinData);
+      return {
+        code: 200,
+        msg: '推荐成功',
+        data: products
+      };
+    } catch (error) {
+      console.error('产品推荐失败:', error);
       throw error;
     }
   }
