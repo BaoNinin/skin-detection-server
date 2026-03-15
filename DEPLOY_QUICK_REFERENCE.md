@@ -2,8 +2,8 @@
 
 ## 📦 代码包信息
 
-- **文件名**：`server-deploy.tar.gz`
-- **大小**：14KB
+- **文件名**：`server-deploy.zip`
+- **大小**：38KB
 - **位置**：项目根目录
 
 ---
@@ -77,7 +77,7 @@ curl -X POST https://<云托管服务地址>.tcb.qcloud.la/api/user/login \
 
 ## ✅ 部署步骤
 
-1. ✅ 下载代码包 `server-deploy.tar.gz`
+1. ✅ 下载代码包 `server-deploy.zip`
 2. ✅ 登录云开发控制台
 3. ✅ 进入云托管 > 新建服务
 4. ✅ 填写服务配置（参考上方表格）

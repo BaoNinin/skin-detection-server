@@ -2,7 +2,7 @@
 
 ## ✅ 代码包已准备好
 
-代码包位置：`server-deploy.tar.gz` (14KB)
+代码包位置：`server-deploy.zip` (38KB)
 
 ---
 
@@ -39,7 +39,7 @@
 ### 步骤 4：上传代码包
 
 1. 点击"上传代码包"
-2. 选择文件：`server-deploy.tar.gz`
+2. 选择文件：`server-deploy.zip`
 3. 等待上传完成
 
 ---
