@@ -8,6 +8,7 @@ const appConfig = {
     'pages/recommend/index',
     'pages/history/index',
     'pages/history-detail/index',
+    'pages/mall/index',
     'pages/profile/index'
   ],
   window: {
@@ -33,6 +34,12 @@ const appConfig = {
         text: '历史',
         iconPath: './assets/tabbar/clock.png',
         selectedIconPath: './assets/tabbar/clock-active.png'
+      },
+      {
+        pagePath: 'pages/mall/index',
+        text: '商城',
+        iconPath: './assets/tabbar/shopping-bag.png',
+        selectedIconPath: './assets/tabbar/shopping-bag-active.png'
       },
       {
         pagePath: 'pages/profile/index',
