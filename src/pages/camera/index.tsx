@@ -543,26 +543,6 @@ export default function CameraPage() {
               </View>
             )}
 
-            {/* 语音引导文字 */}
-            {isScanning && (
-              <View className="absolute -top-20 left-0 right-0 text-center">
-                <View className="bg-black/60 backdrop-blur-sm rounded-xl px-4 py-2 mx-4">
-                  <Text className={`text-sm font-medium block ${
-                    isAligned ? 'text-green-400' : 'text-white'
-                  }`}
-                  >
-                    🔊 {guideText}
-                  </Text>
-                  <Text className={`text-xs block mt-1 ${
-                    isAligned ? 'text-green-300' : 'text-rose-300'
-                  }`}
-                  >
-                    {countdown}秒后自动拍照
-                  </Text>
-                </View>
-              </View>
-            )}
-
             {/* 中心提示点 */}
             <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <View className={`w-2 h-2 rounded-full shadow-lg ${
@@ -689,6 +669,26 @@ export default function CameraPage() {
                 </View>
                 <Text className="text-white text-xs w-10 text-right block">{Math.round(scanData.texture)}%</Text>
               </View>
+            </View>
+          </View>
+        )}
+
+        {/* 语音引导文字 - 扫描时显示 */}
+        {isScanning && (
+          <View className="mx-6 mb-4 bg-black/50 backdrop-blur-sm rounded-2xl p-4">
+            <View className="flex flex-col items-center gap-2">
+              <Text className={`text-base font-medium text-center ${
+                isAligned ? 'text-green-400' : 'text-white'
+              }`}
+              >
+                🔊 {guideText}
+              </Text>
+              <Text className={`text-sm text-center ${
+                isAligned ? 'text-green-300' : 'text-rose-300'
+              }`}
+              >
+                {countdown}秒后自动拍照
+              </Text>
             </View>
           </View>
         )}

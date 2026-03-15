@@ -319,5 +319,59 @@
     "imageUrl": "wxfile://tmp_59528115278a897e5d037f6e467e90345d9117e054c86a6e.jpg",
     "createdAt": "2026-03-15T08:54:25.499Z",
     "updatedAt": "2026-03-15T08:54:25.499Z"
+  },
+  {
+    "id": 14,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "毛孔细腻"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 20,
+    "pores": 10,
+    "blackheads": 0,
+    "recommendations": [
+      "使用滋润型唇膏，保持唇部水分，避免舔唇等不良习惯",
+      "日常注意防晒，减少色斑形成风险，可适当使用含有美白成分的护肤品预防色斑加重",
+      "继续维持当前良好的皮肤状态，选择温和的洁面产品，避免过度清洁"
+    ],
+    "imageUrl": "wxfile://tmp_421108214124b3cf4e86ce651cf2e2a434c44497ab0de5ed.jpg",
+    "createdAt": "2026-03-15T09:10:12.605Z",
+    "updatedAt": "2026-03-15T09:10:12.605Z"
+  },
+  {
+    "id": 15,
+    "userId": 23,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "T区出油",
+      "唇部干燥起皮",
+      "轻微黑头",
+      "少量色斑"
+    ],
+    "moisture": 65,
+    "oiliness": 45,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 25,
+    "blackheads": 15,
+    "recommendations": [
+      "使用温和的氨基酸洁面产品，重点清洁T区，避免过度清洁两颊",
+      "日常护肤注重补水保湿，可选用含有透明质酸的护肤品",
+      "唇部干燥起皮可使用滋润型唇膏，避免舔唇、撕皮等不良习惯",
+      "注意防晒，减少紫外线对皮肤的伤害，预防色斑加重"
+    ],
+    "imageUrl": "wxfile://tmp_00e35a9780c8a06d7a944dadd032632d3942b84e90a2a470.jpg",
+    "createdAt": "2026-03-15T09:11:16.120Z",
+    "updatedAt": "2026-03-15T09:11:16.120Z"
   }
 ]
