@@ -763,5 +763,30 @@
     "imageUrl": "wxfile://tmp_dced35a73b592f0f8405ce9f64053f07e6b54c018af850e8.jpg",
     "createdAt": "2026-03-15T10:06:09.722Z",
     "updatedAt": "2026-03-15T10:06:09.722Z"
+  },
+  {
+    "id": 32,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "痘痘",
+      "轻微色斑"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 30,
+    "wrinkles": 0,
+    "spots": 20,
+    "pores": 20,
+    "blackheads": 10,
+    "recommendations": [
+      "使用温和的洁面产品，避免过度清洁",
+      "针对痘痘区域可使用含有水杨酸的护肤品",
+      "注意防晒，减少色斑加重的风险"
+    ],
+    "imageUrl": "wxfile://tmp_cfc320a5f774fd8f53490dff6f807e52a8b407d1f6bb7619.jpg",
+    "createdAt": "2026-03-15T10:24:26.043Z",
+    "updatedAt": "2026-03-15T10:24:26.043Z"
   }
 ]
