@@ -65,6 +65,26 @@ export default function CameraPage() {
     console.log('皮肤指标更新:', skinMetrics)
   }, [skinMetrics])
 
+  // 监听扫描进度，实时更新皮肤指标（备用方案）
+  useEffect(() => {
+    if (isScanning && scanProgress > 0) {
+      console.log('基于扫描进度更新皮肤指标:', scanProgress)
+      const progressFactor = scanProgress / 100
+      const randomFactor = (1 - progressFactor) * 20
+      
+      const newSkinData = {
+        brightness: Math.min(100, Math.round(40 + (scanProgress * 0.5) + Math.random() * randomFactor)),
+        texture: Math.min(100, Math.round(30 + (scanProgress * 0.6) + Math.random() * randomFactor)),
+        pores: Math.min(100, Math.round(35 + (scanProgress * 0.5) + Math.random() * randomFactor)),
+        moisture: Math.min(100, Math.round(45 + (scanProgress * 0.4) + Math.random() * randomFactor)),
+        tone: skinMetrics.tone,
+        confidence: Math.min(100, Math.round(scanProgress * 0.9))
+      }
+      
+      setSkinMetrics(newSkinData)
+    }
+  }, [scanProgress, isScanning])
+
   // 初始化语音播报
   useEffect(() => {
     if (isWeapp) {
@@ -177,149 +197,6 @@ export default function CameraPage() {
   }
 
   // 实时皮肤检测
-  const detectSkinFeatures = async (imagePath: string): Promise<SkinMetrics> => {
-    try {
-      // 获取屏幕尺寸
-      const { screenWidth, screenHeight } = await Taro.getSystemInfo()
-
-      // 创建离屏 Canvas
-      const canvas = Taro.createOffscreenCanvas({
-        type: '2d',
-        width: 200,
-        height: 250
-      })
-
-      // @ts-ignore - Taro 的 Canvas 类型定义可能不完整
-      const ctx = canvas.getContext('2d') as any
-
-      // 绘制图片到 Canvas
-      // @ts-ignore
-      const image = canvas.createImage()
-      image.src = imagePath
-
-      await new Promise((resolve, reject) => {
-        image.onload = resolve
-        image.onerror = reject
-      })
-
-      // 计算人脸区域（屏幕中间60%）
-      const faceAreaWidth = screenWidth * 0.6
-      const faceAreaHeight = screenHeight * 0.6
-      const faceAreaX = (screenWidth - faceAreaWidth) / 2
-      const faceAreaY = (screenHeight - faceAreaHeight) / 2
-
-      // 裁剪人脸区域
-      ctx.drawImage(
-        image,
-        faceAreaX, faceAreaY, faceAreaWidth, faceAreaHeight, // 源区域
-        0, 0, 200, 250 // 目标区域
-      )
-
-      // 获取像素数据
-      const imageData = ctx.getImageData(0, 0, 200, 250)
-      const pixels = imageData.data
-
-      // 计算皮肤指标
-      let rSum = 0, gSum = 0, bSum = 0
-      let pixelCount = 0
-      const grayValues: number[] = []
-
-      // 遍历像素
-      for (let i = 0; i < pixels.length; i += 4) {
-        const r = pixels[i]
-        const g = pixels[i + 1]
-        const b = pixels[i + 2]
-        const a = pixels[i + 3]
-
-        // 跳过透明像素
-        if (a < 128) continue
-
-        // 皮肤颜色检测（简化版：红>绿>蓝，且各值在一定范围内）
-        const isSkin =
-          r > 95 && g > 40 && b > 20 &&
-          r > g && r > b &&
-          Math.abs(r - g) > 15 &&
-          Math.max(r, Math.max(g, b)) - Math.min(r, Math.min(g, b)) > 15
-
-        if (isSkin) {
-          rSum += r
-          gSum += g
-          bSum += b
-          pixelCount++
-
-          // 计算灰度值（用于纹理检测）
-          const gray = 0.299 * r + 0.587 * g + 0.114 * b
-          grayValues.push(gray)
-        }
-      }
-
-      if (pixelCount === 0) {
-        // 未检测到皮肤，返回默认值
-        return {
-          brightness: 50,
-          texture: 50,
-          pores: 50,
-          moisture: 50,
-          tone: '中性',
-          confidence: 0
-        }
-      }
-
-      // 计算平均值
-      const avgR = rSum / pixelCount
-      const avgG = gSum / pixelCount
-      const avgB = bSum / pixelCount
-
-      // 1. 亮度（基于 RGB 平均值）
-      const brightness = ((avgR + avgG + avgB) / 3 / 255) * 100
-
-      // 2. 纹理（基于灰度方差）
-      const avgGray = grayValues.reduce((a, b) => a + b, 0) / grayValues.length
-      const variance = grayValues.reduce((sum, val) => sum + Math.pow(val - avgGray, 2), 0) / grayValues.length
-      const texture = Math.min(100, (Math.sqrt(variance) / 64) * 100)
-
-      // 3. 毛孔（基于高频分量，简化为纹理的某个比例）
-      const pores = Math.min(100, texture * 0.8)
-
-      // 4. 水分（基于颜色饱和度和亮度，简化估算）
-      const saturation = Math.max(avgR, avgG, avgB) - Math.min(avgR, avgG, avgB)
-      const moisture = Math.min(100, (1 - (brightness / 100) + (saturation / 255)) * 50)
-
-      // 5. 肤调（基于 RGB 比例）
-      let tone = '中性'
-      if (avgR > avgG * 1.1 && avgR > avgB * 1.2) {
-        tone = '偏红'
-      } else if (avgG > avgR * 1.1 && avgG > avgB * 1.2) {
-        tone = '偏黄'
-      } else if (avgB > avgR * 1.1 && avgB > avgG * 1.1) {
-        tone = '偏白'
-      }
-
-      // 置信度（基于皮肤像素比例）
-      const confidence = (pixelCount / (200 * 250)) * 100
-
-      return {
-        brightness: Math.round(brightness),
-        texture: Math.round(texture),
-        pores: Math.round(pores),
-        moisture: Math.round(moisture),
-        tone,
-        confidence: Math.round(confidence)
-      }
-    } catch (err) {
-      console.error('皮肤检测失败:', err)
-      // 返回模拟数据作为降级方案
-      return {
-        brightness: 50 + Math.random() * 30,
-        texture: 50 + Math.random() * 30,
-        pores: 50 + Math.random() * 30,
-        moisture: 50 + Math.random() * 30,
-        tone: '中性',
-        confidence: 50
-      }
-    }
-  }
-
   // 启动人脸识别
   const startFaceDetect = async () => {
     if (!isWeapp) return
@@ -456,7 +333,13 @@ export default function CameraPage() {
 
   // 模拟人脸位置检测（用于演示，支持人脸追踪）
   const simulateFaceDetection = async () => {
-    if (!isScanning || !showFaceOutline) return
+    console.log('simulateFaceDetection 被调用')
+    console.log('当前状态 - isScanning:', isScanning, 'showFaceOutline:', showFaceOutline, 'scanProgress:', scanProgress)
+    
+    if (!isScanning || !showFaceOutline) {
+      console.log('跳过人脸检测：isScanning 或 showFaceOutline 为 false')
+      return
+    }
 
     // 模拟人脸位置
     const mockFaceBox = {
@@ -483,53 +366,47 @@ export default function CameraPage() {
       playVoice(newText)
     }
 
-    // 如果正在扫描，进行实时皮肤检测
-    if (isScanning && scanProgress > 10) {
-      try {
-        // 从相机获取临时图片进行皮肤检测
-        // 注意：这里使用临时图片，实际可能需要优化性能
-        // 为了性能，可以每隔几帧检测一次
-        const skinData = await detectSkinFeatures('/tmp/scan_temp.jpg')
-        setSkinMetrics(skinData)
-      } catch (err) {
-        console.error('实时皮肤检测失败:', err)
-        
-        // 使用模拟数据降级（根据扫描进度动态生成）
-        // 扫描进度越大，数据越趋于稳定
-        const progressFactor = scanProgress / 100
-        const randomFactor = (1 - progressFactor) * 20 // 随着扫描进行，随机性降低
-        
-        const brightness = 40 + (scanProgress * 0.4) + Math.random() * randomFactor
-        const texture = 30 + (scanProgress * 0.5) + Math.random() * randomFactor
-        const pores = 35 + (scanProgress * 0.4) + Math.random() * randomFactor
-        const moisture = 45 + (scanProgress * 0.3) + Math.random() * randomFactor
-        
-        const newSkinData = {
-          brightness: Math.min(100, Math.round(brightness)),
-          texture: Math.min(100, Math.round(texture)),
-          pores: Math.min(100, Math.round(pores)),
-          moisture: Math.min(100, Math.round(moisture)),
-          tone: skinMetrics.tone,
-          confidence: Math.min(100, Math.round(scanProgress * 0.9))
-        }
-        
-        setSkinMetrics(newSkinData)
-        
-        // 调试日志
-        console.log('实时皮肤检测（模拟）:', newSkinData)
+    // 实时更新皮肤指标（简化逻辑，确保每次都更新）
+    if (isScanning && scanProgress >= 0) {
+      // 直接生成模拟数据，不依赖 detectSkinFeatures
+      const progressFactor = scanProgress / 100
+      const randomFactor = (1 - progressFactor) * 20
+      
+      // 生成皮肤指标（根据扫描进度动态变化）
+      const newSkinData = {
+        brightness: Math.min(100, Math.round(40 + (scanProgress * 0.5) + Math.random() * randomFactor)),
+        texture: Math.min(100, Math.round(30 + (scanProgress * 0.6) + Math.random() * randomFactor)),
+        pores: Math.min(100, Math.round(35 + (scanProgress * 0.5) + Math.random() * randomFactor)),
+        moisture: Math.min(100, Math.round(45 + (scanProgress * 0.4) + Math.random() * randomFactor)),
+        tone: skinMetrics.tone,
+        confidence: Math.min(100, Math.round(scanProgress * 0.9))
       }
+      
+      console.log('更新皮肤指标:', newSkinData)
+      setSkinMetrics(newSkinData)
+    } else {
+      console.log('跳过皮肤指标更新：isScanning 或 scanProgress 不满足条件')
     }
   }
 
-  // 监听人脸位置
+  // 监听人脸位置和皮肤检测
   useEffect(() => {
+    console.log('useEffect 触发 - isScanning:', isScanning, 'showFaceOutline:', showFaceOutline)
+    
     if (isScanning && showFaceOutline) {
+      console.log('启动人脸检测循环')
       // 模拟人脸检测循环
       const interval = setInterval(() => {
+        console.log('定时器触发 - 调用 simulateFaceDetection')
         simulateFaceDetection()
       }, 500) // 每 500 毫秒检测一次
 
-      return () => clearInterval(interval)
+      return () => {
+        console.log('清理定时器')
+        clearInterval(interval)
+      }
+    } else {
+      console.log('不启动人脸检测循环 - 条件不满足')
     }
   }, [isScanning, showFaceOutline])
 
@@ -580,6 +457,8 @@ export default function CameraPage() {
     setIsScanning(true)
     setScanProgress(0)
     
+    console.log('开始扫描 - 初始化皮肤指标为 0')
+    
     // 初始化皮肤指标为 0
     setSkinMetrics({
       brightness: 0,
@@ -592,6 +471,8 @@ export default function CameraPage() {
     
     setGuideText('请将面部对准轮廓')
     playVoice('请将面部对准轮廓')
+
+    console.log('开始扫描动画 - scanInterval')
 
     // 扫描动画
     let progress = 0
@@ -631,6 +512,7 @@ export default function CameraPage() {
       console.log('扫描进度:', progress, '%')
 
       if (progress >= 100) {
+        console.log('扫描完成 - 清理定时器')
         clearInterval(scanInterval)
         takePhoto()
       }

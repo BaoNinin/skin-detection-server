@@ -667,5 +667,53 @@
     "imageUrl": "wxfile://tmp_53c310cd812950c4dcfa230274ed0346e06793020e76965d.jpg",
     "createdAt": "2026-03-15T09:41:09.175Z",
     "updatedAt": "2026-03-15T09:41:09.175Z"
+  },
+  {
+    "id": 28,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "皮肤整体状态良好"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 5,
+    "blackheads": 5,
+    "recommendations": [
+      "唇部可使用滋润型唇膏，保持唇部水分，避免舔唇等不良习惯",
+      "日常注意防晒，减少色斑形成的诱因",
+      "继续保持良好的护肤习惯，维持皮肤的水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_c0c6a5ea8a40d2ddf3319863e641acb6139e925e1a121a3d.jpg",
+    "createdAt": "2026-03-15T09:46:07.180Z",
+    "updatedAt": "2026-03-15T09:46:07.180Z"
+  },
+  {
+    "id": 29,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 80,
+    "oiliness": 20,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "继续维持当前良好的护肤习惯，使用温和的洁面产品",
+      "定期使用保湿面膜来巩固皮肤的水分含量",
+      "注意防晒，预防光老化和色斑生成"
+    ],
+    "imageUrl": "wxfile://tmp_f75ac14ed5b80e75d3ee5887f6c1ef48b8425d430ff989e8.jpg",
+    "createdAt": "2026-03-15T09:47:16.065Z",
+    "updatedAt": "2026-03-15T09:47:16.065Z"
   }
 ]
