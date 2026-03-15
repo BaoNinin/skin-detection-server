@@ -41,6 +41,8 @@ export default function HistoryPage() {
     setLoading(true)
 
     const userId = Taro.getStorageSync('userId')
+    console.log('历史记录页面 - userId:', userId, '类型:', typeof userId, '是否有效:', !!userId)
+
     if (!userId) {
       console.warn('用户未登录，跳转到登录页面')
       Taro.showModal({
@@ -56,12 +58,18 @@ export default function HistoryPage() {
     }
 
     try {
+      const url = `/api/skin/history?userId=${userId}`
+      console.log('历史记录页面 - 请求 URL:', url)
+
       const res = await Network.request({
-        url: `/api/skin/history?userId=${userId}`,
+        url: url,
         method: 'GET'
       })
 
+      console.log('历史记录页面 - 响应数据:', res.data)
+
       if (res.data.code === 200) {
+        console.log('历史记录页面 - 查询成功，记录数:', res.data.data?.length || 0)
         setHistoryList(res.data.data)
       } else if (res.data.code === 401) {
         // 401 未登录，跳转到登录页面

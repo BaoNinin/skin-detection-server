@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "userId": 1,
+    "userId": 14,
     "skinType": "干性皮肤",
     "concerns": [
       "干燥",
@@ -25,7 +25,7 @@
   },
   {
     "id": 2,
-    "userId": 1,
+    "userId": 14,
     "skinType": "混合性皮肤",
     "concerns": [
       "T区油腻",
@@ -49,7 +49,7 @@
   },
   {
     "id": 3,
-    "userId": 1,
+    "userId": 14,
     "skinType": "中性皮肤",
     "concerns": [],
     "moisture": 75,
@@ -70,7 +70,7 @@
   },
   {
     "id": 4,
-    "userId": 1,
+    "userId": 14,
     "skinType": "油性皮肤",
     "concerns": [
       "痘痘",
@@ -94,7 +94,7 @@
   },
   {
     "id": 5,
-    "userId": 1,
+    "userId": 14,
     "skinType": "敏感性皮肤",
     "concerns": [
       "泛红",
@@ -139,5 +139,56 @@
     "imageUrl": null,
     "createdAt": "2026-03-15T07:44:00.148Z",
     "updatedAt": "2026-03-15T07:44:00.148Z"
+  },
+  {
+    "id": 7,
+    "userId": 14,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "轻微毛孔问题"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 10,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好防晒，减少紫外线对皮肤的伤害，预防色斑加重",
+      "使用温和的洁面产品，保持皮肤清洁的同时避免过度清洁",
+      "可以适当使用含有保湿成分的护肤品，维持皮肤水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_3d3a292a40223954cd2b5903d5f3789598d6dba3c2ffe7af.jpg",
+    "createdAt": "2026-03-15T07:48:13.510Z",
+    "updatedAt": "2026-03-15T07:48:13.510Z"
+  },
+  {
+    "id": 8,
+    "userId": 14,
+    "skinType": "油性皮肤",
+    "concerns": [
+      "痘痘",
+      "毛孔粗大",
+      "黑头"
+    ],
+    "moisture": 55,
+    "oiliness": 65,
+    "sensitivity": 25,
+    "acne": 30,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 40,
+    "blackheads": 35,
+    "recommendations": [
+      "使用温和的氨基酸洁面产品，每天清洁面部2次，避免过度清洁导致皮肤屏障受损",
+      "选择含有水杨酸、壬二酸等成分的护肤品，帮助改善痘痘和黑头问题，同时定期使用清洁面膜清理毛孔内的油脂和污垢",
+      "注意饮食清淡，减少高糖、高脂肪和辛辣食物的摄入，多吃蔬菜水果，保持充足的睡眠和规律的作息，有助于调节皮肤油脂分泌"
+    ],
+    "imageUrl": "wxfile://tmp_b3375bbaed8a643a56bcc542c5deffb8b3206828800ddab5.jpg",
+    "createdAt": "2026-03-15T07:50:36.340Z",
+    "updatedAt": "2026-03-15T07:50:36.340Z"
   }
 ]
