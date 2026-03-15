@@ -1,0 +1,143 @@
+[
+  {
+    "id": 1,
+    "userId": 1,
+    "skinType": "干性皮肤",
+    "concerns": [
+      "干燥",
+      "细纹"
+    ],
+    "moisture": 45,
+    "oiliness": 30,
+    "sensitivity": 40,
+    "acne": 0,
+    "wrinkles": 15,
+    "spots": 0,
+    "pores": 25,
+    "blackheads": 10,
+    "recommendations": [
+      "加强保湿",
+      "使用温和的洁面产品"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-10T10:30:00.000Z",
+    "updatedAt": "2026-03-10T10:30:00.000Z"
+  },
+  {
+    "id": 2,
+    "userId": 1,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "T区油腻",
+      "毛孔粗大"
+    ],
+    "moisture": 65,
+    "oiliness": 60,
+    "sensitivity": 35,
+    "acne": 20,
+    "wrinkles": 5,
+    "spots": 10,
+    "pores": 50,
+    "blackheads": 30,
+    "recommendations": [
+      "平衡水油",
+      "定期深层清洁"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-12T14:20:00.000Z",
+    "updatedAt": "2026-03-12T14:20:00.000Z"
+  },
+  {
+    "id": 3,
+    "userId": 1,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 75,
+    "oiliness": 45,
+    "sensitivity": 30,
+    "acne": 5,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 30,
+    "blackheads": 15,
+    "recommendations": [
+      "保持现有护肤习惯",
+      "注意防晒"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-13T09:15:00.000Z",
+    "updatedAt": "2026-03-13T09:15:00.000Z"
+  },
+  {
+    "id": 4,
+    "userId": 1,
+    "skinType": "油性皮肤",
+    "concerns": [
+      "痘痘",
+      "黑头"
+    ],
+    "moisture": 55,
+    "oiliness": 75,
+    "sensitivity": 45,
+    "acne": 40,
+    "wrinkles": 10,
+    "spots": 20,
+    "pores": 60,
+    "blackheads": 45,
+    "recommendations": [
+      "控油祛痘",
+      "使用水杨酸产品"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-14T16:45:00.000Z",
+    "updatedAt": "2026-03-14T16:45:00.000Z"
+  },
+  {
+    "id": 5,
+    "userId": 1,
+    "skinType": "敏感性皮肤",
+    "concerns": [
+      "泛红",
+      "刺痛"
+    ],
+    "moisture": 50,
+    "oiliness": 35,
+    "sensitivity": 70,
+    "acne": 10,
+    "wrinkles": 5,
+    "spots": 0,
+    "pores": 35,
+    "blackheads": 20,
+    "recommendations": [
+      "使用舒缓产品",
+      "避免刺激性成分"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-15T11:20:00.000Z",
+    "updatedAt": "2026-03-15T11:20:00.000Z"
+  },
+  {
+    "id": 6,
+    "userId": 1,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "T区油腻",
+      "毛孔粗大"
+    ],
+    "moisture": 60,
+    "oiliness": 55,
+    "sensitivity": 40,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "注意控油",
+      "定期清洁"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-15T07:44:00.148Z",
+    "updatedAt": "2026-03-15T07:44:00.148Z"
+  }
+]

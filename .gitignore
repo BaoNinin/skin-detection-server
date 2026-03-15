@@ -38,3 +38,7 @@ pnpm-debug.log*
 
 # Key
 # key/
+
+# Local data storage
+server/data/
+*.json

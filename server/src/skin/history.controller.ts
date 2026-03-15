@@ -33,7 +33,7 @@ export class HistoryController {
   }
 
   @Post('history')
-  async saveHistory(@Body() body: any) {
+  async saveHistory(@Body() body: any): Promise<any> {
     console.log('收到保存历史记录请求');
 
     try {
@@ -55,20 +55,12 @@ export class HistoryController {
     console.log('收到删除历史记录请求，ID:', id);
 
     try {
-      const client = await import('@/storage/database/supabase-client').then(m => m.getSupabaseClient());
-      const { error } = await client
-        .from('skin_analysis_history')
-        .delete()
-        .eq('id', parseInt(id));
-
-      if (error) {
-        console.error('删除历史记录失败:', error);
-        throw error;
-      }
+      const result = await this.historyService.deleteHistory(id);
 
       return {
         code: 200,
-        msg: '删除成功'
+        msg: '删除成功',
+        data: result
       };
     } catch (error) {
       console.error('删除历史记录失败:', error);

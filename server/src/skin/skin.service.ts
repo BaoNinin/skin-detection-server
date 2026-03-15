@@ -188,34 +188,4 @@ export class SkinService {
   async getHistory(userId?: number) {
     return this.historyService.getHistory(userId);
   }
-
-  async saveHistory(record: {
-    userId: number;
-    skinType: string;
-    concerns: string[];
-    moisture: number;
-    oiliness: number;
-    sensitivity: number;
-    recommendations: string[];
-    imageUrl?: string;
-    imageFile?: UploadedFile; // 新增：支持上传原始文件到云存储
-  }) {
-    // 如果提供了原始文件，上传到云存储
-    if (record.imageFile) {
-      try {
-        console.log('上传图片到云存储...');
-        const cloudImageUrl = await this.cloudStorageService.uploadFile(
-          record.imageFile,
-          `skin-images/${record.userId}/${Date.now()}.jpg`
-        );
-        record.imageUrl = cloudImageUrl;
-        console.log('云存储上传成功:', cloudImageUrl);
-      } catch (error) {
-        console.error('云存储上传失败，继续保存历史记录:', error);
-        // 即使上传失败，也继续保存历史记录
-      }
-    }
-
-    return this.historyService.saveHistory(record);
-  }
 }
