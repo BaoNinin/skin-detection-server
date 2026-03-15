@@ -7,14 +7,14 @@ WORKDIR /app
 # 设置环境变量
 ENV NODE_ENV=production
 
-# 复制 package.json 和 pnpm-lock.yaml
-COPY package.json pnpm-lock.yaml ./
-
 # 安装 pnpm
 RUN npm install -g pnpm
 
-# 安装依赖
-RUN pnpm install
+# 复制 package.json 和 pnpm-lock.yaml（根目录的）
+COPY package.json ./
+
+# 安装依赖（使用 --frozen-lockfile 确保依赖一致性）
+RUN pnpm install --frozen-lockfile
 
 # 复制源代码
 COPY . .
@@ -22,7 +22,7 @@ COPY . .
 # 构建项目
 RUN pnpm build
 
-# 暴露端口
+# 暴露端口（云托管健康检查端口）
 EXPOSE 80
 
 # 启动应用
