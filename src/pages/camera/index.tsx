@@ -34,6 +34,11 @@ export default function CameraPage() {
   const [guideText, setGuideText] = useState('请将面部对准轮廓')
   const [countdown, setCountdown] = useState(5)
 
+  // 调试日志：监听扫描进度变化
+  useEffect(() => {
+    console.log('扫描进度更新:', scanProgress, '%')
+  }, [scanProgress])
+
   // 人脸追踪相关状态
   const facePositionHistoryRef = useRef<Array<FacePosition>>([])
   const smoothedPositionRef = useRef<FacePosition | null>(null)
@@ -591,6 +596,9 @@ export default function CameraPage() {
       progress += 1
       setScanProgress(progress)
 
+      // 调试日志：打印扫描进度
+      console.log('扫描进度:', progress, '%')
+
       if (progress >= 100) {
         clearInterval(scanInterval)
         takePhoto()
@@ -923,11 +931,15 @@ export default function CameraPage() {
               </View>
             </View>
 
-            {/* 扫描进度 - 横向进度条 */}
+            {/* 扫描进度 - 横向进度条（优化版） */}
             <View className="mx-6 mb-2">
-              <View className="bg-gray-600/40 rounded-full h-1 overflow-hidden">
+              <View className="flex items-center justify-between mb-1">
+                <Text className="text-white/60 text-[9px] block">扫描进度</Text>
+                <Text className="text-white text-[9px] font-medium">{Math.round(scanProgress)}%</Text>
+              </View>
+              <View className="bg-gray-500/50 rounded-full h-2 overflow-hidden">
                 <View
-                  className={`h-full transition-all duration-100 ${
+                  className={`h-full transition-all duration-75 ${
                     isAligned ? 'bg-gradient-to-r from-green-400 to-green-500' : 'bg-gradient-to-r from-rose-400 to-pink-500'
                   }`}
                   style={{ width: `${scanProgress}%` }}

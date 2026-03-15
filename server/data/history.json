@@ -545,5 +545,77 @@
     "imageUrl": "wxfile://tmp_2ab4b16119ca3b5e0c0126d117ffb890779721d96048e3f6.jpg",
     "createdAt": "2026-03-15T09:26:19.588Z",
     "updatedAt": "2026-03-15T09:26:19.588Z"
+  },
+  {
+    "id": 23,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 5,
+    "blackheads": 0,
+    "recommendations": [
+      "日常使用含有保湿成分（如透明质酸）的护肤品，维持皮肤水分平衡",
+      "唇部干燥起皮时，可涂抹滋润型润唇膏，避免舔唇、撕皮等不良习惯",
+      "对于面部的轻微色斑，可使用含有美白成分（如维生素C、烟酰胺）的护肤品，同时注意做好防晒，防止色斑加重"
+    ],
+    "imageUrl": "wxfile://tmp_eb9f5f1fb7e51330bc96a5351dd674b3db8ce40863247386.jpg",
+    "createdAt": "2026-03-15T09:36:38.599Z",
+    "updatedAt": "2026-03-15T09:36:38.599Z"
+  },
+  {
+    "id": 24,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 10,
+    "blackheads": 0,
+    "recommendations": [
+      "日常注意唇部护理，可使用滋润型润唇膏保持唇部水分，避免舔唇、撕皮等不良习惯",
+      "对于面部的轻微色斑，可适当使用含有美白淡斑成分（如维生素C、烟酰胺等）的护肤品，同时注意做好防晒，减少紫外线对皮肤的刺激以防止色斑加重",
+      "整体肤质较为健康，继续保持良好的护肤习惯，如使用温和的洁面产品清洁皮肤，维持皮肤的水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_f0267766b2802dc91a78c7346928d8fab8e32ce3f9d7c2da.jpg",
+    "createdAt": "2026-03-15T09:36:47.765Z",
+    "updatedAt": "2026-03-15T09:36:47.765Z"
+  },
+  {
+    "id": 25,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "继续保持良好的护肤习惯，维持水油平衡",
+      "注意防晒，预防色斑和光老化",
+      "可定期使用温和的清洁产品，保持皮肤清洁"
+    ],
+    "imageUrl": "wxfile://tmp_964c0cd145adefdbfeba1d0818087fda14d67ec58ee5f2ed.jpg",
+    "createdAt": "2026-03-15T09:37:52.179Z",
+    "updatedAt": "2026-03-15T09:37:52.179Z"
   }
 ]
