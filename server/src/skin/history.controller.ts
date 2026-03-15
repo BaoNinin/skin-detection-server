@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Query, Delete, Param } from '@nestjs/common';
-import { SkinService } from './skin.service';
+import { HistoryService } from './history.service';
 
 @Controller('skin')
 export class HistoryController {
-  constructor(private readonly skinService: SkinService) {}
+  constructor(private readonly historyService: HistoryService) {}
 
   @Get('history')
   async getHistory(@Query('userId') userId?: string) {
@@ -19,7 +19,7 @@ export class HistoryController {
     }
 
     try {
-      const result = await this.skinService.getHistory(parseInt(userId));
+      const result = await this.historyService.getHistory(parseInt(userId));
 
       return {
         code: 200,
@@ -37,7 +37,7 @@ export class HistoryController {
     console.log('收到保存历史记录请求');
 
     try {
-      const result = await this.skinService.saveHistory(body);
+      const result = await this.historyService.saveHistory(body);
 
       return {
         code: 200,

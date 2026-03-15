@@ -16,9 +16,15 @@ export const skinAnalysisHistory = pgTable("skin_analysis_history", {
 	moisture: integer("moisture").notNull(),
 	oiliness: integer("oiliness").notNull(),
 	sensitivity: integer("sensitivity").notNull(),
+	acne: integer("acne").notNull().default(0),
+	wrinkles: integer("wrinkles").notNull().default(0),
+	spots: integer("spots").notNull().default(0),
+	pores: integer("pores").notNull().default(0),
+	blackheads: integer("blackheads").notNull().default(0),
 	recommendations: jsonb("recommendations").notNull().default(sql`'[]'::jsonb`),
 	imageUrl: text("image_url"),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow(),
 })
 
 export const users = pgTable("users", {

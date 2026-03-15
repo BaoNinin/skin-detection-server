@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { db, COLLECTIONS } from '@/config/cloud.config';
+import { getSupabaseClient } from '@/storage/database/supabase-client';
 import { UserService } from '@/user/user.service';
 
 @Injectable()
 export class HistoryService {
   constructor(private readonly userService: UserService) {
-    console.log('HistoryService 初始化完成，使用云数据库');
+    console.log('HistoryService 初始化完成，使用 Supabase 数据库');
   }
 
   async getHistory(userId?: number) {
@@ -16,16 +16,39 @@ export class HistoryService {
         return [];
       }
 
-      const { data } = await db
-        .collection(COLLECTIONS.HISTORY)
-        .where({
-          userId: userId
-        })
-        .orderBy('createdAt', 'desc')
-        .limit(50)
-        .get();
+      const client = getSupabaseClient();
 
-      return data || [];
+      const { data, error } = await client
+        .from('skin_analysis_history')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(50);
+
+      if (error) {
+        console.error('查询历史记录失败:', error);
+        throw error;
+      }
+
+      // 转换数据格式，将蛇形命名转换为前端期望的格式
+      const formattedData = (data || []).map((record: any) => ({
+        id: record.id,
+        skin_type: record.skin_type,
+        concerns: record.concerns || [],
+        moisture: record.moisture,
+        oiliness: record.oiliness,
+        sensitivity: record.sensitivity,
+        acne: record.acne || 0,
+        wrinkles: record.wrinkles || 0,
+        spots: record.spots || 0,
+        pores: record.pores || 0,
+        blackheads: record.blackheads || 0,
+        recommendations: record.recommendations || [],
+        image_url: record.image_url || null,
+        created_at: record.created_at
+      }));
+
+      return formattedData;
     } catch (error) {
       console.error('获取历史记录失败:', error);
       throw error;
@@ -41,24 +64,42 @@ export class HistoryService {
     sensitivity: number;
     recommendations: string[];
     imageUrl?: string;
+    acne?: number;
+    wrinkles?: number;
+    spots?: number;
+    pores?: number;
+    blackheads?: number;
   }) {
     try {
-      const timestamp = new Date().getTime();
+      const client = getSupabaseClient();
+      const timestamp = new Date().toISOString();
 
-      const { data } = await db
-        .collection(COLLECTIONS.HISTORY)
-        .add({
-          userId: record.userId,
-          skinType: record.skinType,
+      const { data, error } = await client
+        .from('skin_analysis_history')
+        .insert({
+          user_id: record.userId,
+          skin_type: record.skinType,
           concerns: record.concerns || [],
           moisture: record.moisture,
           oiliness: record.oiliness,
           sensitivity: record.sensitivity,
+          acne: record.acne || 0,
+          wrinkles: record.wrinkles || 0,
+          spots: record.spots || 0,
+          pores: record.pores || 0,
+          blackheads: record.blackheads || 0,
           recommendations: record.recommendations || [],
-          imageUrl: record.imageUrl || null,
-          createdAt: timestamp,
-          updatedAt: timestamp
-        });
+          image_url: record.imageUrl || null,
+          created_at: timestamp,
+          updated_at: timestamp
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('保存历史记录失败:', error);
+        throw error;
+      }
 
       // 增加用户的检测次数
       await this.userService.incrementDetectionCount(record.userId);
@@ -72,12 +113,19 @@ export class HistoryService {
 
   async deleteHistory(id: string) {
     try {
-      const { data } = await db
-        .collection(COLLECTIONS.HISTORY)
-        .doc(id)
-        .remove();
+      const client = getSupabaseClient();
 
-      return data;
+      const { error } = await client
+        .from('skin_analysis_history')
+        .delete()
+        .eq('id', parseInt(id));
+
+      if (error) {
+        console.error('删除历史记录失败:', error);
+        throw error;
+      }
+
+      return { success: true };
     } catch (error) {
       console.error('删除历史记录失败:', error);
       throw error;
