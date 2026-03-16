@@ -3,8 +3,6 @@ import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import RadarChart from '@/components/RadarChart'
 import OverallScore from '@/components/OverallScore'
-import SkinModel3D from '@/components/SkinModel3D'
-import Heatmap from '@/components/Heatmap'
 
 interface SkinAnalysisResult {
   skinType: string
@@ -23,77 +21,14 @@ interface SkinAnalysisResult {
 export default function ResultPage() {
   const [result, setResult] = useState<SkinAnalysisResult | null>(null)
   const [imagePath, setImagePath] = useState('')
-  const [overallScore, setOverallScore] = useState(0)
-
-  const scoreRating = overallScore >= 80 ? '优秀' : overallScore >= 60 ? '良好' : '需改善'
-
-  // 当 result 变化时计算综合评分
-  useEffect(() => {
-    if (!result) {
-      setOverallScore(0)
-      return
-    }
-
-    console.log('=== 开始计算综合评分 ===')
-    console.log('result:', result)
-    
-    const scores = [result.moisture, 100 - result.oiliness, 100 - result.sensitivity]
-    console.log('基础指标:', scores)
-    
-    if (result.acne) {
-      scores.push(100 - result.acne)
-      console.log('添加痘痘指标:', 100 - result.acne)
-    }
-    if (result.wrinkles) {
-      scores.push(100 - result.wrinkles)
-      console.log('添加皱纹指标:', 100 - result.wrinkles)
-    }
-    if (result.spots) {
-      scores.push(100 - result.spots)
-      console.log('添加色斑指标:', 100 - result.spots)
-    }
-    if (result.pores) {
-      scores.push(100 - result.pores)
-      console.log('添加毛孔指标:', 100 - result.pores)
-    }
-    if (result.blackheads) {
-      scores.push(100 - result.blackheads)
-      console.log('添加黑头指标:', 100 - result.blackheads)
-    }
-    
-    const avg = scores.reduce((a, b) => a + b, 0) / scores.length
-    console.log('总分:', scores.reduce((a, b) => a + b, 0))
-    console.log('平均分:', avg)
-    const finalScore = Math.round(avg)
-    console.log('最终评分:', finalScore)
-    
-    setOverallScore(finalScore)
-  }, [result])
 
   useEffect(() => {
     const analysisResult = Taro.getStorageSync('skinAnalysisResult')
     const currentImage = Taro.getStorageSync('currentImagePath')
 
-    console.log('=== result 页面数据加载 ===')
-    console.log('analysisResult:', analysisResult)
-    console.log('currentImage:', currentImage)
-
     if (analysisResult) {
       setResult(analysisResult)
       setImagePath(currentImage || '')
-      
-      // 打印各项指标
-      console.log('各项指标:')
-      console.log('  skinType:', analysisResult.skinType)
-      console.log('  concerns:', analysisResult.concerns)
-      console.log('  moisture:', analysisResult.moisture)
-      console.log('  oiliness:', analysisResult.oiliness)
-      console.log('  sensitivity:', analysisResult.sensitivity)
-      console.log('  acne:', analysisResult.acne)
-      console.log('  wrinkles:', analysisResult.wrinkles)
-      console.log('  spots:', analysisResult.spots)
-      console.log('  pores:', analysisResult.pores)
-      console.log('  blackheads:', analysisResult.blackheads)
     } else {
       Taro.showToast({
         title: '未找到检测结果',
@@ -104,6 +39,20 @@ export default function ResultPage() {
       }, 1500)
     }
   }, [])
+
+  const calculateOverallScore = () => {
+    if (!result) return 0
+    const scores = [result.moisture, 100 - result.oiliness, 100 - result.sensitivity]
+    if (result.acne) scores.push(100 - result.acne)
+    if (result.wrinkles) scores.push(100 - result.wrinkles)
+    if (result.spots) scores.push(100 - result.spots)
+    if (result.pores) scores.push(100 - result.pores)
+    if (result.blackheads) scores.push(100 - result.blackheads)
+    return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+  }
+
+  const overallScore = calculateOverallScore()
+  const scoreRating = overallScore >= 80 ? '优秀' : overallScore >= 60 ? '良好' : '需改善'
 
   const getRadarData = () => {
     if (!result) return []
@@ -185,28 +134,6 @@ export default function ResultPage() {
             </View>
           </View>
 
-          {/* 3D 皮肤模型 */}
-          {result && (
-            <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
-              <View className="flex items-center justify-between mb-4">
-                <Text className="text-lg font-semibold text-gray-800 block">3D 肌肤模型</Text>
-                <Text className="text-sm text-gray-500 block">问题分布可视化</Text>
-              </View>
-              <SkinModel3D result={result} />
-            </View>
-          )}
-
-          {/* 肌肤热力图 */}
-          {result && result.concerns && result.concerns.length > 0 && (
-            <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
-              <View className="flex items-center justify-between mb-4">
-                <Text className="text-lg font-semibold text-gray-800 block">肌肤热力图</Text>
-                <Text className="text-sm text-gray-500 block">问题严重程度分析</Text>
-              </View>
-              <Heatmap concerns={result.concerns} />
-            </View>
-          )}
-
           {/* 五大指标详情 */}
           <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
             <Text className="text-lg font-semibold text-gray-800 mb-4 block">五大指标详情</Text>
@@ -281,7 +208,7 @@ export default function ResultPage() {
           {/* 操作按钮 */}
           <View className="space-y-3 mb-8">
             <Button
-              onTap={handleViewDetail}
+              onClick={handleViewDetail}
               className="w-full bg-rose-400 text-white rounded-full py-4 font-medium"
             >
               下一步
@@ -290,13 +217,13 @@ export default function ResultPage() {
 
             <View className="flex gap-3">
               <Button
-                onTap={handleViewRecommendations}
+                onClick={handleViewRecommendations}
                 className="flex-1 bg-white text-rose-400 border-2 border-rose-400 rounded-full py-3"
               >
                 查看推荐
               </Button>
               <Button
-                onTap={handleViewHistory}
+                onClick={handleViewHistory}
                 className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
               >
                 历史记录
@@ -304,7 +231,7 @@ export default function ResultPage() {
             </View>
 
             <Button
-              onTap={handleReDetect}
+              onClick={handleReDetect}
               className="w-full bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
             >
               重新检测

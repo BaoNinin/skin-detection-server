@@ -9,21 +9,9 @@ interface OverallScoreProps {
 export default function OverallScore({ score, rating }: OverallScoreProps) {
   const [displayScore, setDisplayScore] = useState(0)
 
-  console.log('=== OverallScore 组件渲染 ===')
-  console.log('传入的 score:', score)
-  console.log('传入的 rating:', rating)
-  console.log('当前 displayScore:', displayScore)
-
   useEffect(() => {
-    console.log('=== OverallScore useEffect 触发 ===')
-    console.log('目标 score:', score)
-    console.log('当前 displayScore:', displayScore)
-    
-    setDisplayScore(0) // 重置为 0
-    
     const interval = setInterval(() => {
       setDisplayScore((prev) => {
-        console.log('动画中 displayScore:', prev, '-> 目标:', score)
         if (prev >= score) {
           clearInterval(interval)
           return score
@@ -55,7 +43,6 @@ export default function OverallScore({ score, rating }: OverallScoreProps) {
 
   return (
     <View className="bg-white rounded-2xl p-6 shadow-sm">
-      <Text className="block text-xs text-gray-400 mb-2">调试: score={score}, display={displayScore}, rating={rating}</Text>
       <View className="flex items-center justify-between mb-4">
         <View className="flex-1">
           <Text className="text-sm text-gray-500 block mb-1">综合评分</Text>
