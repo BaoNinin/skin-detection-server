@@ -788,5 +788,83 @@
     "imageUrl": "wxfile://tmp_cfc320a5f774fd8f53490dff6f807e52a8b407d1f6bb7619.jpg",
     "createdAt": "2026-03-15T10:24:26.043Z",
     "updatedAt": "2026-03-15T10:24:26.043Z"
+  },
+  {
+    "id": 33,
+    "userId": 24,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "轻微痘痘"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "唇部可使用滋润型唇膏，如含有凡士林、角鲨烷成分的产品，保持唇部湿润",
+      "日常注意防晒，可选择物理防晒或化学防晒产品，预防色斑加重",
+      "注意面部清洁，选择温和的洁面产品，避免过度清洁导致皮肤干燥"
+    ],
+    "imageUrl": "wxfile://tmp_16706830ce44acd78151dd641c52215e.jpg",
+    "createdAt": "2026-03-16T03:07:54.111Z",
+    "updatedAt": "2026-03-16T03:07:54.111Z"
+  },
+  {
+    "id": 34,
+    "userId": 25,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "唇部干燥"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 5,
+    "pores": 5,
+    "blackheads": 5,
+    "recommendations": [
+      "注意唇部保湿，可使用无刺激的润唇膏",
+      "对于面部少量痘痘，注意清洁皮肤，避免用手挤压",
+      "日常做好基础护肤，维持皮肤水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_7be7aec4282936ac202581d8aaa391c74c968e968afe72a4.jpg",
+    "createdAt": "2026-03-16T04:03:11.307Z",
+    "updatedAt": "2026-03-16T04:03:11.307Z"
+  },
+  {
+    "id": 35,
+    "userId": 25,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "少量色斑",
+      "唇部干燥"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 15,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好基础清洁和保湿，保持水油平衡",
+      "唇部干燥时可使用无刺激的润唇膏",
+      "对于少量痘痘可使用温和的祛痘产品，避免挤压",
+      "注意防晒，预防色斑加重"
+    ],
+    "imageUrl": "wxfile://tmp_d14be1b27e8a7219307944f4ffe60fc3b0aad6419ac2506b.jpg",
+    "createdAt": "2026-03-16T04:04:26.983Z",
+    "updatedAt": "2026-03-16T04:04:26.983Z"
   }
 ]

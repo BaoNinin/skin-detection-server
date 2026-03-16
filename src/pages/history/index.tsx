@@ -20,14 +20,16 @@ interface HistoryRecord {
   created_at: string
 }
 
-type ViewType = 'timeline' | 'calendar'
+type ViewType = 'timeline' | 'calendar' | 'trend'
 type FilterType = 'all' | 'pending' | 'completed'
+type TimeRange = 'all' | '7days' | '30days' | '90days'
 
 export default function HistoryPage() {
   const [historyList, setHistoryList] = useState<HistoryRecord[]>([])
   const [loading, setLoading] = useState(false)
   const [viewType, setViewType] = useState<ViewType>('timeline')
   const [filterType, setFilterType] = useState<FilterType>('all')
+  const [timeRange, setTimeRange] = useState<TimeRange>('all')
   const [selectedRecords, setSelectedRecords] = useState<HistoryRecord[]>([])
   const [searchKeyword, setSearchKeyword] = useState('')
   
@@ -46,8 +48,6 @@ export default function HistoryPage() {
     const userId = Taro.getStorageSync('userId')
     console.log('=== 历史记录加载 ===')
     console.log('userId:', userId, '类型:', typeof userId, '是否有效:', !!userId)
-    console.log('userId is number:', typeof userId === 'number')
-    console.log('userId value:', userId)
 
     if (!userId) {
       console.warn('用户未登录，跳转到登录页面')
@@ -73,7 +73,6 @@ export default function HistoryPage() {
       })
 
       console.log('响应状态:', res.data.code)
-      console.log('响应数据:', res.data)
       console.log('记录数量:', res.data.data?.length || 0)
 
       if (res.data.code === 200) {
@@ -130,14 +129,30 @@ export default function HistoryPage() {
     return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
   }
 
+  // 根据时间范围过滤记录
+  const getFilteredByTimeRange = (records: HistoryRecord[]) => {
+    if (timeRange === 'all') return records
+    
+    const now = new Date()
+    const daysAgo = timeRange === '7days' ? 7 : timeRange === '30days' ? 30 : 90
+    const cutoffDate = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000)
+    
+    return records.filter(record => {
+      const recordDate = new Date(record.created_at)
+      return recordDate >= cutoffDate
+    })
+  }
+
   // 根据筛选和搜索过滤记录
   const getFilteredRecords = () => {
     let filtered = [...historyList]
 
+    // 根据时间范围过滤
+    filtered = getFilteredByTimeRange(filtered)
+
     // 根据筛选类型过滤
     if (filterType === 'pending') {
-      // 模拟：这里可以根据实际业务逻辑过滤，例如是否已提交订单
-      // 目前暂时返回所有记录
+      // 模拟：这里可以根据实际业务逻辑过滤
     } else if (filterType === 'completed') {
       // 模拟：已完成订单的记录
     }
@@ -210,7 +225,6 @@ export default function HistoryPage() {
       content: `确定要删除档案 #${record.id} 吗？`,
       success: (modalRes) => {
         if (modalRes.confirm) {
-          // 调用删除接口
           Network.request({
             url: `/api/skin/history/${record.id}`,
             method: 'DELETE'
@@ -220,7 +234,6 @@ export default function HistoryPage() {
                 title: '删除成功',
                 icon: 'success'
               })
-              // 重新加载记录
               loadHistory()
             } else {
               Taro.showToast({
@@ -245,6 +258,211 @@ export default function HistoryPage() {
 
   const handleSearch = (value: string) => {
     setSearchKeyword(value)
+  }
+
+  // 导出报告（生成图片）
+  const handleExportReport = async () => {
+    const records = getFilteredRecords()
+    if (records.length === 0) {
+      Taro.showToast({
+        title: '暂无数据可导出',
+        icon: 'none'
+      })
+      return
+    }
+
+    Taro.showLoading({ title: '生成报告中...' })
+
+    try {
+      // 创建 canvas
+      const canvas = Taro.createOffscreenCanvas({
+        type: '2d',
+        width: 600,
+        height: 800
+      })
+      const ctx = canvas.getContext('2d') as any
+
+      // 绘制背景
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(0, 0, 600, 800)
+
+      // 绘制标题
+      ctx.fillStyle = '#333333'
+      ctx.font = 'bold 32px sans-serif'
+      ctx.fillText('皮肤检测报告', 200, 60)
+
+      // 绘制日期
+      ctx.fillStyle = '#666666'
+      ctx.font = '20px sans-serif'
+      ctx.fillText(`生成时间: ${formatDate(new Date().toISOString())}`, 40, 100)
+
+      // 绘制统计数据
+      const latestRecord = records[0]
+      const score = calculateScore(latestRecord)
+      
+      ctx.fillStyle = '#333333'
+      ctx.font = 'bold 24px sans-serif'
+      ctx.fillText('最新检测结果', 40, 160)
+      
+      ctx.fillStyle = '#666666'
+      ctx.font = '20px sans-serif'
+      ctx.fillText(`皮肤类型: ${latestRecord.skin_type}`, 40, 200)
+      ctx.fillText(`综合评分: ${score}分`, 40, 240)
+      ctx.fillText(`水分: ${latestRecord.moisture}%`, 40, 280)
+      ctx.fillText(`油性: ${latestRecord.oiliness}%`, 200, 280)
+      ctx.fillText(`敏感度: ${latestRecord.sensitivity}%`, 360, 280)
+
+      // 绘制历史趋势
+      if (records.length > 1) {
+        ctx.fillStyle = '#333333'
+        ctx.font = 'bold 24px sans-serif'
+        ctx.fillText('历史趋势', 40, 340)
+
+        const chartHeight = 200
+        const chartWidth = 520
+        const chartX = 40
+        const chartY = 360
+
+        // 绘制坐标轴
+        ctx.strokeStyle = '#dddddd'
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        ctx.moveTo(chartX, chartY)
+        ctx.lineTo(chartX, chartY + chartHeight)
+        ctx.lineTo(chartX + chartWidth, chartY + chartHeight)
+        ctx.stroke()
+
+        // 绘制水分趋势线
+        ctx.strokeStyle = '#3B82F6'
+        ctx.lineWidth = 2
+        ctx.beginPath()
+        records.forEach((record, index) => {
+          const x = chartX + (index / (records.length - 1)) * chartWidth
+          const y = chartY + chartHeight - (record.moisture / 100) * chartHeight
+          if (index === 0) {
+            ctx.moveTo(x, y)
+          } else {
+            ctx.lineTo(x, y)
+          }
+        })
+        ctx.stroke()
+
+        // 绘制图例
+        ctx.fillStyle = '#3B82F6'
+        ctx.fillRect(chartX, chartY - 40, 20, 20)
+        ctx.fillStyle = '#666666'
+        ctx.font = '18px sans-serif'
+        ctx.fillText('水分', chartX + 30, chartY - 25)
+      }
+
+      // 生成图片
+      const tempFilePath = (canvas as any).toDataURL('image/png')
+
+      // 保存到相册
+      await Taro.saveImageToPhotosAlbum({
+        filePath: tempFilePath
+      })
+
+      Taro.hideLoading()
+      Taro.showToast({
+        title: '报告已保存到相册',
+        icon: 'success'
+      })
+    } catch (err) {
+      console.error('导出报告失败:', err)
+      Taro.hideLoading()
+      Taro.showToast({
+        title: '导出失败',
+        icon: 'none'
+      })
+    }
+  }
+
+  // 分享到朋友圈
+  const handleShareToMoments = async () => {
+    const records = getFilteredRecords()
+    if (records.length === 0) {
+      Taro.showToast({
+        title: '暂无数据可分享',
+        icon: 'none'
+      })
+      return
+    }
+
+    const latestRecord = records[0]
+    const score = calculateScore(latestRecord)
+
+    // 生成分享图片
+    Taro.showLoading({ title: '生成分享图片...' })
+
+    try {
+      const canvas = Taro.createOffscreenCanvas({
+        type: '2d',
+        width: 500,
+        height: 600
+      })
+      const ctx = canvas.getContext('2d') as any
+
+      // 绘制渐变背景
+      const gradient = ctx.createLinearGradient(0, 0, 0, 600)
+      gradient.addColorStop(0, '#FFE4E1')
+      gradient.addColorStop(1, '#FFF5EE')
+      ctx.fillStyle = gradient
+      ctx.fillRect(0, 0, 500, 600)
+
+      // 绘制标题
+      ctx.fillStyle = '#333333'
+      ctx.font = 'bold 36px sans-serif'
+      ctx.fillText('我的皮肤报告', 150, 80)
+
+      // 绘制评分
+      ctx.fillStyle = '#FF6B6B'
+      ctx.font = 'bold 80px sans-serif'
+      ctx.fillText(`${score}`, 200, 200)
+
+      ctx.fillStyle = '#666666'
+      ctx.font = '24px sans-serif'
+      ctx.fillText('分', 280, 200)
+
+      // 绘制皮肤类型
+      ctx.fillStyle = '#333333'
+      ctx.font = '24px sans-serif'
+      ctx.fillText(`皮肤类型: ${latestRecord.skin_type}`, 100, 280)
+
+      // 绘制指标
+      ctx.fillStyle = '#666666'
+      ctx.font = '20px sans-serif'
+      ctx.fillText(`水分: ${latestRecord.moisture}%`, 100, 330)
+      ctx.fillText(`油性: ${latestRecord.oiliness}%`, 100, 370)
+      ctx.fillText(`敏感度: ${latestRecord.sensitivity}%`, 100, 410)
+
+      // 绘制二维码提示
+      ctx.fillStyle = '#999999'
+      ctx.font = '18px sans-serif'
+      ctx.fillText('扫码查看详细报告', 140, 500)
+
+      // 生成图片
+      const tempFilePath = (canvas as any).toDataURL('image/png')
+
+      // 保存到相册
+      await Taro.saveImageToPhotosAlbum({
+        filePath: tempFilePath
+      })
+
+      Taro.hideLoading()
+      Taro.showModal({
+        title: '分享图片已生成',
+        content: '图片已保存到相册，您可以到朋友圈发布',
+        showCancel: false
+      })
+    } catch (err) {
+      console.error('生成分享图片失败:', err)
+      Taro.hideLoading()
+      Taro.showToast({
+        title: '生成失败',
+        icon: 'none'
+      })
+    }
   }
 
   // 日历相关函数
@@ -347,6 +565,29 @@ export default function HistoryPage() {
         </View>
       </View>
 
+      {/* 时间范围筛选 */}
+      <View className="bg-white px-4 py-3 border-b border-gray-100">
+        <ScrollView scrollX className="whitespace-nowrap">
+          <View className="inline-flex gap-2">
+            {(['all', '7days', '30days', '90days'] as TimeRange[]).map((range) => (
+              <View
+                key={range}
+                onClick={() => setTimeRange(range)}
+                className={`inline-flex items-center px-4 py-2 rounded-full ${
+                  timeRange === range
+                    ? 'bg-rose-400 text-white'
+                    : 'bg-gray-100 text-gray-700'
+                }`}
+              >
+                <Text className="text-sm font-medium block">
+                  {range === 'all' ? '全部时间' : range === '7days' ? '最近7天' : range === '30days' ? '最近30天' : '最近90天'}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+
       {/* 搜索框 */}
       <View className="bg-white px-4 py-3 border-b border-gray-100">
         <View className="bg-gray-100 rounded-xl px-4 py-3 flex items-center">
@@ -379,8 +620,36 @@ export default function HistoryPage() {
           >
             <Text className="text-sm font-medium block">日历</Text>
           </View>
+          <View
+            onClick={() => setViewType('trend')}
+            className={`flex-1 py-2 rounded-xl text-center ${
+              viewType === 'trend' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
+            }`}
+          >
+            <Text className="text-sm font-medium block">趋势图</Text>
+          </View>
         </View>
       </View>
+
+      {/* 导出和分享按钮 */}
+      {filteredRecords.length > 0 && (
+        <View className="bg-white px-4 py-3 border-b border-gray-100">
+          <View className="flex gap-3">
+            <View
+              onClick={handleExportReport}
+              className="flex-1 py-3 bg-blue-50 border border-blue-200 rounded-xl text-center"
+            >
+              <Text className="text-sm font-medium text-blue-600 block">📊 导出报告</Text>
+            </View>
+            <View
+              onClick={handleShareToMoments}
+              className="flex-1 py-3 bg-green-50 border border-green-200 rounded-xl text-center"
+            >
+              <Text className="text-sm font-medium text-green-600 block">📤 分享</Text>
+            </View>
+          </View>
+        </View>
+      )}
 
       {selectedRecords.length > 0 && (
         <View className="px-4 py-3 bg-white border-b border-gray-100">
@@ -404,9 +673,6 @@ export default function HistoryPage() {
           <View className="flex flex-col items-center justify-center py-20 px-4">
             <View className="w-12 h-12 border-4 border-rose-200 border-t-rose-400 rounded-full animate-spin mb-4" />
             <Text className="text-base text-gray-600 block">加载中...</Text>
-            {Taro.getStorageSync('userId') && (
-              <Text className="text-xs text-gray-400 mt-2 block">用户 ID: {Taro.getStorageSync('userId')}</Text>
-            )}
           </View>
         )}
 
@@ -451,6 +717,131 @@ export default function HistoryPage() {
           </View>
         )}
 
+        {/* 趋势图视图 */}
+        {!loading && filteredRecords.length > 0 && viewType === 'trend' && (
+          <View className="px-4 py-4 space-y-4">
+            <View className="bg-white rounded-2xl p-4 shadow-sm">
+              <View className="flex items-center justify-between mb-4">
+                <Text className="text-lg font-semibold text-gray-800 block">皮肤指标趋势</Text>
+                <Text className="text-sm text-gray-500 block">共 {filteredRecords.length} 次检测</Text>
+              </View>
+
+              <View className="space-y-4">
+                {/* 水分趋势 */}
+                <View>
+                  <View className="flex items-center justify-between mb-2">
+                    <View className="flex items-center gap-2">
+                      <View className="w-3 h-3 rounded-full bg-blue-500" />
+                      <Text className="text-sm font-medium text-gray-700 block">水分</Text>
+                    </View>
+                    <Text className="text-sm text-gray-500 block">
+                      {filteredRecords[0]?.moisture}% → {filteredRecords[filteredRecords.length - 1]?.moisture}%
+                    </Text>
+                  </View>
+                  <View className="flex gap-1">
+                    {filteredRecords.slice(0, 10).map((record, index) => {
+                      const isFirst = index === 0
+                      const isLast = index === filteredRecords.slice(0, 10).length - 1
+                      
+                      return (
+                        <View key={record.id} className="flex-1 flex flex-col items-center">
+                          <View
+                            className="w-full rounded-t"
+                            style={{
+                              height: `${record.moisture}%`,
+                              backgroundColor: isFirst || isLast ? '#3B82F6' : '#93C5FD'
+                            }}
+                          />
+                          <Text className="text-[10px] text-gray-400 mt-1 block">
+                            {formatDate(record.created_at).slice(5)}
+                          </Text>
+                        </View>
+                      )
+                    })}
+                  </View>
+                </View>
+
+                {/* 油性趋势 */}
+                <View>
+                  <View className="flex items-center justify-between mb-2">
+                    <View className="flex items-center gap-2">
+                      <View className="w-3 h-3 rounded-full bg-yellow-500" />
+                      <Text className="text-sm font-medium text-gray-700 block">油性</Text>
+                    </View>
+                    <Text className="text-sm text-gray-500 block">
+                      {filteredRecords[0]?.oiliness}% → {filteredRecords[filteredRecords.length - 1]?.oiliness}%
+                    </Text>
+                  </View>
+                  <View className="flex gap-1">
+                    {filteredRecords.slice(0, 10).map((record, index) => {
+                      const isFirst = index === 0
+                      const isLast = index === filteredRecords.slice(0, 10).length - 1
+                      
+                      return (
+                        <View key={record.id} className="flex-1 flex flex-col items-center">
+                          <View
+                            className="w-full rounded-t"
+                            style={{
+                              height: `${record.oiliness}%`,
+                              backgroundColor: isFirst || isLast ? '#F59E0B' : '#FCD34D'
+                            }}
+                          />
+                          <Text className="text-[10px] text-gray-400 mt-1 block">
+                            {formatDate(record.created_at).slice(5)}
+                          </Text>
+                        </View>
+                      )
+                    })}
+                  </View>
+                </View>
+
+                {/* 敏感度趋势 */}
+                <View>
+                  <View className="flex items-center justify-between mb-2">
+                    <View className="flex items-center gap-2">
+                      <View className="w-3 h-3 rounded-full bg-rose-500" />
+                      <Text className="text-sm font-medium text-gray-700 block">敏感度</Text>
+                    </View>
+                    <Text className="text-sm text-gray-500 block">
+                      {filteredRecords[0]?.sensitivity}% → {filteredRecords[filteredRecords.length - 1]?.sensitivity}%
+                    </Text>
+                  </View>
+                  <View className="flex gap-1">
+                    {filteredRecords.slice(0, 10).map((record, index) => {
+                      const isFirst = index === 0
+                      const isLast = index === filteredRecords.slice(0, 10).length - 1
+                      
+                      return (
+                        <View key={record.id} className="flex-1 flex flex-col items-center">
+                          <View
+                            className="w-full rounded-t"
+                            style={{
+                              height: `${record.sensitivity}%`,
+                              backgroundColor: isFirst || isLast ? '#EF4444' : '#FCA5A5'
+                            }}
+                          />
+                          <Text className="text-[10px] text-gray-400 mt-1 block">
+                            {formatDate(record.created_at).slice(5)}
+                          </Text>
+                        </View>
+                      )
+                    })}
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {filteredRecords.length > 10 && (
+              <View className="bg-gray-100 rounded-xl p-3 text-center">
+                <Text className="text-sm text-gray-500 block">仅显示最近10次检测数据</Text>
+              </View>
+            )}
+            
+            <View className="h-4" />
+          </View>
+        )}
+
+        {/* 时间轴视图 */}
         {!loading && filteredRecords.length > 0 && viewType === 'timeline' && (
           <View className="px-4 py-4 space-y-4">
             {filteredRecords.map((record, index) => {
@@ -551,6 +942,7 @@ export default function HistoryPage() {
           </View>
         )}
 
+        {/* 日历视图 */}
         {!loading && filteredRecords.length > 0 && viewType === 'calendar' && (
           <View className="px-4 py-4 space-y-4">
             {/* 月份切换 */}
