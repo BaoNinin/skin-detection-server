@@ -27,7 +27,7 @@ export default function LandingPage() {
           <View className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-lg">
             <Image
               src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2FLOGO-%E6%AD%A3%E6%96%B9%E5%BD%A2-%E9%BB%91.png&nonce=7e63e028-a3c6-40a3-baa1-59f20c007ce1&project_id=7616586290808668211&sign=f3a066447e3278a8f59cc242406fed69f34e7cb20be636432891094c73c6122b"
-              className="w-24 h-24 ml-4"
+              className="w-24 h-24 ml-2"
               mode="aspectFit"
             />
           </View>
