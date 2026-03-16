@@ -606,7 +606,7 @@ export default function CameraPage() {
           <View className="relative w-[280px] h-[380px]">
             {/* 面部轮廓 */}
             <View 
-              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-80 border-4 rounded-[50%] transition-colors duration-300 ${
+              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 border-4 rounded-[50%] transition-colors duration-300 ${
                 isAligned ? 'border-green-400' : faceDetected ? 'border-blue-700' : 'border-amber-400'
               }`}
               style={{ 
@@ -621,10 +621,10 @@ export default function CameraPage() {
             {/* 扫描点 */}
             {isScanning && Array.from({ length: 12 }).map((_, index) => {
               const angle = (index / 12) * 2 * Math.PI - Math.PI / 2
-              const radiusX = 128
-              const radiusY = 160
-              const centerX = 128
-              const centerY = 160
+              const radiusX = 160
+              const radiusY = 192
+              const centerX = 160
+              const centerY = 192
               const x = centerX + radiusX * Math.cos(angle) - 3
               const y = centerY + radiusY * Math.sin(angle) - 3
               
