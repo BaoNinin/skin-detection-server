@@ -21,14 +21,12 @@ interface HistoryRecord {
 }
 
 type ViewType = 'timeline' | 'calendar' | 'trend'
-type FilterType = 'all' | 'pending' | 'completed'
 type TimeRange = 'all' | '7days' | '30days' | '90days'
 
 export default function HistoryPage() {
   const [historyList, setHistoryList] = useState<HistoryRecord[]>([])
   const [loading, setLoading] = useState(false)
   const [viewType, setViewType] = useState<ViewType>('timeline')
-  const [filterType, setFilterType] = useState<FilterType>('all')
   const [timeRange, setTimeRange] = useState<TimeRange>('all')
   const [selectedRecords, setSelectedRecords] = useState<HistoryRecord[]>([])
   const [searchKeyword, setSearchKeyword] = useState('')
@@ -149,13 +147,6 @@ export default function HistoryPage() {
 
     // 根据时间范围过滤
     filtered = getFilteredByTimeRange(filtered)
-
-    // 根据筛选类型过滤
-    if (filterType === 'pending') {
-      // 模拟：这里可以根据实际业务逻辑过滤
-    } else if (filterType === 'completed') {
-      // 模拟：已完成订单的记录
-    }
 
     // 根据搜索关键词过滤
     if (searchKeyword) {
@@ -535,33 +526,16 @@ export default function HistoryPage() {
         <Text className="text-sm text-gray-500 mt-2 block">管理您的皮肤检测记录</Text>
       </View>
 
-      {/* Tab 切换 */}
+      {/* 搜索框 */}
       <View className="bg-white px-4 py-3 border-b border-gray-100">
-        <View className="flex gap-3">
-          <View
-            onClick={() => setFilterType('all')}
-            className={`flex-1 py-2 rounded-xl text-center ${
-              filterType === 'all' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
-            }`}
-          >
-            <Text className="text-sm font-medium block">全部</Text>
-          </View>
-          <View
-            onClick={() => setFilterType('pending')}
-            className={`flex-1 py-2 rounded-xl text-center ${
-              filterType === 'pending' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
-            }`}
-          >
-            <Text className="text-sm font-medium block">待付款</Text>
-          </View>
-          <View
-            onClick={() => setFilterType('completed')}
-            className={`flex-1 py-2 rounded-xl text-center ${
-              filterType === 'completed' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
-            }`}
-          >
-            <Text className="text-sm font-medium block">已完成</Text>
-          </View>
+        <View className="bg-gray-100 rounded-xl px-4 py-3 flex items-center">
+          <Text className="text-gray-400 mr-2">🔍</Text>
+          <Input
+            className="flex-1 text-sm"
+            placeholder="搜索档案ID或皮肤类型"
+            value={searchKeyword}
+            onInput={(e) => handleSearch(e.detail.value)}
+          />
         </View>
       </View>
 
@@ -586,19 +560,6 @@ export default function HistoryPage() {
             ))}
           </View>
         </ScrollView>
-      </View>
-
-      {/* 搜索框 */}
-      <View className="bg-white px-4 py-3 border-b border-gray-100">
-        <View className="bg-gray-100 rounded-xl px-4 py-3 flex items-center">
-          <Text className="text-gray-400 mr-2">🔍</Text>
-          <Input
-            className="flex-1 text-sm"
-            placeholder="搜索档案ID或皮肤类型"
-            value={searchKeyword}
-            onInput={(e) => handleSearch(e.detail.value)}
-          />
-        </View>
       </View>
 
       {/* 视图切换 */}
