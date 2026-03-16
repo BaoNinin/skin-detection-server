@@ -1072,5 +1072,30 @@
     "imageUrl": "wxfile://tmp_8e2c5603842a7c7d2a1691500d78bdeb73d6f1b6619e3d43.jpg",
     "createdAt": "2026-03-16T07:55:13.383Z",
     "updatedAt": "2026-03-16T07:55:13.383Z"
+  },
+  {
+    "id": 44,
+    "userId": 35,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好基础清洁与保湿，可选用温和的洁面产品和保湿乳液",
+      "唇部干燥起皮可使用滋润型唇膏，避免舔唇等不良习惯",
+      "对于轻微痘痘，注意饮食清淡，减少高糖高脂食物摄入，可适当使用含有水杨酸成分的护肤品进行调理"
+    ],
+    "imageUrl": "wxfile://tmp_94f9a553790aab2992d4e8f4743a3f80d415aa4009b48588.jpg",
+    "createdAt": "2026-03-16T09:23:05.910Z",
+    "updatedAt": "2026-03-16T09:23:05.910Z"
   }
 ]
