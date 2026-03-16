@@ -50,3 +50,31 @@ taro-button-core::after,
 button::after {
   border: none;
 }
+
+/* 深色模式样式 */
+.dark {
+  --bg-primary: #111827;
+  --bg-secondary: #1F2937;
+  --bg-tertiary: #374151;
+  --bg-card: #1F2937;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --text-tertiary: #9CA3AF;
+  --text-muted: #6B7280;
+  --border-primary: #374151;
+  --border-secondary: #4B5563;
+}
+
+/* 小程序端深色模式适配 */
+page[theme-mode='dark'] {
+  --bg-primary: #111827;
+  --bg-secondary: #1F2937;
+  --bg-tertiary: #374151;
+  --bg-card: #1F2937;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --text-tertiary: #9CA3AF;
+  --text-muted: #6B7280;
+  --border-primary: #374151;
+  --border-secondary: #4B5563;
+}

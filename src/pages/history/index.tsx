@@ -5,6 +5,7 @@ import { Network } from '@/network'
 import EmptyState from '@/components/EmptyState'
 import { SkeletonListItem } from '@/components/Skeleton'
 import Swipe from '@/components/Swipe'
+import { useTheme } from '@/context/ThemeContext'
 
 interface HistoryRecord {
   id: number
@@ -38,6 +39,8 @@ export default function HistoryPage() {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1)
   const [selectedDate, setSelectedDate] = useState<string>('')
+
+  const { isDark } = useTheme()
 
   useEffect(() => {
     loadHistory()
@@ -568,11 +571,11 @@ export default function HistoryPage() {
   }, [historyList, searchKeyword, timeRange])
 
   return (
-    <View className="min-h-screen bg-gray-50 flex flex-col">
-      <View className="bg-white border-b border-gray-100 p-4 flex items-center justify-between">
+    <View className={`min-h-screen flex flex-col ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      <View className={`border-b p-4 flex items-center justify-between ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
         <View>
-          <Text className="text-2xl font-bold text-gray-800 block">肤质档案</Text>
-          <Text className="text-sm text-gray-500 mt-1 block">管理您的皮肤检测记录</Text>
+          <Text className={`text-2xl font-bold block ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>肤质档案</Text>
+          <Text className={`text-sm mt-1 block ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>管理您的皮肤检测记录</Text>
         </View>
         {!loading && (
           <View
@@ -585,12 +588,13 @@ export default function HistoryPage() {
       </View>
 
       {/* 搜索框 */}
-      <View className="bg-white px-4 py-3 border-b border-gray-100">
-        <View className="bg-gray-100 rounded-xl px-4 py-3 flex items-center">
-          <Text className="text-gray-400 mr-2">🔍</Text>
+      <View className={`px-4 py-3 border-b ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+        <View className={`rounded-xl px-4 py-3 flex items-center ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
+          <Text className={isDark ? 'text-gray-400 mr-2' : 'text-gray-400 mr-2'}>🔍</Text>
           <Input
             className="flex-1 text-sm"
             placeholder="搜索档案ID或皮肤类型"
+            placeholderClass={isDark ? 'text-gray-400' : 'text-gray-400'}
             value={searchKeyword}
             onInput={(e) => handleSearch(e.detail.value)}
           />
@@ -598,7 +602,7 @@ export default function HistoryPage() {
       </View>
 
       {/* 时间范围筛选 */}
-      <View className="bg-white px-4 py-3 border-b border-gray-100">
+      <View className={`px-4 py-3 border-b ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
         <ScrollView scrollX className="whitespace-nowrap">
           <View className="inline-flex gap-2">
             {(['all', '7days', '30days', '90days'] as TimeRange[]).map((range) => (
@@ -608,7 +612,7 @@ export default function HistoryPage() {
                 className={`inline-flex items-center px-4 py-2 rounded-full ${
                   timeRange === range
                     ? 'bg-rose-400 text-white'
-                    : 'bg-gray-100 text-gray-700'
+                    : isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
                 }`}
               >
                 <Text className="text-sm font-medium block">
@@ -621,12 +625,14 @@ export default function HistoryPage() {
       </View>
 
       {/* 视图切换 */}
-      <View className="bg-white px-4 py-3">
+      <View className={`px-4 py-3 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
         <View className="flex gap-3">
           <View
             onClick={() => setViewType('timeline')}
             className={`flex-1 py-2 rounded-xl text-center ${
-              viewType === 'timeline' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
+              viewType === 'timeline'
+                ? 'bg-rose-400 text-white'
+                : isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
             }`}
           >
             <Text className="text-sm font-medium block">时间轴</Text>
@@ -634,7 +640,9 @@ export default function HistoryPage() {
           <View
             onClick={() => setViewType('calendar')}
             className={`flex-1 py-2 rounded-xl text-center ${
-              viewType === 'calendar' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
+              viewType === 'calendar'
+                ? 'bg-rose-400 text-white'
+                : isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
             }`}
           >
             <Text className="text-sm font-medium block">日历</Text>
@@ -642,7 +650,9 @@ export default function HistoryPage() {
           <View
             onClick={() => setViewType('trend')}
             className={`flex-1 py-2 rounded-xl text-center ${
-              viewType === 'trend' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
+              viewType === 'trend'
+                ? 'bg-rose-400 text-white'
+                : isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
             }`}
           >
             <Text className="text-sm font-medium block">趋势图</Text>

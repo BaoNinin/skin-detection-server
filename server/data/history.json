@@ -1021,5 +1021,30 @@
     "imageUrl": "wxfile://tmp_3aab45e7af433c38481045450d2fd2108c4c39df36ea1b1c.jpg",
     "createdAt": "2026-03-16T07:22:48.714Z",
     "updatedAt": "2026-03-16T07:22:48.714Z"
+  },
+  {
+    "id": 42,
+    "userId": 33,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部周围皮肤状态需关注"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好防晒，可选择物理防晒或温和的化学防晒产品，减少色斑加深风险",
+      "唇部周围可适当使用温和的保湿产品，保持皮肤滋润",
+      "保持良好的作息和饮食习惯，维持皮肤的健康状态"
+    ],
+    "imageUrl": "wxfile://tmp_7ec34305e1d0f3cd27a69fcc7cbfe058a6dd00163a7c2674.jpg",
+    "createdAt": "2026-03-16T07:32:13.537Z",
+    "updatedAt": "2026-03-16T07:32:13.537Z"
   }
 ]

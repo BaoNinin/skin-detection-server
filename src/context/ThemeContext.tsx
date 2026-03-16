@@ -34,15 +34,27 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     // 更新页面背景色
     if (dark) {
+      // 深色模式
       Taro.setNavigationBarColor({
         frontColor: '#ffffff',
         backgroundColor: '#1F2937'
       })
+
+      // 尝试设置全局样式（H5 端）
+      if (typeof window !== 'undefined' && window.document) {
+        document.body.classList.add('dark')
+      }
     } else {
+      // 浅色模式
       Taro.setNavigationBarColor({
         frontColor: '#ffffff',
         backgroundColor: '#E8B4BC'
       })
+
+      // 尝试设置全局样式（H5 端）
+      if (typeof window !== 'undefined' && window.document) {
+        document.body.classList.remove('dark')
+      }
     }
   }
 
@@ -58,6 +70,22 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const newMode: ThemeMode = isDark ? 'light' : 'dark'
     setThemeMode(newMode)
   }
+
+  // 监听系统主题变化
+  useEffect(() => {
+    if (themeMode === 'auto') {
+      const handleThemeChange = (res: any) => {
+        const systemDark = res.theme === 'dark'
+        updateDarkMode('auto', systemDark)
+      }
+
+      Taro.onThemeChange(handleThemeChange)
+
+      return () => {
+        Taro.offThemeChange(handleThemeChange)
+      }
+    }
+  }, [themeMode])
 
   return (
     <ThemeContext.Provider value={{ themeMode, isDark, setThemeMode, toggleTheme }}>
