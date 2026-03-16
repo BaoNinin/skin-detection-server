@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo } from 'react'
 import { Network } from '@/network'
 import EmptyState from '@/components/EmptyState'
 import { SkeletonCard } from '@/components/Skeleton'
-import { useTheme } from '@/context/ThemeContext'
 
 interface Product {
   id: string
@@ -38,8 +37,6 @@ export default function RecommendPage() {
       return recommendations.filter(p => p.category === selectedCategory)
     }
   }, [selectedCategory, recommendations])
-
-  const { isDark } = useTheme()
 
   const loadRecommendations = async () => {
     // 优先使用历史记录数据，如果没有则使用最新的检测结果
@@ -119,11 +116,11 @@ export default function RecommendPage() {
   }
 
   return (
-    <View className={`min-h-screen pb-20 ${isDark ? 'bg-gray-900' : 'bg-rose-50'}`}>
+    <View className="min-h-screen bg-rose-50 pb-20">
       <ScrollView scrollY className="h-[calc(100vh-80px)]">
         <View className="p-4">
-          <Text className={`text-2xl font-bold block ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>产品推荐</Text>
-          <Text className={`text-sm mt-2 block ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{skinSummary}</Text>
+          <Text className="text-2xl font-bold text-gray-800 block">产品推荐</Text>
+          <Text className="text-sm text-gray-500 mt-2 block">{skinSummary}</Text>
         </View>
 
         <View className="px-4 mb-4">
@@ -136,7 +133,7 @@ export default function RecommendPage() {
                   className={`inline-flex items-center px-4 py-2 rounded-full whitespace-nowrap ${
                     selectedCategory === category
                       ? 'bg-rose-400 text-white'
-                      : isDark ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-700'
+                      : 'bg-white text-gray-700'
                   }`}
                 >
                   <Text className="text-sm font-medium block">{category}</Text>
@@ -167,7 +164,7 @@ export default function RecommendPage() {
         {!loading && filteredProducts.length > 0 && (
           <View className="px-4 space-y-4">
             {filteredProducts.map((product) => (
-              <View key={product.id} className={`rounded-2xl overflow-hidden shadow-sm ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+              <View key={product.id} className="bg-white rounded-2xl overflow-hidden shadow-sm">
                 <Image
                   src={product.image}
                   mode="aspectFill"
@@ -177,12 +174,12 @@ export default function RecommendPage() {
                 <View className="p-5">
                   <View className="flex items-start justify-between mb-2">
                     <View className="flex-1">
-                      <Text className={`text-lg font-semibold block ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>{product.name}</Text>
-                      <Text className={`text-sm block ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{product.brand}</Text>
+                      <Text className="text-lg font-semibold text-gray-800 block">{product.name}</Text>
+                      <Text className="text-sm text-gray-500 block">{product.brand}</Text>
                     </View>
                     <View className="flex items-center">
                       <Text className="text-amber-500 text-lg mr-1 block">★</Text>
-                      <Text className={`text-sm font-medium block ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{product.rating}</Text>
+                      <Text className="text-sm font-medium text-gray-700 block">{product.rating}</Text>
                     </View>
                   </View>
 
@@ -191,12 +188,12 @@ export default function RecommendPage() {
                       <Text className="text-xs text-rose-600 block">{product.category}</Text>
                     </View>
                     {product.tags.map((tag, index) => (
-                      <View key={index} className={`inline-flex items-center px-2 py-1 rounded-full ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                        <Text className={`text-xs block ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{tag}</Text>                      </View>
+                      <View key={index} className="inline-flex items-center px-2 py-1 rounded-full bg-gray-100">
+                        <Text className="text-xs text-gray-600 block">{tag}</Text>                      </View>
                     ))}
                   </View>
 
-                  <Text className={`text-sm mb-4 line-clamp-2 block ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{product.description}</Text>
+                  <Text className="text-sm text-gray-600 mb-4 line-clamp-2 block">{product.description}</Text>
 
                   <View className="flex items-center justify-between">
                     <Text className="text-2xl font-bold text-rose-400 block">¥{product.price}</Text>

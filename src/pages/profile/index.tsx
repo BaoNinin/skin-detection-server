@@ -2,7 +2,6 @@ import { View, Text, Button, Image, Input } from '@tarojs/components'
 import Taro, { useDidShow } from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import { Network } from '@/network'
-import { useTheme } from '@/context/ThemeContext'
 
 interface UserInfo {
   id: number
@@ -21,7 +20,6 @@ export default function ProfilePage() {
   const [showEditProfile, setShowEditProfile] = useState(false)
   const [tempAvatarUrl, setTempAvatarUrl] = useState('')
   const [tempNickname, setTempNickname] = useState('')
-  const { isDark, toggleTheme } = useTheme()
 
   useDidShow(() => {
     loadUserInfo()
@@ -235,16 +233,8 @@ export default function ProfilePage() {
   }
 
   return (
-    <View className={`min-h-screen p-4 ${isDark ? 'bg-gray-900' : 'bg-rose-50'}`}>
-      <View className="flex items-center justify-between mb-6">
-        <Text className={`text-2xl font-bold block ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>我的</Text>
-        <View
-          onClick={toggleTheme}
-          className={`px-4 py-2 rounded-lg ${isDark ? 'bg-gray-800 text-yellow-400' : 'bg-white text-gray-700'}`}
-        >
-          <Text className="text-lg">{isDark ? '☀️' : '🌙'}</Text>
-        </View>
-      </View>
+    <View className="min-h-screen bg-rose-50 p-4">
+      <Text className="text-2xl font-bold text-gray-800 mb-6 block">我的</Text>
 
       {/* 完善信息弹窗 */}
       {showEditProfile && (

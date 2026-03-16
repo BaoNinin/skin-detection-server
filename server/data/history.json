@@ -1046,5 +1046,31 @@
     "imageUrl": "wxfile://tmp_7ec34305e1d0f3cd27a69fcc7cbfe058a6dd00163a7c2674.jpg",
     "createdAt": "2026-03-16T07:32:13.537Z",
     "updatedAt": "2026-03-16T07:32:13.537Z"
+  },
+  {
+    "id": 43,
+    "userId": 34,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "轻微毛孔问题",
+      "轻微皱纹"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 20,
+    "spots": 20,
+    "pores": 20,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好防晒，减少色斑加深和新色斑形成",
+      "使用含有抗氧化成分的护肤品，延缓皮肤衰老",
+      "定期进行温和的深层清洁，保持毛孔通畅"
+    ],
+    "imageUrl": "wxfile://tmp_8e2c5603842a7c7d2a1691500d78bdeb73d6f1b6619e3d43.jpg",
+    "createdAt": "2026-03-16T07:55:13.383Z",
+    "updatedAt": "2026-03-16T07:55:13.383Z"
   }
 ]
