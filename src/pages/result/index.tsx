@@ -1,6 +1,6 @@
 import { View, Text, Image, Button, ScrollView } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import RadarChart from '@/components/RadarChart'
 import OverallScore from '@/components/OverallScore'
 import SkinModel3D from '@/components/SkinModel3D'
@@ -24,13 +24,66 @@ export default function ResultPage() {
   const [result, setResult] = useState<SkinAnalysisResult | null>(null)
   const [imagePath, setImagePath] = useState('')
 
+  // 使用 useMemo 计算综合评分
+  const overallScore = React.useMemo(() => {
+    if (!result) return 0
+    const scores = [result.moisture, 100 - result.oiliness, 100 - result.sensitivity]
+    console.log('=== 计算综合评分 ===')
+    console.log('基础指标:', scores)
+    if (result.acne) {
+      scores.push(100 - result.acne)
+      console.log('添加痘痘指标:', 100 - result.acne)
+    }
+    if (result.wrinkles) {
+      scores.push(100 - result.wrinkles)
+      console.log('添加皱纹指标:', 100 - result.wrinkles)
+    }
+    if (result.spots) {
+      scores.push(100 - result.spots)
+      console.log('添加色斑指标:', 100 - result.spots)
+    }
+    if (result.pores) {
+      scores.push(100 - result.pores)
+      console.log('添加毛孔指标:', 100 - result.pores)
+    }
+    if (result.blackheads) {
+      scores.push(100 - result.blackheads)
+      console.log('添加黑头指标:', 100 - result.blackheads)
+    }
+    const avg = scores.reduce((a, b) => a + b, 0) / scores.length
+    console.log('总分:', scores.reduce((a, b) => a + b, 0))
+    console.log('平均分:', avg)
+    const finalScore = Math.round(avg)
+    console.log('最终评分:', finalScore)
+    return finalScore
+  }, [result])
+
+  const scoreRating = overallScore >= 80 ? '优秀' : overallScore >= 60 ? '良好' : '需改善'
+
   useEffect(() => {
     const analysisResult = Taro.getStorageSync('skinAnalysisResult')
     const currentImage = Taro.getStorageSync('currentImagePath')
 
+    console.log('=== result 页面数据加载 ===')
+    console.log('analysisResult:', analysisResult)
+    console.log('currentImage:', currentImage)
+
     if (analysisResult) {
       setResult(analysisResult)
       setImagePath(currentImage || '')
+      
+      // 打印各项指标
+      console.log('各项指标:')
+      console.log('  skinType:', analysisResult.skinType)
+      console.log('  concerns:', analysisResult.concerns)
+      console.log('  moisture:', analysisResult.moisture)
+      console.log('  oiliness:', analysisResult.oiliness)
+      console.log('  sensitivity:', analysisResult.sensitivity)
+      console.log('  acne:', analysisResult.acne)
+      console.log('  wrinkles:', analysisResult.wrinkles)
+      console.log('  spots:', analysisResult.spots)
+      console.log('  pores:', analysisResult.pores)
+      console.log('  blackheads:', analysisResult.blackheads)
     } else {
       Taro.showToast({
         title: '未找到检测结果',
@@ -41,20 +94,6 @@ export default function ResultPage() {
       }, 1500)
     }
   }, [])
-
-  const calculateOverallScore = () => {
-    if (!result) return 0
-    const scores = [result.moisture, 100 - result.oiliness, 100 - result.sensitivity]
-    if (result.acne) scores.push(100 - result.acne)
-    if (result.wrinkles) scores.push(100 - result.wrinkles)
-    if (result.spots) scores.push(100 - result.spots)
-    if (result.pores) scores.push(100 - result.pores)
-    if (result.blackheads) scores.push(100 - result.blackheads)
-    return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
-  }
-
-  const overallScore = calculateOverallScore()
-  const scoreRating = overallScore >= 80 ? '优秀' : overallScore >= 60 ? '良好' : '需改善'
 
   const getRadarData = () => {
     if (!result) return []

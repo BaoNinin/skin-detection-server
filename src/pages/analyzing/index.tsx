@@ -218,11 +218,34 @@ export default function AnalyzingPage() {
       const data = JSON.parse(res.data)
       console.log('=== 分析结果 ===')
       console.log('响应数据:', data)
+      console.log('data.code:', data.code)
+      console.log('data.data:', data.data)
       
       if (data.code === 200) {
         const result = data.data as SkinAnalysisResult
         console.log('皮肤分析结果:', result)
+        console.log('  skinType:', result.skinType, typeof result.skinType)
+        console.log('  concerns:', result.concerns, typeof result.concerns)
+        console.log('  moisture:', result.moisture, typeof result.moisture)
+        console.log('  oiliness:', result.oiliness, typeof result.oiliness)
+        console.log('  sensitivity:', result.sensitivity, typeof result.sensitivity)
+        console.log('  acne:', result.acne, typeof result.acne)
+        console.log('  wrinkles:', result.wrinkles, typeof result.wrinkles)
+        console.log('  spots:', result.spots, typeof result.spots)
+        console.log('  pores:', result.pores, typeof result.pores)
+        console.log('  blackheads:', result.blackheads, typeof result.blackheads)
+        console.log('  recommendations:', result.recommendations, typeof result.recommendations)
+        
         Taro.setStorageSync('skinAnalysisResult', result)
+        console.log('已保存到 storage，key: skinAnalysisResult')
+        
+        // 验证保存
+        const saved = Taro.getStorageSync('skinAnalysisResult')
+        console.log('验证保存结果:', saved)
+        console.log('保存后 moisture:', saved?.moisture)
+        console.log('保存后 oiliness:', saved?.oiliness)
+        console.log('保存后 sensitivity:', saved?.sensitivity)
+        
         Taro.setStorageSync('currentImagePath', path)
         
         // 设置预览结果
