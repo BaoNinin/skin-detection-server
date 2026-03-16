@@ -113,7 +113,7 @@ export default function SkinDetectionPage() {
   }
 
   return (
-    <View className="min-h-screen bg-rose-50">
+    <View className="min-h-screen bg-slate-50">
       <View className="p-4">
         <Text className="text-2xl font-bold text-gray-800 block">智能皮肤检测</Text>
         <Text className="text-sm text-gray-500 mt-2 block">AI 为您分析皮肤状态</Text>
@@ -132,7 +132,7 @@ export default function SkinDetectionPage() {
               onClick={handleTakePhoto}
               className="bg-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg"
             >
-              <View className="w-12 h-12 rounded-full border-4 border-rose-400" />
+              <View className="w-12 h-12 rounded-full border-4 border-blue-700" />
             </Button>
           </View>
         </View>
@@ -148,7 +148,7 @@ export default function SkinDetectionPage() {
           </Text>
           <Button
             onClick={handleStartCamera}
-            className="bg-rose-400 text-white rounded-full py-3 px-12 font-medium"
+            className="bg-blue-700 text-white rounded-full py-3 px-12 font-medium"
           >
             开始检测
           </Button>
@@ -157,7 +157,7 @@ export default function SkinDetectionPage() {
 
       {capturedImage && analyzing && (
         <View className="flex flex-col items-center justify-center py-20 px-4">
-          <View className="w-20 h-20 border-4 border-rose-200 border-t-rose-400 rounded-full animate-spin mb-6" />
+          <View className="w-20 h-20 border-4 border-blue-200 border-t-rose-400 rounded-full animate-spin mb-6" />
           <Text className="text-lg text-gray-700 block">正在分析中...</Text>
           <Text className="text-sm text-gray-500 mt-2 block">请稍候，AI 正在识别您的皮肤状态</Text>
         </View>
@@ -175,8 +175,8 @@ export default function SkinDetectionPage() {
 
           <View className="bg-white rounded-2xl p-5 shadow-sm mb-4">
             <Text className="text-lg font-semibold text-gray-800 mb-3 block">皮肤类型</Text>
-            <View className="inline-flex items-center px-3 py-1 rounded-full bg-rose-100">
-              <Text className="text-base text-rose-600 font-medium block">{result.skinType}</Text>
+            <View className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100">
+              <Text className="text-base text-blue-800 font-medium block">{result.skinType}</Text>
             </View>
           </View>
 
@@ -214,7 +214,7 @@ export default function SkinDetectionPage() {
                 </View>
                 <View className="h-2 bg-gray-200 rounded-full overflow-hidden">
                   <View
-                    className="h-full bg-rose-400 rounded-full transition-all"
+                    className="h-full bg-blue-700 rounded-full transition-all"
                     style={{ width: `${result.sensitivity}%` }}
                   />
                 </View>
@@ -237,14 +237,14 @@ export default function SkinDetectionPage() {
 
           <Button
             onClick={handleStartCamera}
-            className="w-full bg-rose-400 text-white rounded-full py-3 font-medium mb-3"
+            className="w-full bg-blue-700 text-white rounded-full py-3 font-medium mb-3"
           >
             重新检测
           </Button>
 
           <Button
             onClick={handleViewRecommendations}
-            className="w-full bg-white text-rose-400 border-2 border-rose-400 rounded-full py-3 font-medium"
+            className="w-full bg-white text-blue-700 border-2 border-blue-700 rounded-full py-3 font-medium"
           >
             查看推荐产品
           </Button>

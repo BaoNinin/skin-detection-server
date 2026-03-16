@@ -10,24 +10,24 @@
 
 ### 主色板
 
-- **主色**：Rose Pink（玫瑰粉）`#E8B4BC` → Tailwind: `text-rose-400` / `bg-rose-400`
-  - 意象来源：玫瑰花露、护肤精华
+- **主色**：Tech Blue（科技蓝）`#1E40AF` → Tailwind: `text-blue-700` / `bg-blue-700`
+  - 意象来源：科技未来、专业可信
   - 用途：品牌主色、强调元素
 
-- **辅助色**：Lavender（薰衣草紫）`#D8B4D8` → Tailwind: `text-purple-300` / `bg-purple-300`
-  - 意象来源：薰衣草精油、舒缓护肤
+- **辅助色**：Cyan（青色）`#06B6D4` → Tailwind: `text-cyan-500` / `bg-cyan-500`
+  - 意象来源：数据流、智能分析
   - 用途：次级强调、渐变背景
 
 ### 中性色
 
 - **背景色**
   - 主背景：纯白 `#FFFFFF` → `bg-white`
-  - 次背景：浅粉 `#FFF5F6` → `bg-rose-50`
+  - 次背景：浅灰 `#F8FAFC` → `bg-slate-50`
 
 - **文字色**
-  - 主标题：深灰 `#1F2937` → `text-gray-800`
-  - 正文文字：中灰 `#4B5563` → `text-gray-600`
-  - 辅助文字：浅灰 `#9CA3AF` → `text-gray-400`
+  - 主标题：深色 `#0F172A` → `text-slate-900`
+  - 正文文字：中灰 `#475569` → `text-slate-600`
+  - 辅助文字：浅灰 `#94A3B8` → `text-slate-400`
 
 ### 语义色
 
@@ -37,7 +37,7 @@
 - **警告**：Amber Orange `#F59E0B` → `text-amber-500` / `bg-amber-500`
   - 用途：需关注提示
 
-- **错误**：Rose Red `#F43F5E` → `text-rose-500` / `bg-rose-500`
+- **错误**：Red `#EF4444` → `text-red-500` / `bg-red-500`
   - 用途：皮肤问题提示
 
 ## 字体规范
@@ -70,14 +70,14 @@
 
 **主按钮**
 ```tsx
-<Button className="bg-rose-400 text-white rounded-full py-3 px-8 font-medium">
+<Button className="bg-blue-700 text-white rounded-full py-3 px-8 font-medium">
   开始检测
 </Button>
 ```
 
 **次按钮**
 ```tsx
-<Button className="bg-white text-rose-400 border-2 border-rose-400 rounded-full py-3 px-8 font-medium">
+<Button className="bg-white text-blue-700 border-2 border-blue-700 rounded-full py-3 px-8 font-medium">
   查看详情
 </Button>
 ```
@@ -86,8 +86,8 @@
 
 ```tsx
 <View className="bg-white rounded-2xl p-5 shadow-sm">
-  <Text className="text-lg font-semibold text-gray-800 mb-2 block">卡片标题</Text>
-  <Text className="text-base text-gray-600 block">卡片内容</Text>
+  <Text className="text-lg font-semibold text-slate-900 mb-2 block">卡片标题</Text>
+  <Text className="text-base text-slate-600 block">卡片内容</Text>
 </View>
 ```
 
@@ -104,7 +104,7 @@
 ```tsx
 <View className="flex flex-col items-center justify-center py-12">
   <Image src="/assets/empty.png" className="w-32 h-32 mb-4" />
-  <Text className="text-base text-gray-400 text-center block">暂无数据</Text>
+  <Text className="text-base text-slate-400 text-center block">暂无数据</Text>
 </View>
 ```
 
@@ -112,8 +112,8 @@
 
 ```tsx
 <View className="flex flex-col items-center justify-center py-12">
-  <View className="w-12 h-12 border-4 border-rose-200 border-t-rose-400 rounded-full animate-spin mb-4" />
-  <Text className="text-base text-gray-600 block">加载中...</Text>
+  <View className="w-12 h-12 border-4 border-blue-200 border-t-blue-700 rounded-full animate-spin mb-4" />
+  <Text className="text-base text-slate-600 block">加载中...</Text>
 </View>
 ```
 
@@ -125,7 +125,10 @@
 - **历史记录**：`pages/history/index` - 图标：Clock
 - **我的**：`pages/profile/index` - 图标：User
 
-### 页面跳转规范
+**配色**
+- 未选中：`#94A3B8`（浅灰）
+- 选中：`#1E40AF`（科技蓝）
+- 背景色：`#FFFFFF`（纯白）
 
 - TabBar 页面切换：`Taro.switchTab()`
 - 普通页面跳转：`Taro.navigateTo()`
@@ -147,10 +150,10 @@
 <View className="bg-white rounded-2xl overflow-hidden shadow-sm">
   <Image src={product.image} className="w-full h-48" />
   <View className="p-5">
-    <Text className="text-lg font-semibold text-gray-800 mb-2 block">{product.name}</Text>
-    <Text className="text-sm text-gray-500 mb-4 block">{product.description}</Text>
+    <Text className="text-lg font-semibold text-slate-900 mb-2 block">{product.name}</Text>
+    <Text className="text-sm text-slate-500 mb-4 block">{product.description}</Text>
     <View className="flex items-center justify-between">
-      <Text className="text-xl font-bold text-rose-400 block">¥{product.price}</Text>
+      <Text className="text-xl font-bold text-blue-700 block">¥{product.price}</Text>
       <Button size="mini" type="primary">立即购买</Button>
     </View>
   </View>

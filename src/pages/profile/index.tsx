@@ -233,7 +233,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <View className="min-h-screen bg-rose-50 p-4">
+    <View className="min-h-screen bg-slate-50 p-4">
       <Text className="text-2xl font-bold text-gray-800 mb-6 block">我的</Text>
 
       {/* 完善信息弹窗 */}
@@ -262,14 +262,14 @@ export default function ProfilePage() {
                   openType="chooseAvatar"
                   onChooseAvatar={handleChooseAvatar}
                   size="mini"
-                  className="flex-1 bg-rose-400 text-white rounded-full border-0"
+                  className="flex-1 bg-blue-700 text-white rounded-full border-0"
                 >
                   微信头像
                 </Button>
                 <Button
                   onClick={handleChooseImage}
                   size="mini"
-                  className="flex-1 bg-white text-rose-400 border-2 border-rose-400 rounded-full"
+                  className="flex-1 bg-white text-blue-700 border-2 border-rose-400 rounded-full"
                 >
                   相册选择
                 </Button>
@@ -297,7 +297,7 @@ export default function ProfilePage() {
               </Button>
               <Button
                 onClick={handleSaveProfile}
-                className="flex-1 bg-rose-400 text-white rounded-xl"
+                className="flex-1 bg-blue-700 text-white rounded-xl"
               >
                 保存
               </Button>
@@ -314,7 +314,7 @@ export default function ProfilePage() {
                 className="flex items-center cursor-pointer active:opacity-70"
                 onClick={handleEditProfile}
               >
-                <View className="w-16 h-16 bg-rose-200 rounded-full flex items-center justify-center mr-4 overflow-hidden">
+                <View className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mr-4 overflow-hidden">
                   {userInfo.avatarUrl ? (
                     <Image
                       src={userInfo.avatarUrl}
@@ -347,7 +347,7 @@ export default function ProfilePage() {
               <Button
                 size="mini"
                 onClick={handleEditProfile}
-                className="bg-rose-400 text-white rounded-full"
+                className="bg-blue-700 text-white rounded-full"
               >
                 编辑
               </Button>
@@ -357,7 +357,7 @@ export default function ProfilePage() {
           <View className="bg-white rounded-2xl overflow-hidden shadow-sm">
             <View className="p-4 border-b border-gray-100">
               <Text className="text-base text-gray-800 block">检测次数</Text>
-              <Text className="text-2xl font-bold text-rose-400 block">
+              <Text className="text-2xl font-bold text-blue-700 block">
                 {userInfo.detectionCount} 次
               </Text>
             </View>
@@ -393,7 +393,7 @@ export default function ProfilePage() {
           ) : (
             <Button
               onClick={handleLogin}
-              className="bg-rose-400 text-white rounded-xl w-full"
+              className="bg-blue-700 text-white rounded-xl w-full"
             >
               微信快速登录
             </Button>

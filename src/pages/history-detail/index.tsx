@@ -142,7 +142,7 @@ export default function HistoryDetailPage() {
         <ScrollView scrollY className="h-screen">
           <View className="p-4">
             {/* 报告头部 */}
-            <View className="bg-gradient-to-r from-rose-400 to-pink-500 rounded-2xl p-6 text-white mb-4">
+            <View className="bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl p-6 text-white mb-4">
               <Text className="text-2xl font-bold block">肌肤检测报告</Text>
               <Text className="text-sm opacity-90 block mt-2">
                 档案编号：#{record.id}
@@ -168,8 +168,8 @@ export default function HistoryDetailPage() {
                 )}
                 <View className="flex-1">
                   <Text className="text-sm text-gray-500 mb-2 block">皮肤类型</Text>
-                  <View className="inline-flex items-center px-4 py-2 rounded-full bg-rose-100">
-                    <Text className="text-lg text-rose-600 font-semibold block">{record.skin_type}</Text>
+                  <View className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100">
+                    <Text className="text-lg text-blue-800 font-semibold block">{record.skin_type}</Text>
                   </View>
                 </View>
               </View>
@@ -184,7 +184,7 @@ export default function HistoryDetailPage() {
               <RadarChart data={getRadarData(record)} width={280} height={280} />
               <View className="mt-4 text-center">
                 <Text className="text-sm text-gray-500 block">
-                  您的肌肤综合指数为 <Text className="font-bold text-rose-400">{score}分</Text>
+                  您的肌肤综合指数为 <Text className="font-bold text-blue-700">{score}分</Text>
                 </Text>
               </View>
             </View>
@@ -471,7 +471,7 @@ export default function HistoryDetailPage() {
                 <View className="space-y-2">
                   {record.recommendations.map((rec, index) => (
                     <View key={index} className="flex items-start bg-gray-50 rounded-lg p-3">
-                      <View className="w-6 h-6 rounded-full bg-rose-400 flex items-center justify-center mr-3 flex-shrink-0">
+                      <View className="w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center mr-3 flex-shrink-0">
                         <Text className="text-white text-xs font-bold block">{index + 1}</Text>
                       </View>
                       <Text className="text-sm text-gray-700 flex-1 block">{rec}</Text>
@@ -485,7 +485,7 @@ export default function HistoryDetailPage() {
             <View className="space-y-3 mb-8">
               <Button
                 onClick={handleViewRecommendations}
-                className="w-full bg-rose-400 text-white rounded-full py-4 font-medium"
+                className="w-full bg-blue-700 text-white rounded-full py-4 font-medium"
               >
                 查看推荐产品
               </Button>
@@ -528,7 +528,7 @@ export default function HistoryDetailPage() {
         <ScrollView scrollY className="h-screen">
           <View className="p-4">
             {/* 报告头部 */}
-            <View className="bg-gradient-to-r from-rose-400 to-pink-500 rounded-2xl p-6 text-white mb-4">
+            <View className="bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl p-6 text-white mb-4">
               <Text className="text-2xl font-bold block">对比分析</Text>
             </View>
 
@@ -538,7 +538,7 @@ export default function HistoryDetailPage() {
               <View className="flex justify-between">
                 <View className="flex-1 text-center">
                   <Text className="text-xs text-gray-500 mb-2 block">{formatDate(record1.created_at)}</Text>
-                  <Text className="text-4xl font-bold text-rose-400 block">{score1}分</Text>
+                  <Text className="text-4xl font-bold text-blue-700 block">{score1}分</Text>
                   <Text className="text-sm text-gray-600 mt-2 block">{getScoreRating(score1)}</Text>
                 </View>
 
@@ -548,7 +548,7 @@ export default function HistoryDetailPage() {
 
                 <View className="flex-1 text-center">
                   <Text className="text-xs text-gray-500 mb-2 block">{formatDate(record2.created_at)}</Text>
-                  <Text className="text-4xl font-bold text-rose-400 block">{score2}分</Text>
+                  <Text className="text-4xl font-bold text-blue-700 block">{score2}分</Text>
                   <Text className="text-sm text-gray-600 mt-2 block">{getScoreRating(score2)}</Text>
                 </View>
               </View>
@@ -631,10 +631,10 @@ export default function HistoryDetailPage() {
                   <View className="flex items-center gap-2">
                     <Text className="text-sm font-medium text-gray-800 block w-16 text-right">{record1.sensitivity}%</Text>
                     <View className="flex-1 bg-gray-100 rounded-lg h-3 overflow-hidden">
-                      <View className="bg-rose-400 h-full" style={{ width: `${record1.sensitivity}%` }} />
+                      <View className="bg-blue-700 h-full" style={{ width: `${record1.sensitivity}%` }} />
                     </View>
                     <View className="flex-1 bg-gray-100 rounded-lg h-3 overflow-hidden">
-                      <View className="bg-rose-400 h-full" style={{ width: `${record2.sensitivity}%` }} />
+                      <View className="bg-blue-700 h-full" style={{ width: `${record2.sensitivity}%` }} />
                     </View>
                     <Text className="text-sm font-medium text-gray-800 block w-16">{record2.sensitivity}%</Text>
                   </View>

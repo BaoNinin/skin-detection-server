@@ -93,7 +93,7 @@ export default function ResultDetailPage() {
       <ScrollView scrollY className="h-screen">
         <View className="p-4">
           {/* 报告头部 */}
-          <View className="bg-gradient-to-r from-rose-400 to-pink-500 rounded-2xl p-6 text-white mb-4">
+          <View className="bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl p-6 text-white mb-4">
             <Text className="text-2xl font-bold block">肌肤检测报告</Text>
             <Text className="text-sm opacity-90 block mt-2">
               {new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -125,8 +125,8 @@ export default function ResultDetailPage() {
           {/* 皮肤类型详情 */}
           <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
             <Text className="text-lg font-semibold text-gray-800 mb-3 block">皮肤类型</Text>
-            <View className="bg-rose-50 rounded-xl p-4">
-              <Text className="text-2xl font-bold text-rose-600 block mb-2">{result.skinType}</Text>
+            <View className="bg-slate-50 rounded-xl p-4">
+              <Text className="text-2xl font-bold text-blue-800 block mb-2">{result.skinType}</Text>
               <Text className="text-sm text-gray-600 block">
                 {result.skinType === '干性' && '肌肤干燥，容易产生细纹，需要加强保湿'}
                 {result.skinType === '油性' && '皮脂分泌旺盛，容易出油和长痘，需要控油祛痘'}
@@ -370,7 +370,7 @@ export default function ResultDetailPage() {
               <View className="space-y-2">
                 {result.recommendations.map((rec, index) => (
                   <View key={index} className="flex items-start bg-gray-50 rounded-lg p-3">
-                    <View className="w-6 h-6 rounded-full bg-rose-400 flex items-center justify-center mr-3 flex-shrink-0">
+                    <View className="w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center mr-3 flex-shrink-0">
                       <Text className="text-white text-xs font-bold block">{index + 1}</Text>
                     </View>
                     <Text className="text-sm text-gray-700 flex-1 block">{rec}</Text>
@@ -384,7 +384,7 @@ export default function ResultDetailPage() {
           <View className="space-y-3 mb-8">
             <Button
               onClick={handleViewRecommendations}
-              className="w-full bg-rose-400 text-white rounded-full py-4 font-medium"
+              className="w-full bg-blue-700 text-white rounded-full py-4 font-medium"
             >
               查看推荐产品
             </Button>

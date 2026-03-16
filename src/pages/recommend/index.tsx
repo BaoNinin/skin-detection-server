@@ -116,7 +116,7 @@ export default function RecommendPage() {
   }
 
   return (
-    <View className="min-h-screen bg-rose-50 pb-20">
+    <View className="min-h-screen bg-slate-50 pb-20">
       <ScrollView scrollY className="h-[calc(100vh-80px)]">
         <View className="p-4">
           <Text className="text-2xl font-bold text-gray-800 block">产品推荐</Text>
@@ -132,7 +132,7 @@ export default function RecommendPage() {
                   onClick={() => setSelectedCategory(category)}
                   className={`inline-flex items-center px-4 py-2 rounded-full whitespace-nowrap ${
                     selectedCategory === category
-                      ? 'bg-rose-400 text-white'
+                      ? 'bg-blue-700 text-white'
                       : 'bg-white text-gray-700'
                   }`}
                 >
@@ -184,8 +184,8 @@ export default function RecommendPage() {
                   </View>
 
                   <View className="flex flex-wrap gap-2 mb-3">
-                    <View className="inline-flex items-center px-2 py-1 rounded-full bg-rose-100">
-                      <Text className="text-xs text-rose-600 block">{product.category}</Text>
+                    <View className="inline-flex items-center px-2 py-1 rounded-full bg-blue-100">
+                      <Text className="text-xs text-blue-800 block">{product.category}</Text>
                     </View>
                     {product.tags.map((tag, index) => (
                       <View key={index} className="inline-flex items-center px-2 py-1 rounded-full bg-gray-100">
@@ -196,11 +196,11 @@ export default function RecommendPage() {
                   <Text className="text-sm text-gray-600 mb-4 line-clamp-2 block">{product.description}</Text>
 
                   <View className="flex items-center justify-between">
-                    <Text className="text-2xl font-bold text-rose-400 block">¥{product.price}</Text>
+                    <Text className="text-2xl font-bold text-blue-700 block">¥{product.price}</Text>
                     <Button
                       size="mini"
                       onClick={() => handleBuyProduct(product)}
-                      className="bg-rose-400 text-white rounded-full"
+                      className="bg-blue-700 text-white rounded-full"
                     >
                       去购买
                     </Button>

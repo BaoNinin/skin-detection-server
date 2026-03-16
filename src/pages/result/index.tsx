@@ -95,7 +95,7 @@ export default function ResultPage() {
   }
 
   return (
-    <View className="min-h-screen bg-rose-50">
+    <View className="min-h-screen bg-slate-50">
       <ScrollView scrollY className="h-screen">
         <View className="p-4">
           {/* 综合评分 */}
@@ -113,8 +113,8 @@ export default function ResultPage() {
               )}
               <View className="flex-1">
                 <Text className="text-sm text-gray-500 mb-2 block">皮肤类型</Text>
-                <View className="inline-flex items-center px-4 py-2 rounded-full bg-rose-100">
-                  <Text className="text-lg text-rose-600 font-semibold block">{result.skinType}</Text>
+                <View className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100">
+                  <Text className="text-lg text-blue-800 font-semibold block">{result.skinType}</Text>
                 </View>
               </View>
             </View>
@@ -129,7 +129,7 @@ export default function ResultPage() {
             <RadarChart data={getRadarData()} width={280} height={280} />
             <View className="mt-4 text-center">
               <Text className="text-sm text-gray-500 block">
-                您的肌肤综合指数为 <Text className="font-bold text-rose-400">{overallScore}分</Text>
+                您的肌肤综合指数为 <Text className="font-bold text-blue-700">{overallScore}分</Text>
               </Text>
             </View>
           </View>
@@ -209,7 +209,7 @@ export default function ResultPage() {
           <View className="space-y-3 mb-8">
             <Button
               onClick={handleViewDetail}
-              className="w-full bg-rose-400 text-white rounded-full py-4 font-medium"
+              className="w-full bg-blue-700 text-white rounded-full py-4 font-medium"
             >
               下一步
             </Button>
@@ -218,7 +218,7 @@ export default function ResultPage() {
             <View className="flex gap-3">
               <Button
                 onClick={handleViewRecommendations}
-                className="flex-1 bg-white text-rose-400 border-2 border-rose-400 rounded-full py-3"
+                className="flex-1 bg-white text-blue-700 border-2 border-blue-700 rounded-full py-3"
               >
                 查看推荐
               </Button>

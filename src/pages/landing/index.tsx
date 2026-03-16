@@ -21,7 +21,7 @@ export default function LandingPage() {
   }
 
   return (
-    <View className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
+    <View className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <View className="flex flex-col items-center justify-center px-8 py-12">
         <View className="mb-8">
           <View className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-lg">
@@ -38,7 +38,7 @@ export default function LandingPage() {
 
         <View
           onClick={handleStartDetection}
-          className="w-full bg-rose-400 rounded-2xl py-4 px-6 flex items-center justify-center shadow-md mb-8"
+          className="w-full bg-blue-700 rounded-2xl py-4 px-6 flex items-center justify-center shadow-md mb-8"
         >
           <Text className="text-xl text-white font-semibold block">
             📷 开始检测

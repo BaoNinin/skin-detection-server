@@ -577,9 +577,9 @@ export default function HistoryPage() {
         {!loading && (
           <View
             onClick={handleRefresh}
-            className="bg-rose-50 px-4 py-2 rounded-lg active:bg-rose-100"
+            className="bg-slate-50 px-4 py-2 rounded-lg active:bg-slate-100"
           >
-            <Text className="text-sm text-rose-600 block">🔄 刷新</Text>
+            <Text className="text-sm text-blue-800 block">🔄 刷新</Text>
           </View>
         )}
       </View>
@@ -607,7 +607,7 @@ export default function HistoryPage() {
                 onClick={() => setTimeRange(range)}
                 className={`inline-flex items-center px-4 py-2 rounded-full ${
                   timeRange === range
-                    ? 'bg-rose-400 text-white'
+                    ? 'bg-blue-700 text-white'
                     : 'bg-gray-100 text-gray-700'
                 }`}
               >
@@ -626,7 +626,7 @@ export default function HistoryPage() {
           <View
             onClick={() => setViewType('timeline')}
             className={`flex-1 py-2 rounded-xl text-center ${
-              viewType === 'timeline' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
+              viewType === 'timeline' ? 'bg-blue-700 text-white' : 'bg-gray-100 text-gray-700'
             }`}
           >
             <Text className="text-sm font-medium block">时间轴</Text>
@@ -634,7 +634,7 @@ export default function HistoryPage() {
           <View
             onClick={() => setViewType('calendar')}
             className={`flex-1 py-2 rounded-xl text-center ${
-              viewType === 'calendar' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
+              viewType === 'calendar' ? 'bg-blue-700 text-white' : 'bg-gray-100 text-gray-700'
             }`}
           >
             <Text className="text-sm font-medium block">日历</Text>
@@ -642,7 +642,7 @@ export default function HistoryPage() {
           <View
             onClick={() => setViewType('trend')}
             className={`flex-1 py-2 rounded-xl text-center ${
-              viewType === 'trend' ? 'bg-rose-400 text-white' : 'bg-gray-100 text-gray-700'
+              viewType === 'trend' ? 'bg-blue-700 text-white' : 'bg-gray-100 text-gray-700'
             }`}
           >
             <Text className="text-sm font-medium block">趋势图</Text>
@@ -807,7 +807,7 @@ export default function HistoryPage() {
                 <View>
                   <View className="flex items-center justify-between mb-2">
                     <View className="flex items-center gap-2">
-                      <View className="w-3 h-3 rounded-full bg-rose-500" />
+                      <View className="w-3 h-3 rounded-full bg-slate-500" />
                       <Text className="text-sm font-medium text-gray-700 block">敏感度</Text>
                     </View>
                     <Text className="text-sm text-gray-500 block">
@@ -865,7 +865,7 @@ export default function HistoryPage() {
                   <View
                     onClick={() => handleViewDetail(record)}
                     className={`relative bg-white rounded-2xl p-5 shadow-sm ml-12 ${
-                      isSelected ? 'border-2 border-rose-400' : ''
+                      isSelected ? 'border-2 border-blue-700' : ''
                     }`}
                   >
                     <View
@@ -874,7 +874,7 @@ export default function HistoryPage() {
                         handleSelectRecord(record)
                       }}
                       className={`absolute left-[-32px] top-5 w-10 h-10 rounded-full flex items-center justify-center ${
-                        isSelected ? 'bg-rose-400' : 'bg-gray-200'
+                        isSelected ? 'bg-blue-700' : 'bg-gray-200'
                       }`}
                     >
                       <Text className="text-lg block">{isSelected ? '✓' : index + 1}</Text>
@@ -889,7 +889,7 @@ export default function HistoryPage() {
                         </Text>
                       </View>
                       <View className="text-right">
-                        <Text className="text-2xl font-bold text-rose-400 block">{score}分</Text>
+                        <Text className="text-2xl font-bold text-blue-700 block">{score}分</Text>
                       </View>
                     </View>
 
@@ -904,7 +904,7 @@ export default function HistoryPage() {
                       </View>
                       <View className="flex-1 bg-gray-50 rounded-lg p-2">
                         <Text className="text-xs text-gray-500 block mb-1">敏感度</Text>
-                        <Text className="text-base font-bold text-rose-500 block">{record.sensitivity}%</Text>
+                        <Text className="text-base font-bold text-blue-800 block">{record.sensitivity}%</Text>
                       </View>
                     </View>
 
@@ -1011,8 +1011,8 @@ export default function HistoryPage() {
                             key={day}
                             onClick={() => hasRecords && handleDateClick(day)}
                             className={`aspect-square flex flex-col items-center justify-center rounded-xl ${
-                              hasRecords ? 'active:bg-rose-50 cursor-pointer' : 'opacity-30'
-                            } ${isSelected ? 'bg-rose-400' : ''} ${isToday && !isSelected ? 'border-2 border-rose-400' : ''}`}
+                              hasRecords ? 'active:bg-slate-50 cursor-pointer' : 'opacity-30'
+                            } ${isSelected ? 'bg-blue-700' : ''} ${isToday && !isSelected ? 'border-2 border-blue-700' : ''}`}
                           >
                             <Text
                               className={`text-sm font-medium block ${
@@ -1024,7 +1024,7 @@ export default function HistoryPage() {
                             {hasRecords && recordsCount > 0 && (
                               <View
                                 className={`w-1.5 h-1.5 rounded-full mt-1 ${
-                                  isSelected ? 'bg-white' : 'bg-rose-400'
+                                  isSelected ? 'bg-white' : 'bg-blue-700'
                                 }`}
                               />
                             )}
@@ -1066,7 +1066,7 @@ export default function HistoryPage() {
                               {record.skin_type}
                             </Text>
                           </View>
-                          <Text className="text-lg font-bold text-rose-400 block">{score}分</Text>
+                          <Text className="text-lg font-bold text-blue-700 block">{score}分</Text>
                         </View>
 
                         <Text className="text-xs text-gray-500 block mb-3">
@@ -1084,7 +1084,7 @@ export default function HistoryPage() {
                           </View>
                           <View className="flex-1 bg-white rounded-lg p-2 text-center">
                             <Text className="text-xs text-gray-500 block">敏感度</Text>
-                            <Text className="text-sm font-bold text-rose-500 block">{record.sensitivity}%</Text>
+                            <Text className="text-sm font-bold text-blue-800 block">{record.sensitivity}%</Text>
                           </View>
                         </View>
                       </View>

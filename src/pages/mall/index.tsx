@@ -2,8 +2,8 @@ import { View, Text } from '@tarojs/components'
 
 export default function MallPage() {
   return (
-    <View className="min-h-screen bg-rose-50 flex flex-col items-center justify-center">
-      <View className="w-32 h-32 bg-rose-200 rounded-full flex items-center justify-center mb-6">
+    <View className="min-h-screen bg-slate-50 flex flex-col items-center justify-center">
+      <View className="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center mb-6">
         <Text className="text-6xl">🛍️</Text>
       </View>
 

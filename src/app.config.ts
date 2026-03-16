@@ -13,14 +13,14 @@ const appConfig = {
   ],
   window: {
     backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#E8B4BC',
+    navigationBarBackgroundColor: '#1E40AF',
     navigationBarTitleText: '智能皮肤检测',
     navigationBarTextStyle: 'white',
     animationType: 'slide-in-right'
   },
   tabBar: {
-    color: '#9CA3AF',
-    selectedColor: '#E8B4BC',
+    color: '#94A3B8',
+    selectedColor: '#1E40AF',
     backgroundColor: '#ffffff',
     borderStyle: 'black' as const,
     list: [

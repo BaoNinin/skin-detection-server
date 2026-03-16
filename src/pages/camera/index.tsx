@@ -577,7 +577,7 @@ export default function CameraPage() {
         <Text className="text-lg text-gray-700 text-center block">
           相机功能仅在小程序中可用{'\n'}请在微信小程序中打开
         </Text>
-        <Button onClick={handleCancel} className="mt-8 bg-rose-400 text-white rounded-full">
+        <Button onClick={handleCancel} className="mt-8 bg-blue-700 text-white rounded-full">
           返回
         </Button>
       </View>
@@ -607,7 +607,7 @@ export default function CameraPage() {
             {/* 面部轮廓 */}
             <View 
               className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-64 border-4 rounded-[50%] transition-colors duration-300 ${
-                isAligned ? 'border-green-400' : faceDetected ? 'border-rose-400' : 'border-amber-400'
+                isAligned ? 'border-green-400' : faceDetected ? 'border-blue-700' : 'border-amber-400'
               }`}
               style={{ 
                 boxShadow: isAligned 
@@ -632,7 +632,7 @@ export default function CameraPage() {
                 <View
                   key={index}
                   className={`absolute w-1.5 h-1.5 rounded-full ${
-                    isAligned ? 'bg-green-400' : 'bg-rose-400'
+                    isAligned ? 'bg-green-400' : 'bg-blue-700'
                   }`}
                   style={{
                     left: `${x}px`,
@@ -650,7 +650,7 @@ export default function CameraPage() {
             {isScanning && (
               <View
                 className={`absolute left-0 right-0 h-1 ${
-                  isAligned ? 'bg-gradient-to-r from-green-400 via-green-500 to-green-400' : 'bg-gradient-to-r from-rose-400 via-pink-500 to-rose-400'
+                  isAligned ? 'bg-gradient-to-r from-green-400 via-green-500 to-green-400' : 'bg-gradient-to-r from-blue-700 via-blue-800 to-blue-700'
                 }`}
                 style={{
                   top: `${scanProgress}%`,
@@ -677,7 +677,7 @@ export default function CameraPage() {
             {/* 中心提示点 */}
             <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <View className={`w-2 h-2 rounded-full shadow-lg ${
-                isAligned ? 'bg-green-400 shadow-green-400/50' : 'bg-rose-400 shadow-rose-400/50'
+                isAligned ? 'bg-green-400 shadow-green-400/50' : 'bg-blue-700 shadow-blue-700/50'
               }`}
               />
             </View>
@@ -687,9 +687,9 @@ export default function CameraPage() {
           <View className="flex flex-col items-center justify-center gap-4">
             {/* 引导图标 */}
             <View className="relative w-32 h-32">
-              <View className="absolute inset-0 border-4 border-rose-400/30 rounded-full animate-ping" />
-              <View className="absolute inset-4 border-2 border-rose-400/50 rounded-full" />
-              <View className="absolute inset-8 bg-rose-400/10 border-2 border-rose-400 rounded-full flex items-center justify-center">
+              <View className="absolute inset-0 border-4 border-blue-700/30 rounded-full animate-ping" />
+              <View className="absolute inset-4 border-2 border-blue-700/50 rounded-full" />
+              <View className="absolute inset-8 bg-blue-700/10 border-2 border-blue-700 rounded-full flex items-center justify-center">
                 <Text className="text-4xl">👤</Text>
               </View>
             </View>
@@ -699,7 +699,7 @@ export default function CameraPage() {
               <Text className="text-white text-base text-center block">
                 准备好开始检测了吗？
               </Text>
-              <Text className="text-rose-300 text-sm text-center block mt-2">
+              <Text className="text-blue-300 text-sm text-center block mt-2">
                 点击下方「开始检测」按钮
               </Text>
             </View>
@@ -873,7 +873,7 @@ export default function CameraPage() {
                 {guideText}
               </Text>
               <Text className={`text-[10px] ${
-                isAligned ? 'text-green-300' : 'text-rose-300'
+                isAligned ? 'text-green-300' : 'text-blue-300'
               }`}
               >
                 · {countdown}s
@@ -898,15 +898,15 @@ export default function CameraPage() {
             {/* 开始检测按钮 */}
             {isScanning ? (
               <View className={`relative w-24 h-24 rounded-full flex items-center justify-center shadow-2xl ${
-                isAligned ? 'bg-green-400 shadow-green-400/50' : 'bg-rose-400 shadow-rose-400/50'
+                isAligned ? 'bg-green-400 shadow-green-400/50' : 'bg-blue-700 shadow-blue-700/50'
               }`}
               >
                 <View className={`absolute inset-0 rounded-full animate-ping opacity-50 ${
-                  isAligned ? 'bg-green-400' : 'bg-rose-400'
+                  isAligned ? 'bg-green-400' : 'bg-blue-700'
                 }`}
                 />
                 <View className={`w-20 h-20 rounded-full border-4 border-white flex items-center justify-center ${
-                  isAligned ? 'bg-green-400' : 'bg-rose-400'
+                  isAligned ? 'bg-green-400' : 'bg-blue-700'
                 }`}
                 >
                   <Text className="text-white text-2xl font-bold">{countdown}</Text>
@@ -918,7 +918,7 @@ export default function CameraPage() {
                 className="relative w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform flex-shrink-0"
               >
                 <View className="absolute inset-0 bg-white rounded-full" />
-                <View className="w-20 h-20 bg-rose-400 rounded-full border-4 border-white flex items-center justify-center">
+                <View className="w-20 h-20 bg-blue-700 rounded-full border-4 border-white flex items-center justify-center">
                   <Text className="text-white text-sm font-bold">开始检测</Text>
                 </View>
               </View>

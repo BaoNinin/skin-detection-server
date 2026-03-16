@@ -386,15 +386,15 @@ export default function AnalyzingPage() {
   }
 
   return (
-    <View className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
+    <View className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <View className="flex flex-col items-center justify-center px-8 py-12">
         {/* 识别成功动画 */}
         {currentStep === 'activating' && (
           <View className="mb-8">
             <View className="w-32 h-32 flex items-center justify-center relative">
-              <View className="absolute w-32 h-32 border-4 border-rose-200 rounded-full" />
+              <View className="absolute w-32 h-32 border-4 border-blue-200 rounded-full" />
               <View
-                className="absolute w-32 h-32 border-4 border-rose-400 rounded-t-full transition-all"
+                className="absolute w-32 h-32 border-4 border-blue-700 rounded-t-full transition-all"
                 style={{
                   transform: `rotate(${spinRotation}deg)`
                 }}
@@ -428,7 +428,7 @@ export default function AnalyzingPage() {
                 {Array.from({ length: 9 }).map((_, index) => (
                   <View
                     key={index}
-                    className={`w-6 h-6 bg-rose-400 rounded-full transition-all duration-300 ${
+                    className={`w-6 h-6 bg-blue-700 rounded-full transition-all duration-300 ${
                       chipPointsPulse[index] ? 'opacity-100 scale-110' : 'opacity-50 scale-100'
                     }`}
                     style={{
@@ -440,7 +440,7 @@ export default function AnalyzingPage() {
 
               {/* 外圈脉冲效果 - 使用 CSS 动画 */}
               <View
-                className="absolute w-32 h-32 border-2 border-rose-400/50 rounded-full"
+                className="absolute w-32 h-32 border-2 border-blue-700/50 rounded-full"
                 style={{
                   opacity: pulseOpacity,
                   animation: 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite'
@@ -449,7 +449,7 @@ export default function AnalyzingPage() {
 
               {/* 中心芯片图标 */}
               <View
-                className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center relative z-10"
+                className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center relative z-10"
                 style={{
                   opacity: pulseOpacity,
                   boxShadow: `0 0 ${pulseOpacity * 20}px rgba(251, 113, 133, 0.5)`
@@ -461,7 +461,7 @@ export default function AnalyzingPage() {
 
             {/* 倒计时 */}
             <View className="mt-6 text-center">
-              <Text className="text-6xl font-bold text-rose-400 block" style={{ textShadow: '0 0 20px rgba(251, 113, 133, 0.8)' }}>
+              <Text className="text-6xl font-bold text-blue-700 block" style={{ textShadow: '0 0 20px rgba(251, 113, 133, 0.8)' }}>
                 {activationCountdown}
               </Text>
               <Text className="text-sm text-gray-600 mt-2 block">AI芯片激活中</Text>
@@ -471,7 +471,7 @@ export default function AnalyzingPage() {
             <View className="mt-4 w-64">
               <View className="h-2 bg-gray-200 rounded-full overflow-hidden">
                 <View
-                  className="h-full bg-gradient-to-r from-rose-400 via-pink-500 to-rose-400 transition-all duration-300"
+                  className="h-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-700 transition-all duration-300"
                   style={{ width: `${activationProgress}%` }}
                 />
               </View>
@@ -494,7 +494,7 @@ export default function AnalyzingPage() {
 
         {/* 加载动画 */}
         {currentStep === 'analyzing' && (
-          <View className="w-16 h-16 border-4 border-rose-200 border-t-rose-400 rounded-full mb-6 transition-all" style={{ transform: `rotate(${loaderRotation}deg)` }} />
+          <View className="w-16 h-16 border-4 border-blue-200 border-t-rose-400 rounded-full mb-6 transition-all" style={{ transform: `rotate(${loaderRotation}deg)` }} />
         )}
 
         {/* 当前步骤文字 */}
@@ -507,11 +507,11 @@ export default function AnalyzingPage() {
           <View className="w-full max-w-xs mb-6">
             <View className="flex items-center justify-between mb-2">
               <Text className="text-sm text-gray-600 block">{currentAnalysisTask}</Text>
-              <Text className="text-sm font-medium text-rose-400 block">{analysisProgress}%</Text>
+              <Text className="text-sm font-medium text-blue-700 block">{analysisProgress}%</Text>
             </View>
             <View className="h-2 bg-gray-200 rounded-full overflow-hidden">
               <View
-                className="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-300"
+                className="h-full bg-gradient-to-r from-blue-700 to-blue-800 transition-all duration-300"
                 style={{ width: `${analysisProgress}%` }}
               />
             </View>
@@ -524,7 +524,7 @@ export default function AnalyzingPage() {
                       index < analysisTasks.findIndex(t => t.text === currentAnalysisTask)
                         ? 'bg-green-400'
                         : task.text === currentAnalysisTask
-                        ? 'bg-rose-400 animate-pulse'
+                        ? 'bg-blue-700 animate-pulse'
                         : 'bg-gray-200'
                     }`}
                   >
@@ -570,14 +570,14 @@ export default function AnalyzingPage() {
                 </View>
                 <View className="bg-rose-50 rounded-xl p-3 text-center">
                   <Text className="text-xs text-gray-500 block mb-1">敏感度</Text>
-                  <Text className="text-xl font-bold text-rose-500 block">{previewResult.sensitivity}%</Text>
+                  <Text className="text-xl font-bold text-blue-800 block">{previewResult.sensitivity}%</Text>
                 </View>
               </View>
               
               {/* 皮肤类型 */}
               <View className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl p-4 mb-4">
                 <Text className="text-xs text-gray-500 block mb-1">皮肤类型</Text>
-                <Text className="text-lg font-bold text-rose-600 block">{previewResult.skinType}</Text>
+                <Text className="text-lg font-bold text-blue-800 block">{previewResult.skinType}</Text>
               </View>
               
               {/* 主要问题 */}
@@ -611,7 +611,7 @@ export default function AnalyzingPage() {
               key={index}
               className={`w-3 h-3 rounded-full transition-all ${
                 steps.findIndex(s => s.step === currentStep) >= index
-                  ? 'bg-rose-400'
+                  ? 'bg-blue-700'
                   : 'bg-gray-200'
               }`}
             />
@@ -638,13 +638,13 @@ export default function AnalyzingPage() {
           <View className="flex gap-3">
             <Button
               onClick={handleGoToResult}
-              className="flex-1 bg-rose-400 text-white rounded-full py-3 font-medium"
+              className="flex-1 bg-blue-700 text-white rounded-full py-3 font-medium"
             >
               查看报告
             </Button>
             <Button
               onClick={handleImmediateJump}
-              className="flex-1 bg-white text-rose-400 border-2 border-rose-400 rounded-full py-3 font-medium"
+              className="flex-1 bg-white text-blue-700 border-2 border-blue-700 rounded-full py-3 font-medium"
             >
               立即跳转
             </Button>
