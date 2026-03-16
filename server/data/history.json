@@ -967,5 +967,31 @@
     "imageUrl": "wxfile://tmp_b00b51592570bf0e2de454a971187e2449cd9aa9029e9c5f.jpg",
     "createdAt": "2026-03-16T05:39:40.709Z",
     "updatedAt": "2026-03-16T05:39:40.709Z"
+  },
+  {
+    "id": 40,
+    "userId": 27,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "少量黑头",
+      "轻微毛孔问题"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 10,
+    "blackheads": 10,
+    "recommendations": [
+      "日常做好清洁，可选择温和的氨基酸洁面产品",
+      "注意补水保湿，使用清爽型的保湿乳液",
+      "饮食上减少辛辣油腻食物的摄入，多吃蔬菜水果"
+    ],
+    "imageUrl": "wxfile://tmp_4fd8e4bfb8afa3e93a4a5d1b4e426c486ad478a0035fc735.jpg",
+    "createdAt": "2026-03-16T05:44:40.606Z",
+    "updatedAt": "2026-03-16T05:44:40.606Z"
   }
 ]
