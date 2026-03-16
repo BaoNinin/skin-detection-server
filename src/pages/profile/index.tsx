@@ -233,7 +233,16 @@ export default function ProfilePage() {
   }
 
   return (
-    <View className="min-h-screen bg-slate-50 p-4">
+    <View className="min-h-screen relative">
+      {/* 背景图片 */}
+      <Image
+        src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2F%E4%B8%AA%E4%BA%BA%E9%A1%B5%E8%83%8C%E6%99%AF-%E8%93%9D%E8%89%B2.png&nonce=d2b741cb-9bc7-4cc9-a078-dad346c1e0c2&project_id=7616586290808668211&sign=dbcab78f493f4a2fce6117406af9538572fad46888e5df7afb8c229c3cb2af14"
+        className="absolute inset-0 w-full h-full"
+        mode="aspectFill"
+      />
+      
+      {/* 内容层 */}
+      <View className="relative z-10 bg-slate-50/95 min-h-screen p-4">
       <Text className="text-2xl font-bold text-gray-800 mb-6 block">我的</Text>
 
       {/* 完善信息弹窗 */}
@@ -400,6 +409,7 @@ export default function ProfilePage() {
           )}
         </View>
       )}
+      </View>
     </View>
   )
 }

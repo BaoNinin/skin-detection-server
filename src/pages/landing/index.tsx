@@ -21,7 +21,16 @@ export default function LandingPage() {
   }
 
   return (
-    <View className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <View className="min-h-screen relative">
+      {/* 背景图片 */}
+      <Image
+        src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2F%E9%A6%96%E9%A1%B5%E8%83%8C%E6%99%AF-%E8%93%9D%E8%89%B2.png&nonce=465fd36f-7580-4020-8a48-0d8be52b029c&project_id=7616586290808668211&sign=376b900c4dcc6ba799a1d451311397ff10237fa4192a2d7aa3018b58d2221faa"
+        className="absolute inset-0 w-full h-full"
+        mode="aspectFill"
+      />
+      
+      {/* 内容层 */}
+      <View className="relative z-10 bg-gradient-to-b from-slate-50 to-white/95 min-h-screen">
       <View className="flex flex-col items-center justify-center px-8 py-12">
         <View className="mb-8">
           <View className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-lg">
@@ -72,6 +81,7 @@ export default function LandingPage() {
             💡 使用提示：请确保光线充足，面部正对摄像头，保持表情自然
           </Text>
         </View>
+      </View>
       </View>
     </View>
   )
