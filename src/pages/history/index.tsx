@@ -40,13 +40,22 @@ export default function HistoryPage() {
     loadHistory()
   }, [])
 
-  const loadHistory = async (retryCount = 0) => {
+  const loadHistory = async (retryCount = 0, resetFilters = false) => {
     setLoading(true)
+
+    // 如果需要重置筛选条件（点击刷新按钮时）
+    if (resetFilters) {
+      console.log('重置筛选条件')
+      setSearchKeyword('')
+      setTimeRange('all')
+      setSelectedRecords([])
+    }
 
     const userId = Taro.getStorageSync('userId')
     console.log('=== 历史记录加载 ===')
     console.log('userId:', userId, '类型:', typeof userId, '是否有效:', !!userId)
     console.log('重试次数:', retryCount)
+    console.log('重置筛选条件:', resetFilters)
 
     if (!userId) {
       console.warn('用户未登录，跳转到登录页面')
@@ -77,7 +86,19 @@ export default function HistoryPage() {
 
       if (res.data.code === 200) {
         setHistoryList(res.data.data || [])
-        console.log('查询成功，历史记录已更新')
+        console.log('查询成功，历史记录已更新，当前筛选条件:', {
+          keyword: resetFilters ? '' : searchKeyword,
+          timeRange: resetFilters ? 'all' : timeRange
+        })
+
+        // 如果是点击刷新按钮，显示成功提示
+        if (resetFilters) {
+          Taro.showToast({
+            title: `刷新成功，共 ${res.data.data?.length || 0} 条记录`,
+            icon: 'success',
+            duration: 1500
+          })
+        }
       } else if (res.data.code === 401) {
         console.error('登录已过期')
         Taro.showModal({
@@ -97,7 +118,7 @@ export default function HistoryPage() {
       }
     } catch (err) {
       console.error('加载历史记录失败:', err)
-      
+
       // 网络错误时自动重试一次
       if (retryCount === 0) {
         console.log('首次加载失败，尝试重试...')
@@ -107,7 +128,7 @@ export default function HistoryPage() {
           duration: 1500
         })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        return loadHistory(retryCount + 1)
+        return loadHistory(retryCount + 1, resetFilters)
       } else {
         console.error('重试失败，不再重试')
         Taro.showToast({
@@ -243,7 +264,7 @@ export default function HistoryPage() {
                 title: '删除成功',
                 icon: 'success'
               })
-              loadHistory()
+              loadHistory(0, false) // 删除记录后刷新，不重置筛选条件
             } else {
               Taro.showToast({
                 title: '删除失败',
@@ -546,7 +567,7 @@ export default function HistoryPage() {
         </View>
         {!loading && (
           <View
-            onClick={() => loadHistory()}
+            onClick={() => loadHistory(0, true)}
             className="bg-rose-50 px-4 py-2 rounded-lg active:bg-rose-100"
           >
             <Text className="text-sm text-rose-600 block">🔄 刷新</Text>
