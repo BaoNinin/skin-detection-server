@@ -110,6 +110,7 @@ export default function ResultDetailPage() {
               <Image
                 src={imagePath}
                 mode="aspectFill"
+                lazyLoad
                 className="w-full h-80 rounded-xl"
               />
             </View>

@@ -943,5 +943,31 @@
     "imageUrl": "wxfile://tmp_ec9b43f54b3d74b855a7056f04a7a57e6b7688bcab22a37c.jpg",
     "createdAt": "2026-03-16T05:55:23.203Z",
     "updatedAt": "2026-03-16T05:55:23.203Z"
+  },
+  {
+    "id": 39,
+    "userId": 31,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "T区出油",
+      "嘴唇周围干燥起皮",
+      "轻微色斑"
+    ],
+    "moisture": 65,
+    "oiliness": 45,
+    "sensitivity": 25,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 20,
+    "blackheads": 15,
+    "recommendations": [
+      "T区使用控油护肤品，如含有水杨酸的爽肤水或乳液，帮助调节油脂分泌；两颊和嘴唇周围使用滋润保湿的面霜，缓解干燥起皮问题",
+      "日常注意防晒，可选择物理防晒产品，减少色斑加深和新色斑形成的可能",
+      "定期使用温和的去角质产品（如含有氨基酸成分的），帮助清理T区的黑头和老旧角质，但注意频率不要过高，避免损伤皮肤"
+    ],
+    "imageUrl": "wxfile://tmp_4b15b2e065d066654394f2a46c70978011b63c3cc602bd3c.jpg",
+    "createdAt": "2026-03-16T06:41:27.914Z",
+    "updatedAt": "2026-03-16T06:41:27.914Z"
   }
 ]

@@ -1,6 +1,6 @@
 import { View, Text, Image, Button, ScrollView } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Network } from '@/network'
 
 interface Product {
@@ -19,7 +19,6 @@ const categories = ['全部', '洁面', '保湿', '精华', '面霜', '面膜', 
 
 export default function RecommendPage() {
   const [recommendations, setRecommendations] = useState<Product[]>([])
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState('全部')
   const [skinSummary, setSkinSummary] = useState('')
@@ -28,11 +27,12 @@ export default function RecommendPage() {
     loadRecommendations()
   }, [])
 
-  useEffect(() => {
+  // 使用 useMemo 缓存过滤后的产品，避免不必要的重新计算
+  const filteredProducts = useMemo(() => {
     if (selectedCategory === '全部') {
-      setFilteredProducts(recommendations)
+      return recommendations
     } else {
-      setFilteredProducts(recommendations.filter(p => p.category === selectedCategory))
+      return recommendations.filter(p => p.category === selectedCategory)
     }
   }, [selectedCategory, recommendations])
 
@@ -80,7 +80,6 @@ export default function RecommendPage() {
 
       if (res.data.code === 200) {
         setRecommendations(res.data.data)
-        setFilteredProducts(res.data.data)
 
         const recordDate = historyData ? '历史检测' : '本次检测'
         setSkinSummary(
@@ -162,6 +161,7 @@ export default function RecommendPage() {
                 <Image
                   src={product.image}
                   mode="aspectFill"
+                  lazyLoad
                   className="w-full h-48"
                 />
                 <View className="p-5">

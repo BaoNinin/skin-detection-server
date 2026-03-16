@@ -1,6 +1,6 @@
 import { View, Text, Button, ScrollView, Input } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Network } from '@/network'
 
 interface HistoryRecord {
@@ -214,6 +214,13 @@ export default function HistoryPage() {
         icon: 'none'
       })
     }
+  }
+
+  const handleRefresh = () => {
+    // 清除历史记录相关的缓存
+    Network.cache.clearUrl('/api/skin/history')
+    // 重新加载历史记录
+    loadHistory(0, true)
   }
 
   const handleCompare = () => {
@@ -556,7 +563,10 @@ export default function HistoryPage() {
     return ['一', '二', '三', '四', '五', '六', '日']
   }
 
-  const filteredRecords = getFilteredRecords()
+  // 使用 useMemo 缓存过滤后的记录，避免不必要的重新计算
+  const filteredRecords = useMemo(() => {
+    return getFilteredRecords()
+  }, [historyList, searchKeyword, timeRange])
 
   return (
     <View className="min-h-screen bg-gray-50 flex flex-col">
@@ -567,7 +577,7 @@ export default function HistoryPage() {
         </View>
         {!loading && (
           <View
-            onClick={() => loadHistory(0, true)}
+            onClick={handleRefresh}
             className="bg-rose-50 px-4 py-2 rounded-lg active:bg-rose-100"
           >
             <Text className="text-sm text-rose-600 block">🔄 刷新</Text>

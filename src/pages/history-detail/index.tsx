@@ -162,6 +162,7 @@ export default function HistoryDetailPage() {
                   <Image
                     src={record.image_url}
                     mode="aspectFill"
+                    lazyLoad
                     className="w-24 h-24 rounded-xl"
                   />
                 )}

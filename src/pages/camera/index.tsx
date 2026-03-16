@@ -495,8 +495,8 @@ export default function CameraPage() {
           setGuideText('保持当前姿势，不要移动')
           playVoice('保持当前姿势，不要移动')
         } else if (countdownValue === 1) {
-          setGuideText('即将拍照')
-          playVoice('即将拍照')
+          setGuideText('即将扫描')
+          playVoice('即将扫描')
         }
       } else {
         clearInterval(countdownInterval)
@@ -543,7 +543,7 @@ export default function CameraPage() {
         setIsScanning(false)
         setShowFaceOutline(false)
         Taro.showToast({
-          title: '拍照失败，请重试',
+          title: '扫描失败，请重试',
           icon: 'none'
         })
       }
