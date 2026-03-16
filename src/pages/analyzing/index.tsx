@@ -17,9 +17,11 @@ interface SkinAnalysisResult {
   recommendations: string[]
 }
 
+type AnalysisStep = 'activating' | 'success' | 'analyzing' | 'processing' | 'preview' | 'completed'
+
 export default function AnalyzingPage() {
   const [imagePath, setImagePath] = useState('')
-  const [currentStep, setCurrentStep] = useState(0)
+  const [currentStep, setCurrentStep] = useState<AnalysisStep>('activating')
   const [analyzing, setAnalyzing] = useState(false)
   const [scanSuccess, setScanSuccess] = useState(false)
   const [pingScale, setPingScale] = useState(1)
@@ -31,10 +33,27 @@ export default function AnalyzingPage() {
   const [activationCountdown, setActivationCountdown] = useState(10)
   const [activationProgress, setActivationProgress] = useState(0)
   const [chipPointsPulse, setChipPointsPulse] = useState(Array(9).fill(false))
+  
+  // AI 分析进度相关
+  const [analysisProgress, setAnalysisProgress] = useState(0)
+  const [currentAnalysisTask, setCurrentAnalysisTask] = useState('')
+  const [analysisTasks] = useState([
+    { id: 1, text: '检测面部轮廓...', duration: 800 },
+    { id: 2, text: '分析肤色特征...', duration: 600 },
+    { id: 3, text: '识别纹理细节...', duration: 700 },
+    { id: 4, text: '检测痘痘斑点...', duration: 900 },
+    { id: 5, text: '评估毛孔大小...', duration: 600 },
+    { id: 6, text: '生成分析报告...', duration: 800 }
+  ])
+  
+  // 结果预览相关
+  const [previewResult, setPreviewResult] = useState<SkinAnalysisResult | null>(null)
+  const [showPreview, setShowPreview] = useState(false)
+  const [autoJumpCountdown, setAutoJumpCountdown] = useState(5)
 
   // AI分析时的加载动画
   useEffect(() => {
-    if (currentStep === 2 && analyzing) {
+    if (currentStep === 'analyzing' && analyzing) {
       const interval = setInterval(() => {
         setLoaderRotation(prev => prev >= 360 ? 0 : prev + 15)
       }, 50)
@@ -42,18 +61,22 @@ export default function AnalyzingPage() {
     }
   }, [currentStep, analyzing])
 
-  // 芯片激活时的动画
+  // 芯片激活时的动画（优化版 - 使用 CSS 动画）
   useEffect(() => {
-    if (currentStep === 3 && analyzing) {
-      // 芯片点脉冲动画
+    if (currentStep === 'processing' && analyzing) {
+      // 芯片点脉冲动画 - 优化为更流畅的随机闪烁
       const pulseInterval = setInterval(() => {
         setChipPointsPulse(prev => {
           const newPulse = [...prev]
-          const randomIndex = Math.floor(Math.random() * 9)
-          newPulse[randomIndex] = !newPulse[randomIndex]
+          // 每次随机激活 2-3 个点，形成更自然的波纹效果
+          const count = Math.floor(Math.random() * 2) + 2
+          for (let i = 0; i < count; i++) {
+            const randomIndex = Math.floor(Math.random() * 9)
+            newPulse[randomIndex] = !newPulse[randomIndex]
+          }
           return newPulse
         })
-      }, 300)
+      }, 200) // 从 300 改为 200，更流畅
 
       // 倒计时动画
       const countdownInterval = setInterval(() => {
@@ -69,8 +92,8 @@ export default function AnalyzingPage() {
 
       // Pulse opacity动画
       const pulseOpacityInterval = setInterval(() => {
-        setPulseOpacity(prev => prev <= 0.3 ? 1 : prev - 0.1)
-      }, 100)
+        setPulseOpacity(prev => prev <= 0.3 ? 1 : prev - 0.05) // 从 0.1 改为 0.05，更平滑
+      }, 80) // 从 100 改为 80，更流畅
 
       return () => {
         clearInterval(pulseInterval)
@@ -80,17 +103,31 @@ export default function AnalyzingPage() {
     }
   }, [currentStep, analyzing])
 
+  // 自动跳转倒计时
+  useEffect(() => {
+    if (currentStep === 'preview' && showPreview && autoJumpCountdown > 0) {
+      const timer = setTimeout(() => {
+        setAutoJumpCountdown(prev => prev - 1)
+      }, 1000)
+      return () => clearTimeout(timer)
+    } else if (autoJumpCountdown === 0) {
+      handleGoToResult()
+    }
+  }, [currentStep, showPreview, autoJumpCountdown])
+
   const steps = scanSuccess
     ? [
-        { icon: '🔌', text: '正在激活芯片...' },
-        { icon: '✅', text: '识别成功' },
-        { icon: '🔬', text: 'AI 正在分析肤质...' },
-        { icon: '⚡', text: '芯片激活中...' },
-        { icon: '✨', text: '分析完成！' }
+        { icon: '🔌', text: '正在激活芯片...', step: 'activating' },
+        { icon: '✅', text: '识别成功', step: 'success' },
+        { icon: '🔬', text: 'AI 正在分析肤质...', step: 'analyzing' },
+        { icon: '⚡', text: '芯片激活中...', step: 'processing' },
+        { icon: '📊', text: '生成报告...', step: 'preview' },
+        { icon: '✨', text: '分析完成！', step: 'completed' }
       ]
     : [
-        { icon: '🔬', text: 'AI 正在分析肤质...' },
-        { icon: '✨', text: '分析完成！' }
+        { icon: '🔬', text: 'AI 正在分析肤质...', step: 'analyzing' },
+        { icon: '📊', text: '生成报告...', step: 'preview' },
+        { icon: '✨', text: '分析完成！', step: 'completed' }
       ]
 
   useEffect(() => {
@@ -114,13 +151,12 @@ export default function AnalyzingPage() {
   const startAnalysis = async (path: string, isScanSuccess: boolean) => {
     console.log('=== 开始分析 ===')
     console.log('isScanSuccess:', isScanSuccess)
-    console.log('scanSuccess状态:', scanSuccess)
     setAnalyzing(true)
 
     // 如果是扫描成功，显示识别成功动画
     if (isScanSuccess) {
       console.log('开始显示识别成功动画')
-      setCurrentStep(0)
+      setCurrentStep('activating')
       setSpinRotation(0)
 
       // Step 0: 激活芯片 - spin动画
@@ -130,11 +166,11 @@ export default function AnalyzingPage() {
 
       await sleep(2000)
       clearInterval(spinInterval)
-      console.log('Step 0 完成，spin动画结束')
+      console.log('Step activating 完成，spin动画结束')
 
       // Step 1: 识别成功 - ping动画
-      setCurrentStep(1)
-      console.log('currentStep:', 1)
+      setCurrentStep('success')
+      console.log('currentStep:', 'success')
       setPingScale(1)
       const pingInterval = setInterval(() => {
         setPingScale(prev => {
@@ -145,19 +181,28 @@ export default function AnalyzingPage() {
 
       await sleep(1000)
       clearInterval(pingInterval)
-      console.log('Step 1 完成，ping动画结束')
+      console.log('Step success 完成，ping动画结束')
 
       // Step 2: AI分析
-      setCurrentStep(2)
-      console.log('currentStep:', 2, '开始AI分析')
+      setCurrentStep('analyzing')
+      console.log('currentStep:', 'analyzing', '开始AI分析')
     } else {
       // 如果不是扫描成功，跳过识别动画，直接开始分析
-      setCurrentStep(2)
+      setCurrentStep('analyzing')
       await sleep(500)
     }
 
-    // Step 2: AI正在分析肤质 - 执行实际的图片上传和分析
-    await sleep(500)
+    // Step 2: AI正在分析肤质 - 执行具体的分析任务
+    console.log('开始执行分析任务...')
+    
+    for (let i = 0; i < analysisTasks.length; i++) {
+      const task = analysisTasks[i]
+      setCurrentAnalysisTask(task.text)
+      setAnalysisProgress(Math.round(((i + 1) / analysisTasks.length) * 100))
+      await sleep(task.duration)
+    }
+    
+    console.log('所有分析任务完成')
 
     try {
       const userId = Taro.getStorageSync('userId')
@@ -179,6 +224,9 @@ export default function AnalyzingPage() {
         console.log('皮肤分析结果:', result)
         Taro.setStorageSync('skinAnalysisResult', result)
         Taro.setStorageSync('currentImagePath', path)
+        
+        // 设置预览结果
+        setPreviewResult(result)
 
         if (userId) {
           console.log('=== 开始保存历史记录 ===')
@@ -236,25 +284,23 @@ export default function AnalyzingPage() {
         // 如果是扫描成功，显示芯片激活动画
         if (isScanSuccess) {
           // Step 3: 芯片激活中 - pulse动画
-          setCurrentStep(3)
-          console.log('currentStep:', 3, '开始芯片激活动画')
+          setCurrentStep('processing')
+          console.log('currentStep:', 'processing', '开始芯片激活动画')
           setPulseOpacity(1)
           const pulseInterval = setInterval(() => {
-            setPulseOpacity(prev => prev <= 0.3 ? 1 : prev - 0.1)
-          }, 100)
+            setPulseOpacity(prev => prev <= 0.3 ? 1 : prev - 0.05)
+          }, 80)
 
           await sleep(2000)
           clearInterval(pulseInterval)
-          console.log('Step 3 完成，pulse动画结束')
+          console.log('Step processing 完成，pulse动画结束')
         }
 
-        // Step 4: 分析完成
-        setCurrentStep(4)
-        await sleep(1000)
-
-        Taro.redirectTo({
-          url: '/pages/result/index'
-        })
+        // Step 4: 显示结果预览
+        setCurrentStep('preview')
+        setShowPreview(true)
+        setAutoJumpCountdown(5)
+        console.log('显示结果预览，开始自动跳转倒计时')
       } else {
         Taro.showToast({
           title: data.msg || '分析失败',
@@ -296,39 +342,52 @@ export default function AnalyzingPage() {
     }
   }
 
+  const handleGoToResult = () => {
+    Taro.redirectTo({
+      url: '/pages/result/index'
+    })
+  }
+
+  const handleImmediateJump = () => {
+    setAutoJumpCountdown(0)
+  }
+
   return (
     <View className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
       <View className="flex flex-col items-center justify-center px-8 py-12">
         {/* 识别成功动画 */}
-        {currentStep < 2 ? (
+        {currentStep === 'activating' && (
           <View className="mb-8">
-            {currentStep === 0 && (
-              <View className="w-32 h-32 flex items-center justify-center relative">
-                <View className="absolute w-32 h-32 border-4 border-rose-200 rounded-full" />
-                <View
-                  className="absolute w-32 h-32 border-4 border-rose-400 rounded-t-full transition-all"
-                  style={{
-                    transform: `rotate(${spinRotation}deg)`
-                  }}
-                />
-                <Text className="text-6xl block z-10">🔌</Text>
-              </View>
-            )}
-            {currentStep === 1 && (
-              <View className="w-32 h-32 flex items-center justify-center relative">
-                <View
-                  className="absolute bg-green-100 rounded-full opacity-50 transition-all"
-                  style={{
-                    width: `${32 * pingScale}px`,
-                    height: `${32 * pingScale}px`
-                  }}
-                />
-                <Text className="text-6xl block z-10">✅</Text>
-              </View>
-            )}
+            <View className="w-32 h-32 flex items-center justify-center relative">
+              <View className="absolute w-32 h-32 border-4 border-rose-200 rounded-full" />
+              <View
+                className="absolute w-32 h-32 border-4 border-rose-400 rounded-t-full transition-all"
+                style={{
+                  transform: `rotate(${spinRotation}deg)`
+                }}
+              />
+              <Text className="text-6xl block z-10">🔌</Text>
+            </View>
           </View>
-        ) : currentStep === 3 ? (
-          // 芯片激活中 - 改进版
+        )}
+
+        {currentStep === 'success' && (
+          <View className="mb-8">
+            <View className="w-32 h-32 flex items-center justify-center relative">
+              <View
+                className="absolute bg-green-100 rounded-full opacity-50 transition-all"
+                style={{
+                  width: `${32 * pingScale}px`,
+                  height: `${32 * pingScale}px`
+                }}
+              />
+              <Text className="text-6xl block z-10">✅</Text>
+            </View>
+          </View>
+        )}
+
+        {/* 芯片激活中 - 改进版 */}
+        {currentStep === 'processing' && (
           <View className="mb-8 flex flex-col items-center">
             <View className="w-36 h-36 flex items-center justify-center relative">
               {/* 3x3 芯片网格 */}
@@ -346,12 +405,12 @@ export default function AnalyzingPage() {
                 ))}
               </View>
 
-              {/* 外圈脉冲效果 */}
+              {/* 外圈脉冲效果 - 使用 CSS 动画 */}
               <View
-                className="absolute w-32 h-32 border-2 border-rose-400/50 rounded-full transition-all"
+                className="absolute w-32 h-32 border-2 border-rose-400/50 rounded-full"
                 style={{
                   opacity: pulseOpacity,
-                  animation: 'pulse 2s infinite'
+                  animation: 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite'
                 }}
               />
 
@@ -379,16 +438,16 @@ export default function AnalyzingPage() {
             <View className="mt-4 w-64">
               <View className="h-2 bg-gray-200 rounded-full overflow-hidden">
                 <View
-                  className="h-full bg-gradient-to-r from-rose-400 via-pink-500 to-rose-400 transition-all duration-1000"
+                  className="h-full bg-gradient-to-r from-rose-400 via-pink-500 to-rose-400 transition-all duration-300"
                   style={{ width: `${activationProgress}%` }}
                 />
               </View>
             </View>
           </View>
-        ) : null}
+        )}
 
         {/* 上传/分析时的图片展示 */}
-        {currentStep === 2 && (
+        {currentStep === 'analyzing' && (
           <View className="mb-8">
             {imagePath && (
               <Image
@@ -401,22 +460,126 @@ export default function AnalyzingPage() {
         )}
 
         {/* 加载动画 */}
-        {currentStep === 2 && (
+        {currentStep === 'analyzing' && (
           <View className="w-16 h-16 border-4 border-rose-200 border-t-rose-400 rounded-full mb-6 transition-all" style={{ transform: `rotate(${loaderRotation}deg)` }} />
         )}
 
         {/* 当前步骤文字 */}
         <Text className="text-xl font-semibold text-gray-800 mb-4 block text-center">
-          {steps[currentStep].text}
+          {steps.find(s => s.step === currentStep)?.text || '分析中...'}
         </Text>
+
+        {/* AI 分析任务进度 */}
+        {currentStep === 'analyzing' && (
+          <View className="w-full max-w-xs mb-6">
+            <View className="flex items-center justify-between mb-2">
+              <Text className="text-sm text-gray-600 block">{currentAnalysisTask}</Text>
+              <Text className="text-sm font-medium text-rose-400 block">{analysisProgress}%</Text>
+            </View>
+            <View className="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <View
+                className="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-300"
+                style={{ width: `${analysisProgress}%` }}
+              />
+            </View>
+            {/* 任务列表 */}
+            <View className="mt-3 space-y-2">
+              {analysisTasks.map((task, index) => (
+                <View key={task.id} className="flex items-center gap-2">
+                  <View
+                    className={`w-4 h-4 rounded-full flex items-center justify-center ${
+                      index < analysisTasks.findIndex(t => t.text === currentAnalysisTask)
+                        ? 'bg-green-400'
+                        : task.text === currentAnalysisTask
+                        ? 'bg-rose-400 animate-pulse'
+                        : 'bg-gray-200'
+                    }`}
+                  >
+                    {index < analysisTasks.findIndex(t => t.text === currentAnalysisTask) && (
+                      <Text className="text-xs text-white block">✓</Text>
+                    )}
+                  </View>
+                  <Text
+                    className={`text-xs ${
+                      index < analysisTasks.findIndex(t => t.text === currentAnalysisTask)
+                        ? 'text-gray-400'
+                        : task.text === currentAnalysisTask
+                        ? 'text-gray-800 font-medium'
+                        : 'text-gray-400'
+                    } block`}
+                  >
+                    {task.text}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {/* 结果预览 */}
+        {currentStep === 'preview' && showPreview && previewResult && (
+          <View className="w-full max-w-sm mb-6">
+            <View className="bg-white rounded-2xl p-6 shadow-lg border-2 border-rose-100">
+              <View className="text-center mb-4">
+                <Text className="text-2xl font-bold text-gray-800 block">分析完成！</Text>
+                <Text className="text-sm text-gray-500 mt-1 block">您的肤质报告已生成</Text>
+              </View>
+              
+              {/* 关键指标 */}
+              <View className="grid grid-cols-3 gap-3 mb-4">
+                <View className="bg-blue-50 rounded-xl p-3 text-center">
+                  <Text className="text-xs text-gray-500 block mb-1">水分</Text>
+                  <Text className="text-xl font-bold text-blue-500 block">{previewResult.moisture}%</Text>
+                </View>
+                <View className="bg-yellow-50 rounded-xl p-3 text-center">
+                  <Text className="text-xs text-gray-500 block mb-1">油性</Text>
+                  <Text className="text-xl font-bold text-yellow-500 block">{previewResult.oiliness}%</Text>
+                </View>
+                <View className="bg-rose-50 rounded-xl p-3 text-center">
+                  <Text className="text-xs text-gray-500 block mb-1">敏感度</Text>
+                  <Text className="text-xl font-bold text-rose-500 block">{previewResult.sensitivity}%</Text>
+                </View>
+              </View>
+              
+              {/* 皮肤类型 */}
+              <View className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl p-4 mb-4">
+                <Text className="text-xs text-gray-500 block mb-1">皮肤类型</Text>
+                <Text className="text-lg font-bold text-rose-600 block">{previewResult.skinType}</Text>
+              </View>
+              
+              {/* 主要问题 */}
+              {previewResult.concerns && previewResult.concerns.length > 0 && (
+                <View className="mb-4">
+                  <Text className="text-xs text-gray-500 block mb-2">主要问题</Text>
+                  <View className="flex flex-wrap gap-2">
+                    {previewResult.concerns.slice(0, 3).map((concern, idx) => (
+                      <View key={idx} className="px-3 py-1 bg-amber-100 rounded-full">
+                        <Text className="text-xs text-amber-600 block">{concern}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+              
+              {/* 自动跳转倒计时 */}
+              <View className="text-center">
+                <Text className="text-sm text-gray-500 block">
+                  {autoJumpCountdown} 秒后自动跳转
+                </Text>
+              </View>
+            </View>
+          </View>
+        )}
 
         {/* 进度指示器 */}
         <View className="flex gap-2 mb-8">
-          {steps.map((_, index) => (
+          {steps.map((_step, index) => (
             <View
               key={index}
-              className={`w-2 h-2 rounded-full transition-all ${
-                index <= currentStep ? 'bg-rose-400' : 'bg-gray-200'
+              className={`w-3 h-3 rounded-full transition-all ${
+                steps.findIndex(s => s.step === currentStep) >= index
+                  ? 'bg-rose-400'
+                  : 'bg-gray-200'
               }`}
             />
           ))}
@@ -424,24 +587,43 @@ export default function AnalyzingPage() {
 
         {/* 预计时间 */}
         <Text className="text-sm text-gray-500 text-center block">
-          {currentStep < 2
+          {currentStep === 'activating'
             ? '激活芯片中，请稍候...'
-            : currentStep === 2
+            : currentStep === 'analyzing'
             ? 'AI分析中，请稍候...'
-            : currentStep === 3
+            : currentStep === 'processing'
             ? '芯片激活中，请稍候...'
-            : '预计等待时间 5-10 秒'
-          }
+            : currentStep === 'preview'
+            ? '报告已生成'
+            : '分析完成'}
         </Text>
       </View>
 
+      {/* 底部按钮 */}
       <View className="px-8 pb-8">
-        <Button
-          onClick={handleCancel}
-          className="w-full bg-white text-gray-600 border-2 border-gray-200 rounded-full py-3"
-        >
-          取消
-        </Button>
+        {currentStep === 'preview' ? (
+          <View className="flex gap-3">
+            <Button
+              onClick={handleGoToResult}
+              className="flex-1 bg-rose-400 text-white rounded-full py-3 font-medium"
+            >
+              查看报告
+            </Button>
+            <Button
+              onClick={handleImmediateJump}
+              className="flex-1 bg-white text-rose-400 border-2 border-rose-400 rounded-full py-3 font-medium"
+            >
+              立即跳转
+            </Button>
+          </View>
+        ) : (
+          <Button
+            onClick={handleCancel}
+            className="w-full bg-white text-gray-600 border-2 border-gray-200 rounded-full py-3"
+          >
+            取消
+          </Button>
+        )}
       </View>
     </View>
   )
