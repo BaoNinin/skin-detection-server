@@ -40,12 +40,13 @@ export default function HistoryPage() {
     loadHistory()
   }, [])
 
-  const loadHistory = async () => {
+  const loadHistory = async (retryCount = 0) => {
     setLoading(true)
 
     const userId = Taro.getStorageSync('userId')
     console.log('=== 历史记录加载 ===')
     console.log('userId:', userId, '类型:', typeof userId, '是否有效:', !!userId)
+    console.log('重试次数:', retryCount)
 
     if (!userId) {
       console.warn('用户未登录，跳转到登录页面')
@@ -72,11 +73,13 @@ export default function HistoryPage() {
 
       console.log('响应状态:', res.data.code)
       console.log('记录数量:', res.data.data?.length || 0)
+      console.log('响应数据:', res.data.data)
 
       if (res.data.code === 200) {
-        setHistoryList(res.data.data)
+        setHistoryList(res.data.data || [])
         console.log('查询成功，历史记录已更新')
       } else if (res.data.code === 401) {
+        console.error('登录已过期')
         Taro.showModal({
           title: '提示',
           content: '登录已过期，请重新登录',
@@ -86,6 +89,7 @@ export default function HistoryPage() {
           }
         })
       } else {
+        console.error('查询失败，错误信息:', res.data.msg)
         Taro.showToast({
           title: res.data.msg || '加载失败',
           icon: 'none'
@@ -93,10 +97,24 @@ export default function HistoryPage() {
       }
     } catch (err) {
       console.error('加载历史记录失败:', err)
-      Taro.showToast({
-        title: '加载失败',
-        icon: 'none'
-      })
+      
+      // 网络错误时自动重试一次
+      if (retryCount === 0) {
+        console.log('首次加载失败，尝试重试...')
+        Taro.showToast({
+          title: '加载失败，正在重试...',
+          icon: 'none',
+          duration: 1500
+        })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        return loadHistory(retryCount + 1)
+      } else {
+        console.error('重试失败，不再重试')
+        Taro.showToast({
+          title: '加载失败，请检查网络',
+          icon: 'none'
+        })
+      }
     } finally {
       setLoading(false)
     }
@@ -521,9 +539,19 @@ export default function HistoryPage() {
 
   return (
     <View className="min-h-screen bg-gray-50 flex flex-col">
-      <View className="bg-white border-b border-gray-100 p-4">
-        <Text className="text-2xl font-bold text-gray-800 block">肤质档案</Text>
-        <Text className="text-sm text-gray-500 mt-2 block">管理您的皮肤检测记录</Text>
+      <View className="bg-white border-b border-gray-100 p-4 flex items-center justify-between">
+        <View>
+          <Text className="text-2xl font-bold text-gray-800 block">肤质档案</Text>
+          <Text className="text-sm text-gray-500 mt-1 block">管理您的皮肤检测记录</Text>
+        </View>
+        {!loading && (
+          <View
+            onClick={() => loadHistory()}
+            className="bg-rose-50 px-4 py-2 rounded-lg active:bg-rose-100"
+          >
+            <Text className="text-sm text-rose-600 block">🔄 刷新</Text>
+          </View>
+        )}
       </View>
 
       {/* 搜索框 */}

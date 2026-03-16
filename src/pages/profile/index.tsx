@@ -23,11 +23,54 @@ export default function ProfilePage() {
 
   useDidShow(() => {
     loadUserInfo()
+    autoLoginIfNot()
   })
 
   useEffect(() => {
     loadUserInfo()
+    autoLoginIfNot()
   }, [])
+
+  const autoLoginIfNot = async () => {
+    const userId = Taro.getStorageSync('userId')
+    const storedUserInfo = Taro.getStorageSync('userInfo')
+    
+    // 如果已有 userId 和 userInfo，不需要自动登录
+    if (userId && storedUserInfo) {
+      console.log('用户已登录，跳过自动登录')
+      return
+    }
+    
+    // 如果没有 userId，尝试静默自动登录
+    if (!userId) {
+      console.log('用户未登录，尝试自动登录')
+      try {
+        const loginRes = await Taro.login()
+        console.log('自动登录 code:', loginRes.code)
+
+        const res = await Network.request({
+          url: '/api/user/login',
+          method: 'POST',
+          data: {
+            code: loginRes.code,
+            userInfo: null
+          }
+        })
+
+        if (res.data.code === 200) {
+          const userData = res.data.data
+          Taro.setStorageSync('userId', userData.id)
+          Taro.setStorageSync('userInfo', userData)
+          setUserInfo(userData)
+          console.log('自动登录成功，userId:', userData.id)
+        } else {
+          console.error('自动登录失败:', res.data.msg)
+        }
+      } catch (err) {
+        console.error('自动登录失败:', err)
+      }
+    }
+  }
 
   const loadUserInfo = async () => {
     const userId = Taro.getStorageSync('userId')

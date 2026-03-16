@@ -228,7 +228,16 @@ export default function AnalyzingPage() {
         // 设置预览结果
         setPreviewResult(result)
 
-        if (userId) {
+        // 确保有 userId 才保存历史记录
+        if (!userId) {
+          console.warn('=== 用户未登录，无法保存历史记录 ===')
+          Taro.showToast({
+            title: '请先登录以保存记录',
+            icon: 'none',
+            duration: 2000
+          })
+          // 继续显示结果，但历史记录不会保存
+        } else {
           console.log('=== 开始保存历史记录 ===')
           console.log('userId:', userId)
           console.log('皮肤类型:', result.skinType)
@@ -251,14 +260,27 @@ export default function AnalyzingPage() {
           }
           console.log('历史记录数据:', historyData)
           
-          Network.request({
-            url: '/api/skin/history',
-            method: 'POST',
-            data: historyData
-          })
-            .then(async (historyRes) => {
+          // 使用 await 确保历史记录保存完成
+          try {
+            const historyRes = await Network.request({
+              url: '/api/skin/history',
+              method: 'POST',
+              data: historyData
+            })
+            
+            console.log('=== 历史记录保存响应 ===')
+            console.log('响应状态:', historyRes.data.code)
+            console.log('响应数据:', historyRes.data)
+            
+            if (historyRes.data.code === 200) {
               console.log('=== 历史记录保存成功 ===')
-              console.log('保存响应:', historyRes.data)
+              Taro.showToast({
+                title: '记录已保存',
+                icon: 'success',
+                duration: 1500
+              })
+              
+              // 更新用户信息（检测次数）
               try {
                 const userRes = await Network.request({
                   url: `/api/user/${userId}`,
@@ -272,13 +294,24 @@ export default function AnalyzingPage() {
               } catch (err) {
                 console.error('更新用户信息失败:', err)
               }
-            })
-            .catch(err => {
+            } else {
               console.error('=== 历史记录保存失败 ===')
-              console.error('错误信息:', err)
+              console.error('错误信息:', historyRes.data.msg)
+              Taro.showToast({
+                title: '保存失败: ' + (historyRes.data.msg || '未知错误'),
+                icon: 'none',
+                duration: 2000
+              })
+            }
+          } catch (err) {
+            console.error('=== 历史记录保存异常 ===')
+            console.error('错误信息:', err)
+            Taro.showToast({
+              title: '保存失败，请检查网络',
+              icon: 'none',
+              duration: 2000
             })
-        } else {
-          console.warn('=== 用户未登录，跳过保存历史记录 ===')
+          }
         }
 
         // 如果是扫描成功，显示芯片激活动画

@@ -891,5 +891,31 @@
     "imageUrl": "wxfile://tmp_9741ae46dc331d1a82616bd2762b1ad81783366d8527507e.jpg",
     "createdAt": "2026-03-16T04:37:54.621Z",
     "updatedAt": "2026-03-16T04:37:54.621Z"
+  },
+  {
+    "id": 37,
+    "userId": 27,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "整体肤质维持"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 5,
+    "blackheads": 0,
+    "recommendations": [
+      "唇部使用滋润型唇膏，如含有凡士林、角鲨烷成分的产品，缓解干燥起皮",
+      "日常做好防晒，可选择轻薄的物理防晒或化学防晒，预防色斑加深",
+      "继续保持良好的护肤习惯，使用温和的洁面产品和保湿产品维持水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_2fdaf4efd47183ded3be7c7b653e7266a17e9aedf3cd6bdc.jpg",
+    "createdAt": "2026-03-16T05:47:03.126Z",
+    "updatedAt": "2026-03-16T05:47:03.126Z"
   }
 ]
