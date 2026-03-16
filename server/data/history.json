@@ -917,5 +917,31 @@
     "imageUrl": "wxfile://tmp_2fdaf4efd47183ded3be7c7b653e7266a17e9aedf3cd6bdc.jpg",
     "createdAt": "2026-03-16T05:47:03.126Z",
     "updatedAt": "2026-03-16T05:47:03.126Z"
+  },
+  {
+    "id": 38,
+    "userId": 28,
+    "skinType": "干性皮肤",
+    "concerns": [
+      "嘴唇干燥起皮",
+      "皮肤缺水",
+      "可能存在轻微敏感"
+    ],
+    "moisture": 50,
+    "oiliness": 20,
+    "sensitivity": 30,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 10,
+    "blackheads": 0,
+    "recommendations": [
+      "使用温和的保湿洁面产品，避免过度清洁带走皮肤水分",
+      "加强唇部护理，使用滋润型唇膏，可定期进行唇部去角质和唇膜护理",
+      "日常护肤注重补水保湿，选择含有透明质酸、神经酰胺等成分的保湿护肤品，同时注意环境湿度的调节，可使用加湿器"
+    ],
+    "imageUrl": "wxfile://tmp_ec9b43f54b3d74b855a7056f04a7a57e6b7688bcab22a37c.jpg",
+    "createdAt": "2026-03-16T05:55:23.203Z",
+    "updatedAt": "2026-03-16T05:55:23.203Z"
   }
 ]
