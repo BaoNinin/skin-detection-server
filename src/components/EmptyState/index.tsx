@@ -62,7 +62,7 @@ export default function EmptyState({
       {actionText && (
         <View
           onClick={handleAction}
-          className="bg-rose-400 text-white px-8 py-3 rounded-full active:bg-rose-500 transition-colors"
+          className="bg-blue-700 text-white px-8 py-3 rounded-full active:bg-blue-800 transition-colors"
         >
           <Text className="text-base font-medium block">{actionText}</Text>
         </View>
