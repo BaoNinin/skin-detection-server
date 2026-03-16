@@ -15,7 +15,8 @@ const appConfig = {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#E8B4BC',
     navigationBarTitleText: '智能皮肤检测',
-    navigationBarTextStyle: 'white'
+    navigationBarTextStyle: 'white',
+    animationType: 'slide-in-right'
   },
   tabBar: {
     color: '#9CA3AF',

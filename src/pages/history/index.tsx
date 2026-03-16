@@ -2,6 +2,9 @@ import { View, Text, Button, ScrollView, Input } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect, useMemo } from 'react'
 import { Network } from '@/network'
+import EmptyState from '@/components/EmptyState'
+import { SkeletonListItem } from '@/components/Skeleton'
+import Swipe from '@/components/Swipe'
 
 interface HistoryRecord {
   id: number
@@ -287,10 +290,6 @@ export default function HistoryPage() {
         }
       }
     })
-  }
-
-  const handleGoToDetect = () => {
-    Taro.switchTab({ url: '/pages/landing/index' })
   }
 
   const handleSearch = (value: string) => {
@@ -688,53 +687,42 @@ export default function HistoryPage() {
         </View>
       )}
 
-      <ScrollView scrollY className="flex-1 bg-gray-50">
+      <Swipe
+        onSwipeLeft={() => Taro.switchTab({ url: '/pages/mall/index' })}
+        onSwipeRight={() => Taro.switchTab({ url: '/pages/landing/index' })}
+        threshold={80}
+      >
+        <ScrollView scrollY className="flex-1 bg-gray-50">
+        {/* 加载骨架屏 */}
         {loading && (
-          <View className="flex flex-col items-center justify-center py-20 px-4">
-            <View className="w-12 h-12 border-4 border-rose-200 border-t-rose-400 rounded-full animate-spin mb-4" />
-            <Text className="text-base text-gray-600 block">加载中...</Text>
+          <View className="p-4">
+            <SkeletonListItem />
+            <SkeletonListItem />
+            <SkeletonListItem />
           </View>
         )}
 
+        {/* 空状态 */}
         {!loading && filteredRecords.length === 0 && (
-          <View className="flex flex-col items-center justify-center py-20 px-4">
-            <Text className="text-6xl mb-4 block">📋</Text>
-            <Text className="text-base text-gray-400 text-center block">
-              {searchKeyword ? '未找到匹配的档案' : '暂无检测记录'}
-            </Text>
-
-            {!Taro.getStorageSync('userId') ? (
-              <>
-                <Text className="text-sm text-gray-400 text-center mt-2 block">请先登录以查看您的检测记录</Text>
-                <Button
-                  onClick={() => Taro.switchTab({ url: '/pages/profile/index' })}
-                  className="bg-rose-400 text-white rounded-full py-3 px-8 font-medium mt-6"
-                >
-                  去登录
-                </Button>
-              </>
-            ) : searchKeyword ? (
-              <>
-                <Text className="text-sm text-gray-400 text-center mt-2 block">请尝试其他搜索关键词</Text>
-                <Button
-                  onClick={() => setSearchKeyword('')}
-                  className="bg-gray-200 text-gray-700 rounded-full py-3 px-8 font-medium mt-6"
-                >
-                  清除搜索
-                </Button>
-              </>
-            ) : (
-              <>
-                <Text className="text-sm text-gray-400 text-center mt-2 block">点击下方按钮开始您的第一次皮肤检测</Text>
-                <Button
-                  onClick={handleGoToDetect}
-                  className="bg-rose-400 text-white rounded-full py-3 px-8 font-medium mt-6"
-                >
-                  开始检测
-                </Button>
-              </>
-            )}
-          </View>
+          <EmptyState
+            icon="📋"
+            title={searchKeyword ? '未找到匹配的档案' : '暂无检测记录'}
+            description={
+              !Taro.getStorageSync('userId')
+                ? '请先登录以查看您的检测记录'
+                : '开始您的第一次皮肤检测吧'
+            }
+            actionText={
+              !Taro.getStorageSync('userId')
+                ? '去登录'
+                : '开始检测'
+            }
+            onAction={
+              !Taro.getStorageSync('userId')
+                ? () => Taro.switchTab({ url: '/pages/profile/index' })
+                : () => Taro.switchTab({ url: '/pages/landing/index' })
+            }
+          />
         )}
 
         {/* 趋势图视图 */}
@@ -1109,6 +1097,7 @@ export default function HistoryPage() {
           </View>
         )}
       </ScrollView>
+      </Swipe>
     </View>
   )
 }

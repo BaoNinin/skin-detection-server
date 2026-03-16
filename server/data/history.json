@@ -969,5 +969,57 @@
     "imageUrl": "wxfile://tmp_4b15b2e065d066654394f2a46c70978011b63c3cc602bd3c.jpg",
     "createdAt": "2026-03-16T06:41:27.914Z",
     "updatedAt": "2026-03-16T06:41:27.914Z"
+  },
+  {
+    "id": 40,
+    "userId": 32,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "痘痘",
+      "毛孔粗大",
+      "轻微色斑"
+    ],
+    "moisture": 65,
+    "oiliness": 50,
+    "sensitivity": 25,
+    "acne": 30,
+    "wrinkles": 0,
+    "spots": 15,
+    "pores": 35,
+    "blackheads": 20,
+    "recommendations": [
+      "使用温和的洁面产品，避免过度清洁导致皮肤屏障受损",
+      "T区使用控油产品，两颊使用保湿产品，维持水油平衡",
+      "注意防晒，减少色斑形成和加重的风险"
+    ],
+    "imageUrl": "wxfile://tmp_6d902fd606c1d1cdbc391d6db38c6e29a8fb3a9c4132cfba.jpg",
+    "createdAt": "2026-03-16T07:21:47.606Z",
+    "updatedAt": "2026-03-16T07:21:47.606Z"
+  },
+  {
+    "id": 41,
+    "userId": 32,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "痘痘",
+      "毛孔",
+      "皮肤水油不平衡"
+    ],
+    "moisture": 65,
+    "oiliness": 45,
+    "sensitivity": 25,
+    "acne": 30,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 35,
+    "blackheads": 20,
+    "recommendations": [
+      "使用温和的氨基酸洁面产品，避免过度清洁导致皮肤屏障受损",
+      "T区使用控油爽肤水，两颊使用保湿爽肤水，分区护理",
+      "定期使用清洁面膜（如每周1-2次）清洁毛孔，减少黑头和痘痘产生"
+    ],
+    "imageUrl": "wxfile://tmp_3aab45e7af433c38481045450d2fd2108c4c39df36ea1b1c.jpg",
+    "createdAt": "2026-03-16T07:22:48.714Z",
+    "updatedAt": "2026-03-16T07:22:48.714Z"
   }
 ]

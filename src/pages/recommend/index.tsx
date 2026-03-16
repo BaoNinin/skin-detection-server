@@ -2,6 +2,8 @@ import { View, Text, Image, Button, ScrollView } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect, useMemo } from 'react'
 import { Network } from '@/network'
+import EmptyState from '@/components/EmptyState'
+import { SkeletonCard } from '@/components/Skeleton'
 
 interface Product {
   id: string
@@ -141,19 +143,24 @@ export default function RecommendPage() {
           </ScrollView>
         </View>
 
+        {/* 加载骨架屏 */}
         {loading && (
-          <View className="flex flex-col items-center justify-center py-20 px-4">
-            <View className="w-12 h-12 border-4 border-rose-200 border-t-rose-400 rounded-full animate-spin mb-4" />
-            <Text className="text-base text-gray-600 block">正在为您推荐...</Text>
+          <View className="px-4">
+            <SkeletonCard />
+            <SkeletonCard />
           </View>
         )}
 
+        {/* 空状态 */}
         {!loading && filteredProducts.length === 0 && (
-          <View className="flex flex-col items-center justify-center py-20 px-4">
-            <Text className="text-base text-gray-400 text-center block">暂无该分类产品</Text>
-          </View>
+          <EmptyState
+            icon="🛍️"
+            title="暂无该分类产品"
+            description="请尝试切换其他分类或重新进行皮肤检测"
+          />
         )}
 
+        {/* 产品列表 */}
         {!loading && filteredProducts.length > 0 && (
           <View className="px-4 space-y-4">
             {filteredProducts.map((product) => (
