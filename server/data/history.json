@@ -941,5 +941,31 @@
     "imageUrl": "wxfile://tmp_8c25ea87d11ea533c290736a1276df3f82fff331c0b73246.jpg",
     "createdAt": "2026-03-16T05:34:08.575Z",
     "updatedAt": "2026-03-16T05:34:08.575Z"
+  },
+  {
+    "id": 39,
+    "userId": 27,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "皮肤整体状态良好"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "注意唇部护理，可使用滋润型唇膏保持唇部水分",
+      "日常做好防晒，预防色斑加重",
+      "继续维持当前良好的护肤习惯，保持皮肤水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_b00b51592570bf0e2de454a971187e2449cd9aa9029e9c5f.jpg",
+    "createdAt": "2026-03-16T05:39:40.709Z",
+    "updatedAt": "2026-03-16T05:39:40.709Z"
   }
 ]
