@@ -37,12 +37,6 @@ const appConfig = {
         selectedIconPath: './assets/tabbar/clock-active.png'
       },
       {
-        pagePath: 'pages/mall/index',
-        text: '商城',
-        iconPath: './assets/tabbar/shopping-bag.png',
-        selectedIconPath: './assets/tabbar/shopping-bag-active.png'
-      },
-      {
         pagePath: 'pages/profile/index',
         text: '我的',
         iconPath: './assets/tabbar/user.png',
