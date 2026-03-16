@@ -3,6 +3,8 @@ import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import RadarChart from '@/components/RadarChart'
 import OverallScore from '@/components/OverallScore'
+import SkinModel3D from '@/components/SkinModel3D'
+import Heatmap from '@/components/Heatmap'
 
 interface SkinAnalysisResult {
   skinType: string
@@ -133,6 +135,28 @@ export default function ResultPage() {
               </Text>
             </View>
           </View>
+
+          {/* 3D 皮肤模型 */}
+          {result && (
+            <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
+              <View className="flex items-center justify-between mb-4">
+                <Text className="text-lg font-semibold text-gray-800 block">3D 肌肤模型</Text>
+                <Text className="text-sm text-gray-500 block">问题分布可视化</Text>
+              </View>
+              <SkinModel3D result={result} />
+            </View>
+          )}
+
+          {/* 肌肤热力图 */}
+          {result && result.concerns && result.concerns.length > 0 && (
+            <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
+              <View className="flex items-center justify-between mb-4">
+                <Text className="text-lg font-semibold text-gray-800 block">肌肤热力图</Text>
+                <Text className="text-sm text-gray-500 block">问题严重程度分析</Text>
+              </View>
+              <Heatmap concerns={result.concerns} />
+            </View>
+          )}
 
           {/* 五大指标详情 */}
           <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">

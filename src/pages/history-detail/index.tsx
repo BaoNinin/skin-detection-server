@@ -3,6 +3,9 @@ import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import RadarChart from '@/components/RadarChart'
 import OverallScore from '@/components/OverallScore'
+import SkinModel3D from '@/components/SkinModel3D'
+import Heatmap from '@/components/Heatmap'
+import ComparisonChart from '@/components/ComparisonChart'
 
 interface HistoryRecord {
   id: number
@@ -187,6 +190,39 @@ export default function HistoryDetailPage() {
                 </Text>
               </View>
             </View>
+
+            {/* 3D 皮肤模型 */}
+            <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
+              <View className="flex items-center justify-between mb-4">
+                <Text className="text-lg font-semibold text-gray-800 block">3D 肌肤模型</Text>
+                <Text className="text-sm text-gray-500 block">问题分布可视化</Text>
+              </View>
+              <SkinModel3D result={{
+                skinType: record.skin_type,
+                concerns: record.concerns,
+                moisture: record.moisture,
+                oiliness: record.oiliness,
+                sensitivity: record.sensitivity,
+                acne: record.acne,
+                wrinkles: record.wrinkles,
+                spots: record.spots,
+                pores: record.pores,
+                blackheads: record.blackheads,
+                recommendations: record.recommendations
+              }}
+              />
+            </View>
+
+            {/* 肌肤热力图 */}
+            {record.concerns && record.concerns.length > 0 && (
+              <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
+                <View className="flex items-center justify-between mb-4">
+                  <Text className="text-lg font-semibold text-gray-800 block">肌肤热力图</Text>
+                  <Text className="text-sm text-gray-500 block">问题严重程度分析</Text>
+                </View>
+                <Heatmap concerns={record.concerns} />
+              </View>
+            )}
 
             {/* 五大指标详情 */}
             <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
@@ -581,6 +617,45 @@ export default function HistoryDetailPage() {
                 </View>
               </View>
             </View>
+
+            {/* 对比分析图表 */}
+            <ComparisonChart data={[
+              {
+                label: '第一次',
+                record: {
+                  skinType: record1.skin_type,
+                  concerns: record1.concerns,
+                  moisture: record1.moisture,
+                  oiliness: record1.oiliness,
+                  sensitivity: record1.sensitivity,
+                  acne: record1.acne,
+                  wrinkles: record1.wrinkles,
+                  spots: record1.spots,
+                  pores: record1.pores,
+                  blackheads: record1.blackheads,
+                  score: score1,
+                  date: record1.created_at
+                }
+              },
+              {
+                label: '第二次',
+                record: {
+                  skinType: record2.skin_type,
+                  concerns: record2.concerns,
+                  moisture: record2.moisture,
+                  oiliness: record2.oiliness,
+                  sensitivity: record2.sensitivity,
+                  acne: record2.acne,
+                  wrinkles: record2.wrinkles,
+                  spots: record2.spots,
+                  pores: record2.pores,
+                  blackheads: record2.blackheads,
+                  score: score2,
+                  date: record2.created_at
+                }
+              }
+            ]}
+            />
 
             {/* 指标对比 */}
             <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">

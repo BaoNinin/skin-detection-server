@@ -891,5 +891,30 @@
     "imageUrl": "wxfile://tmp_9741ae46dc331d1a82616bd2762b1ad81783366d8527507e.jpg",
     "createdAt": "2026-03-16T04:37:54.621Z",
     "updatedAt": "2026-03-16T04:37:54.621Z"
+  },
+  {
+    "id": 37,
+    "userId": 27,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "唇部周围皮肤问题"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "注意唇部周围皮肤的清洁和护理，可适当使用温和的唇部护理产品",
+      "对于轻微痘痘，可使用含有水杨酸或茶树精油的护肤品进行局部护理",
+      "保持良好的作息和饮食习惯，避免熬夜和辛辣食物，以维持皮肤的健康状态"
+    ],
+    "imageUrl": "wxfile://tmp_fb2cc5cdd5ee5d3ff5a83fe472ef43b7cdf51c42244749d6.jpg",
+    "createdAt": "2026-03-16T05:12:48.823Z",
+    "updatedAt": "2026-03-16T05:12:48.823Z"
   }
 ]
