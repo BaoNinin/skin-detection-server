@@ -1199,5 +1199,31 @@
     "imageUrl": "wxfile://tmp_c40596016201bdf6004ff90867a7f7437cb9d58e421081ef.jpg",
     "createdAt": "2026-03-17T03:11:47.611Z",
     "updatedAt": "2026-03-17T03:11:47.611Z"
+  },
+  {
+    "id": 49,
+    "userId": 38,
+    "skinType": "油性皮肤",
+    "concerns": [
+      "出油",
+      "毛孔粗大",
+      "轻微黑头"
+    ],
+    "moisture": 55,
+    "oiliness": 65,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 40,
+    "blackheads": 25,
+    "recommendations": [
+      "使用温和的洁面产品，早晚清洁面部，避免过度清洁导致油脂分泌失衡",
+      "选择清爽型的爽肤水和乳液，调节皮肤水油平衡",
+      "定期使用清洁面膜或去角质产品（每周1-2次），清理毛孔内的污垢和黑头"
+    ],
+    "imageUrl": "wxfile://tmp_90d23d099dff0a270749168c9d5c682876bfde419cb6ad47.jpg",
+    "createdAt": "2026-03-17T03:43:22.054Z",
+    "updatedAt": "2026-03-17T03:43:22.054Z"
   }
 ]
