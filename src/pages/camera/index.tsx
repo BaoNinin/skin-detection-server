@@ -55,6 +55,32 @@ export default function CameraPage() {
   const lastVoiceTimeRef = useRef<number>(0)
   const lastGuideTextRef = useRef<string>('')
 
+  // 接收 NFC 启动参数
+  useEffect(() => {
+    const launchOptions = Taro.getLaunchOptionsSync()
+    const { query, scene } = launchOptions
+    
+    console.log('启动参数:', { query, scene })
+    
+    // 检查是否来自 NFC
+    if (query?.from === 'nfc' || scene === 1047) {
+      console.log('NFC 触发跳转')
+      
+      // 记录设备ID（如果有）
+      if (query?.deviceId) {
+        console.log('设备ID:', query.deviceId)
+        Taro.setStorageSync('nfc_device_id', query.deviceId)
+      }
+      
+      // 显示提示
+      if (query?.deviceId) {
+        setGuideText(`已连接设备 ${query.deviceId}`)
+      } else {
+        setGuideText('NFC 触发，请开始检测')
+      }
+    }
+  }, [])
+
   // 调试日志：监听扫描进度变化
   useEffect(() => {
     console.log('扫描进度更新:', scanProgress, '%')
