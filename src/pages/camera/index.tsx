@@ -1,7 +1,7 @@
 import { View, Text, Camera, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect, useRef } from 'react'
-import { checkNFCStartup, startNFCDiscovery, stopNFCDiscovery, NFCData } from '@/utils/nfc'
+import { startNFCDiscovery, stopNFCDiscovery, NFCData } from '@/utils/nfc'
 
 interface FacePosition {
   x: number

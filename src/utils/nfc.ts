@@ -17,6 +17,7 @@ export interface NFCData {
  */
 export function checkNFCSupport(): boolean {
   const systemInfo = Taro.getSystemInfoSync()
+  // @ts-ignore - Taro.getSystemInfoSync 返回类型可能不包含 NFC
   return !!systemInfo.NFC
 }
 
