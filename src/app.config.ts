@@ -9,7 +9,8 @@ const appConfig = {
     'pages/history/index',
     'pages/history-detail/index',
     'pages/mall/index',
-    'pages/profile/index'
+    'pages/profile/index',
+    'pages/nfc-writer/index'  // NFC 写入工具页面
   ],
   window: {
     backgroundTextStyle: 'light',

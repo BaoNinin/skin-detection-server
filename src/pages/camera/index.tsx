@@ -1,6 +1,7 @@
 import { View, Text, Camera, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect, useRef } from 'react'
+import { checkNFCStartup, startNFCDiscovery, stopNFCDiscovery, NFCData } from '@/utils/nfc'
 
 interface FacePosition {
   x: number
@@ -80,6 +81,45 @@ export default function CameraPage() {
       }
     }
   }, [])
+
+  // NFC 实时监听
+  useEffect(() => {
+    if (!isWeapp) return
+
+    console.log('启动 NFC 实时监听')
+
+    const handleNFCDiscovered = (data: NFCData) => {
+      console.log('发现 NFC 标签:', data)
+
+      // 如果有设备 ID，显示连接提示
+      if (data.deviceId) {
+        setGuideText(`已连接设备 ${data.deviceId}`)
+        playVoice(`已连接设备 ${data.deviceId}`)
+      }
+
+      // 如果是分析操作，且当前未在扫描，则自动开始
+      if (data.action === 'analyze' && !isScanning) {
+        console.log('NFC 触发自动分析')
+        setGuideText('NFC 触发，正在启动检测...')
+        setTimeout(() => {
+          handleStartDetection()
+        }, 1000)
+      }
+    }
+
+    const handleNFCError = (error: any) => {
+      console.error('NFC 监听错误:', error)
+    }
+
+    // 启动 NFC 监听
+    startNFCDiscovery(handleNFCDiscovered, handleNFCError)
+
+    // 清理函数
+    return () => {
+      console.log('停止 NFC 监听')
+      stopNFCDiscovery()
+    }
+  }, [isScanning])
 
   // 调试日志：监听扫描进度变化
   useEffect(() => {
