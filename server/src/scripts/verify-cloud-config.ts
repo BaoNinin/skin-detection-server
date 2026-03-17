@@ -44,7 +44,7 @@ try {
     traceUser: true,
   });
   console.log('✅ 云开发初始化成功');
-} catch (error) {
+} catch (error: any) {
   console.error('❌ 云开发初始化失败:', error.message);
   console.error('\n可能的原因：');
   console.error('1. 环境ID不正确');
@@ -70,7 +70,7 @@ async function checkCollection(collectionName: string): Promise<boolean> {
     const result = await db.collection(collectionName).limit(1).get();
     console.log(`✅ 集合 ${collectionName} 存在，当前数据量: ${result.data.length}`);
     return true;
-  } catch (error) {
+  } catch (error: any) {
     if (error.errCode === -1) {
       console.log(`❌ 集合 ${collectionName} 不存在`);
       console.log(`   请在云开发控制台创建该集合`);
@@ -81,108 +81,111 @@ async function checkCollection(collectionName: string): Promise<boolean> {
   }
 }
 
-// 检查所有集合
-const usersExists = await checkCollection(COLLECTIONS.USERS);
-const historyExists = await checkCollection(COLLECTIONS.HISTORY);
-const healthCheckExists = await checkCollection(COLLECTIONS.HEALTH_CHECK);
+// 包装在 async 函数中
+(async () => {
+  // 检查所有集合
+  const usersExists = await checkCollection(COLLECTIONS.USERS);
+  const historyExists = await checkCollection(COLLECTIONS.HISTORY);
+  const healthCheckExists = await checkCollection(COLLECTIONS.HEALTH_CHECK);
 
-if (!usersExists || !historyExists || !healthCheckExists) {
-  console.log('\n⚠️  部分集合缺失，请按以下步骤创建：\n');
+  if (!usersExists || !historyExists || !healthCheckExists) {
+    console.log('\n⚠️  部分集合缺失，请按以下步骤创建：\n');
 
-  if (!usersExists) {
-    console.log('1. 创建 users 集合');
-    console.log('   - 名称: users');
-    console.log('   - 权限: 所有用户可读，仅创建者可写\n');
-  }
+    if (!usersExists) {
+      console.log('1. 创建 users 集合');
+      console.log('   - 名称: users');
+      console.log('   - 权限: 所有用户可读，仅创建者可写\n');
+    }
 
-  if (!historyExists) {
-    console.log('2. 创建 skin_history 集合');
-    console.log('   - 名称: skin_history');
-    console.log('   - 权限: 所有用户可读，仅创建者可写\n');
-  }
+    if (!historyExists) {
+      console.log('2. 创建 skin_history 集合');
+      console.log('   - 名称: skin_history');
+      console.log('   - 权限: 所有用户可读，仅创建者可写\n');
+    }
 
-  if (!healthCheckExists) {
-    console.log('3. 创建 health_check 集合');
-    console.log('   - 名称: health_check');
-    console.log('   - 权限: 所有用户可读，仅管理员可写\n');
-  }
-}
-
-console.log('----------------------------------------\n');
-
-// 4. 检查云存储
-console.log('📋 步骤 4：检查云存储\n');
-
-async function checkStorage(): Promise<boolean> {
-  try {
-    // 尝试获取云存储信息（这个操作会失败，但可以确认云存储是否开通）
-    await cloud.getTempFileURL({
-      fileList: [],
-    });
-    console.log('✅ 云存储已开通');
-    return true;
-  } catch (error) {
-    if (error.errCode === -502001) {
-      console.log('❌ 云存储未开通');
-      console.log('   请在云开发控制台开通云存储服务');
-      return false;
-    } else {
-      console.log('✅ 云存储已开通（API调用正常）');
-      return true;
+    if (!healthCheckExists) {
+      console.log('3. 创建 health_check 集合');
+      console.log('   - 名称: health_check');
+      console.log('   - 权限: 所有用户可读，仅管理员可写\n');
     }
   }
-}
 
-const storageExists = await checkStorage();
-console.log('----------------------------------------\n');
+  console.log('----------------------------------------\n');
 
-// 5. 测试数据库写入（仅当所有集合都存在时）
-console.log('📋 步骤 5：测试数据库写入\n');
+  // 4. 检查云存储
+  console.log('📋 步骤 4：检查云存储\n');
 
-const allCollectionsExist = usersExists && historyExists && healthCheckExists;
-
-if (allCollectionsExist) {
-  try {
-    // 测试写入 health_check
-    const result = await db.collection(COLLECTIONS.HEALTH_CHECK).add({
-      data: {
-        updated_at: new Date().toISOString(),
-      },
-    });
-    console.log('✅ 数据库写入测试成功，记录ID:', result._id);
-  } catch (error) {
-    console.error('❌ 数据库写入测试失败:', error.message);
+  async function checkStorage(): Promise<boolean> {
+    try {
+      // 尝试获取云存储信息（这个操作会失败，但可以确认云存储是否开通）
+      await cloud.getTempFileURL({
+        fileList: [],
+      });
+      console.log('✅ 云存储已开通');
+      return true;
+    } catch (error: any) {
+      if (error.errCode === -502001) {
+        console.log('❌ 云存储未开通');
+        console.log('   请在云开发控制台开通云存储服务');
+        return false;
+      } else {
+        console.log('✅ 云存储已开通（API调用正常）');
+        return true;
+      }
+    }
   }
-} else {
-  console.log('⏭️  跳过数据库写入测试（集合未完全创建）');
-}
 
-console.log('----------------------------------------\n');
+  const storageExists = await checkStorage();
+  console.log('----------------------------------------\n');
 
-// 6. 总结
-console.log('📊 配置验证总结\n');
+  // 5. 测试数据库写入（仅当所有集合都存在时）
+  console.log('📋 步骤 5：测试数据库写入\n');
 
-const results: Record<string, string> = {
-  环境变量: '✅ 已配置',
-  云开发初始化: '✅ 成功',
-  'users 集合': usersExists ? '✅ 已创建' : '❌ 未创建',
-  'skin_history 集合': historyExists ? '✅ 已创建' : '❌ 未创建',
-  'health_check 集合': healthCheckExists ? '✅ 已创建' : '❌ 未创建',
-  云存储: storageExists ? '✅ 已开通' : '❌ 未开通',
-};
+  const allCollectionsExist = usersExists && historyExists && healthCheckExists;
 
-Object.entries(results).forEach(([key, value]) => {
-  console.log(`${key}: ${value}`);
-});
+  if (allCollectionsExist) {
+    try {
+      // 测试写入 health_check
+      const result = await db.collection(COLLECTIONS.HEALTH_CHECK).add({
+        data: {
+          updated_at: new Date().toISOString(),
+        },
+      });
+      console.log('✅ 数据库写入测试成功，记录ID:', result._id);
+    } catch (error: any) {
+      console.error('❌ 数据库写入测试失败:', error.message);
+    }
+  } else {
+    console.log('⏭️  跳过数据库写入测试（集合未完全创建）');
+  }
 
-console.log('\n----------------------------------------\n');
+  console.log('----------------------------------------\n');
 
-if (allCollectionsExist && storageExists) {
-  console.log('🎉 云开发配置完成！所有检查通过。');
-  console.log('✅ 你可以开始上传小程序代码了。');
-} else {
-  console.log('⚠️  云开发配置未完成，请按上述提示完成缺失的配置。');
-  console.log('完成后请重新运行此脚本验证。');
-}
+  // 6. 总结
+  console.log('📊 配置验证总结\n');
 
-console.log('\n----------------------------------------\n');
+  const results: Record<string, string> = {
+    环境变量: '✅ 已配置',
+    云开发初始化: '✅ 成功',
+    'users 集合': usersExists ? '✅ 已创建' : '❌ 未创建',
+    'skin_history 集合': historyExists ? '✅ 已创建' : '❌ 未创建',
+    'health_check 集合': healthCheckExists ? '✅ 已创建' : '❌ 未创建',
+    云存储: storageExists ? '✅ 已开通' : '❌ 未开通',
+  };
+
+  Object.entries(results).forEach(([key, value]) => {
+    console.log(`${key}: ${value}`);
+  });
+
+  console.log('\n----------------------------------------\n');
+
+  if (allCollectionsExist && storageExists) {
+    console.log('🎉 云开发配置完成！所有检查通过。');
+    console.log('✅ 你可以开始上传小程序代码了。');
+  } else {
+    console.log('⚠️  云开发配置未完成，请按上述提示完成缺失的配置。');
+    console.log('完成后请重新运行此脚本验证。');
+  }
+
+  console.log('\n----------------------------------------\n');
+})();

@@ -15,9 +15,14 @@ export class SkinService {
     private readonly historyService: HistoryService,
     private readonly cloudStorageService: CloudStorageService
   ) {
-    const config = new Config();
+    const apiKey = process.env.COZE_API_KEY || '';
+
+    const config = new Config({
+      apiKey
+    });
     this.client = new LLMClient(config);
-    console.log('SkinService 初始化完成');
+    const model = process.env.COZE_MODEL || 'doubao-seed-1-6-vision-250815';
+    console.log('SkinService 初始化完成，使用模型:', model);
     console.log('使用豆包视觉模型进行皮肤分析');
     console.log('使用云存储保存图片');
   }
