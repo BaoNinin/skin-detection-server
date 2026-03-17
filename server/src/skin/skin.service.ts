@@ -34,6 +34,18 @@ export class SkinService {
       console.log('文件大小:', file.size);
       console.log('MIME 类型:', file.mimetype);
 
+      // 检查是否使用模拟数据
+      const useMock = process.env.COZE_USE_MOCK === 'true';
+      
+      if (useMock) {
+        console.log('=== 使用模拟数据模式 ===');
+        await this.sleep(2000); // 模拟 API 延迟
+        
+        // 返回模拟数据
+        return this.getMockAnalysisResult();
+      }
+
+      // 真实 API 调用逻辑
       let imageData: string;
 
       if (file.path) {
@@ -178,6 +190,59 @@ export class SkinService {
       console.error('错误详情:', JSON.stringify(error, null, 2));
       throw error;
     }
+  }
+
+  // 辅助方法：模拟延迟
+  private sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // 辅助方法：获取模拟分析结果
+  private getMockAnalysisResult(): SkinAnalysisResult {
+    const skinTypes = ['干性皮肤', '油性皮肤', '混合性皮肤', '中性皮肤', '敏感性皮肤'];
+    const concernsList = [
+      ['毛孔粗大', 'T区出油', '肤色暗沉'],
+      ['干燥缺水', '细纹', '敏感泛红'],
+      ['痘痘', '毛孔堵塞', '油光'],
+      ['色斑', '肤色不均', '缺乏光泽']
+    ];
+    
+    // 随机选择皮肤类型和问题
+    const randomIndex = Math.floor(Math.random() * skinTypes.length);
+    const randomConcerns = concernsList[randomIndex];
+    
+    // 生成随机但合理的数值
+    const moisture = Math.floor(Math.random() * 30) + 50; // 50-80
+    const oiliness = Math.floor(Math.random() * 40) + 30; // 30-70
+    const sensitivity = Math.floor(Math.random() * 50) + 10; // 10-60
+    
+    const result: SkinAnalysisResult = {
+      skinType: skinTypes[randomIndex],
+      concerns: randomConcerns,
+      moisture,
+      oiliness,
+      sensitivity,
+      acne: Math.floor(Math.random() * 40),
+      wrinkles: Math.floor(Math.random() * 30),
+      spots: Math.floor(Math.random() * 35),
+      pores: Math.floor(Math.random() * 50) + 30,
+      blackheads: Math.floor(Math.random() * 40),
+      recommendations: [
+        '建议使用温和的洁面产品，早晚清洁',
+        '保持充足的水分，使用保湿精华',
+        '注意防晒，避免紫外线伤害',
+        '定期使用面膜，改善肌肤状态'
+      ]
+    };
+    
+    console.log('=== 模拟分析结果 ===');
+    console.log('皮肤类型:', result.skinType);
+    console.log('主要问题:', result.concerns);
+    console.log('水分:', result.moisture);
+    console.log('油性:', result.oiliness);
+    console.log('敏感度:', result.sensitivity);
+    
+    return result;
   }
 
   async recommendProducts(skinData: {
