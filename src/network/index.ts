@@ -153,7 +153,7 @@ class Network {
   /**
    * 下载文件
    */
-  static async downloadFile(options: DownloadFileOptions): Promise<Taro.downloadFile.FileSuccessCallbackResult> {
+  static async downloadFile(options: DownloadFileOptions): Promise<Taro.downloadFile.SuccessCallbackResult> {
     const { url, header = {}, ...rest } = options
 
     // 构建 URL
