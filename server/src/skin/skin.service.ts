@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { LLMClient, Config } from 'coze-coding-dev-sdk';
 import * as fs from 'fs';
 import { UploadedFile, SkinAnalysisResult } from './skin.types';
 import { ProductService } from './product.service';
@@ -8,23 +7,19 @@ import { CloudStorageService } from '@/config/cloud-storage.service';
 
 @Injectable()
 export class SkinService {
-  private client: LLMClient;
-
   constructor(
     private readonly productService: ProductService,
     private readonly historyService: HistoryService,
     private readonly cloudStorageService: CloudStorageService
   ) {
-    const apiKey = process.env.COZE_API_KEY || '';
-
-    const config = new Config({
-      apiKey
-    });
-    this.client = new LLMClient(config);
-    const model = process.env.COZE_MODEL || 'doubao-seed-1-6-vision-250815';
+    const model = process.env.COZE_MODEL || 'doubao-1-5-vision-pro-32k-250115';
+    const useMock = process.env.COZE_USE_MOCK === 'true';
     console.log('SkinService 初始化完成，使用模型:', model);
     console.log('使用豆包视觉模型进行皮肤分析');
     console.log('使用云存储保存图片');
+    if (useMock) {
+      console.log('⚠️  当前使用模拟数据模式');
+    }
   }
 
   async analyzeSkinImage(file: UploadedFile): Promise<SkinAnalysisResult> {
@@ -147,19 +142,53 @@ export class SkinService {
       ];
 
       console.log('调用豆包视觉模型...');
-      
-      // 使用 coze-coding-dev-sdk 的 LLMClient 调用豆包视觉模型
-      const response = await this.client.invoke(messages, {
-        model: 'doubao-seed-1-6-vision-250815',
+      console.log('API Key:', process.env.COZE_API_KEY?.substring(0, 10) + '...');
+      console.log('模型:', process.env.COZE_MODEL);
+
+      // 使用火山引擎原生 API 调用
+      const apiKey = process.env.COZE_API_KEY || '';
+      const apiUrl = process.env.COZE_API_BASE || 'https://ark.cn-beijing.volces.com/api/v3/chat/completions';
+      const model = process.env.COZE_MODEL || 'doubao-1-5-vision-pro-32k-250115';
+
+      const requestBody = {
+        model,
+        messages,
         temperature: 0.3,
+        max_tokens: 2000,
+      };
+
+      console.log('请求 URL:', apiUrl);
+      console.log('请求体（不含图片数据）:', {
+        model: requestBody.model,
+        temperature: requestBody.temperature,
       });
 
-      console.log('豆包模型响应长度:', response.content?.length);
-      const responseContent = response.content || '{}';
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API 调用失败:', response.status, errorText);
+        throw new Error(`API 调用失败: ${response.status} - ${errorText}`);
+      }
+
+      const responseData = await response.json();
+      console.log('豆包模型响应:', JSON.stringify(responseData, null, 2));
+
+      // 解析响应
+      const responseContent = responseData.choices?.[0]?.message?.content || '{}';
+      console.log('响应内容长度:', responseContent.length);
       console.log('响应前 200 字符:', responseContent.substring(0, 200));
 
       const jsonMatch = responseContent.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
+        console.error('无法从响应中提取 JSON，原始内容:', responseContent);
         throw new Error('无法解析 LLM 响应为 JSON');
       }
 
