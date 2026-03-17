@@ -21,7 +21,7 @@ export default [
   },
   {
     files: ['src/**/*.{js,jsx,ts,tsx}'],
-    ignores: ['src/network.ts'],
+    ignores: ['src/network.ts', 'src/network/**/*'],
     rules: {
       'no-restricted-syntax': [
         'error',

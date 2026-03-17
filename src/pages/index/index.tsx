@@ -75,10 +75,11 @@ export default function SkinDetectionPage() {
 
         Taro.setStorageSync('skinAnalysisResult', analysisResult)
 
+        // 保存历史记录
         Network.request({
           url: '/api/skin/history',
           method: 'POST',
-          data: result
+          data: analysisResult
         }).catch(err => {
           console.error('保存历史记录失败:', err)
         })
