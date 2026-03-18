@@ -1,18 +1,30 @@
-require('dotenv').config({ path: '.env.local' });
+require('dotenv').config({ path: 'server/.env.local' });
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@/app.module';
 import * as express from 'express';
 import { HttpStatusInterceptor } from '@/interceptors/http-status.interceptor';
 
 function parsePort(): number {
+  // 优先读取 PORT 环境变量（最高优先级）
+  if (process.env.PORT) {
+    const port = parseInt(process.env.PORT, 10);
+    if (!isNaN(port) && port > 0 && port < 65536) {
+      console.log(`[DEBUG] Using port ${port} from PORT env var`);
+      return port;
+    }
+  }
+
+  // 检查命令行参数
   const args = process.argv.slice(2);
   const portIndex = args.indexOf('-p');
   if (portIndex !== -1 && args[portIndex + 1]) {
     const port = parseInt(args[portIndex + 1], 10);
     if (!isNaN(port) && port > 0 && port < 65536) {
+      console.log(`[DEBUG] Using port ${port} from command line`);
       return port;
     }
   }
+
   // 云托管环境默认使用 80 端口
   // 如果设置了 CLOUDBASE_ENV_ID 或 NODE_ENV 为 production，则使用 80 端口
   console.log(`[DEBUG] CLOUDBASE_ENV_ID: ${process.env.CLOUDBASE_ENV_ID}`);
