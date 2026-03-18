@@ -201,6 +201,32 @@ export class SkinService {
         return Math.min(100, Math.max(0, num));
       };
 
+      // 检查结果是否有效
+      const isValidResult = (
+        result.skinType &&
+        result.skinType !== '请提供面部照片' &&
+        result.skinType !== '无法识别' &&
+        (result.moisture > 0 || result.oiliness > 0 || result.sensitivity > 0 ||
+         result.acne > 0 || result.wrinkles > 0 || result.spots > 0 ||
+         result.pores > 0 || result.blackheads > 0)
+      );
+
+      if (!isValidResult) {
+        console.warn('=== 豆包模型返回无效结果，使用模拟数据 ===');
+        console.warn('皮肤类型:', result.skinType);
+        console.warn('各项指标:', {
+          moisture: result.moisture,
+          oiliness: result.oiliness,
+          sensitivity: result.sensitivity,
+          acne: result.acne,
+          wrinkles: result.wrinkles,
+          spots: result.spots,
+          pores: result.pores,
+          blackheads: result.blackheads
+        });
+        return this.getMockAnalysisResult();
+      }
+
       return {
         skinType: result.skinType || '中性皮肤',
         concerns: Array.isArray(result.concerns) ? result.concerns : [],

@@ -1269,5 +1269,49 @@
     "imageUrl": "wxfile://tmp_cda9e38b935477fafa66cdac9189995805fbb3403da467f7.jpg",
     "createdAt": "2026-03-17T11:08:33.752Z",
     "updatedAt": "2026-03-17T11:08:33.752Z"
+  },
+  {
+    "id": 52,
+    "userId": 44,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好基础清洁，保持皮肤干净",
+      "坚持使用温和的保湿护肤品",
+      "注意防晒，避免紫外线伤害"
+    ],
+    "imageUrl": "wxfile://tmp_115dd30fa395a737e77ba9948260dac3a4c7fa45410620d2.jpg",
+    "createdAt": "2026-03-18T02:59:09.807Z",
+    "updatedAt": "2026-03-18T02:59:09.807Z"
+  },
+  {
+    "id": 53,
+    "userId": 44,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好基础清洁，使用温和的洁面产品",
+      "注意防晒，可选择物理防晒霜",
+      "保持良好的作息和饮食习惯，多喝水"
+    ],
+    "imageUrl": "wxfile://tmp_6574d69dd002ec00809f14f42f38ff5ec3ac6839e020b3bf.jpg",
+    "createdAt": "2026-03-18T03:38:54.811Z",
+    "updatedAt": "2026-03-18T03:38:54.811Z"
   }
 ]
