@@ -24,7 +24,7 @@ export default function LandingPage() {
     <View className="min-h-screen relative">
       {/* 背景图片 */}
       <Image
-        src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2F%E9%A6%96%E9%A1%B5%E8%83%8C%E6%99%AF-%E8%93%9D%E8%89%B2.png&nonce=465fd36f-7580-4020-8a48-0d8be52b029c&project_id=7616586290808668211&sign=376b900c4dcc6ba799a1d451311397ff10237fa4192a2d7aa3018b58d2221faa"
+        src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2F%E9%A6%96%E9%A1%B5%E8%83%8C%E6%99%AF-%E8%93%9D%E8%89%B2.png&nonce=62f572a4-19f5-4e3e-8fa7-8c6474589c10&project_id=7616586290808668211&sign=a8f621742ffaa717c2b8038dbd3c93b0865d09f555ec1f0e19952ad9ca8a21b5"
         className="absolute inset-0 w-full h-full"
         mode="aspectFill"
       />
