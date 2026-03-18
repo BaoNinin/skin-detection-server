@@ -21,16 +21,16 @@ export default function LandingPage() {
   }
 
   return (
-    <View className="min-h-screen relative">
+    <View className="min-h-screen relative bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500">
       {/* 背景图片 */}
       <Image
-        src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2F%E9%A6%96%E9%A1%B5%E8%83%8C%E6%99%AF-%E8%93%9D%E8%89%B2.png&nonce=62f572a4-19f5-4e3e-8fa7-8c6474589c10&project_id=7616586290808668211&sign=a8f621742ffaa717c2b8038dbd3c93b0865d09f555ec1f0e19952ad9ca8a21b5"
-        className="absolute inset-0 w-full h-full"
+        src="/assets/landing-bg.png"
+        className="absolute inset-0 w-full h-full opacity-30"
         mode="aspectFill"
       />
-      
+
       {/* 内容层 */}
-      <View className="relative z-10 bg-gradient-to-b from-slate-50 to-white/95 min-h-screen">
+      <View className="relative z-10 min-h-screen bg-gradient-to-b from-transparent via-blue-900/50 to-blue-900/70 backdrop-blur-sm">
       <View className="flex flex-col items-center justify-center px-8 py-12">
         <View className="mb-8">
           <View className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-lg">

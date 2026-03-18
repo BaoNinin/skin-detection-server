@@ -233,16 +233,16 @@ export default function ProfilePage() {
   }
 
   return (
-    <View className="min-h-screen relative">
+    <View className="min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       {/* 背景图片 */}
       <Image
-        src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2F%E4%B8%AA%E4%BA%BA%E9%A1%B5%E8%83%8C%E6%99%AF-%E8%93%9D%E8%89%B2.png&nonce=022d82a8-fa10-4340-99b8-9d030d54e804&project_id=7616586290808668211&sign=785fd2cb271b2adffd070245988eaf493113c8ab7030b6f665a0844b09500903"
-        className="absolute inset-0 w-full h-full"
+        src="/assets/profile-bg.png"
+        className="absolute inset-0 w-full h-full opacity-30"
         mode="aspectFill"
       />
-      
+
       {/* 内容层 */}
-      <View className="relative z-10 bg-slate-50/95 min-h-screen p-4">
+      <View className="relative z-10 min-h-screen p-4 bg-gradient-to-b from-transparent via-slate-900/60 to-slate-900/80 backdrop-blur-sm">
       <Text className="text-2xl font-bold text-gray-800 mb-6 block">我的</Text>
 
       {/* 完善信息弹窗 */}
