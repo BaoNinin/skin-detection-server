@@ -44,24 +44,6 @@ const appConfig = {
         selectedIconPath: './assets/tabbar/user-active.png'
       }
     ]
-  },
-  // 页面预加载配置
-  preloadRule: {
-    'pages/landing/index': {
-      network: 'all' as const
-    },
-    'pages/camera/index': {
-      network: 'all' as const
-    },
-    'pages/analyzing/index': {
-      network: 'all' as const
-    },
-    'pages/history/index': {
-      network: 'all' as const
-    },
-    'pages/result/index': {
-      network: 'all' as const
-    }
   }
 }
 
