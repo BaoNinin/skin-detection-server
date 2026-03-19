@@ -81,9 +81,12 @@ const requestCache = new RequestCache()
 export namespace Network {
     const createUrl = (url: string): string => {
         if (url.startsWith('http://') || url.startsWith('https://')) {
+            console.log('[Network] URL 已是完整路径，跳过域名拼接:', url)
             return url
         }
-        return `${PROJECT_DOMAIN}${url}`
+        const fullUrl = `${PROJECT_DOMAIN}${url}`
+        console.log('[Network] URL 拼接结果:', fullUrl, '(原路径:', url, ')')
+        return fullUrl
     }
 
     export const request: any = option => {
