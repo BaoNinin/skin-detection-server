@@ -4,26 +4,28 @@ FROM node:18-alpine
 # 设置工作目录
 WORKDIR /app
 
-# 设置环境变量
-ENV NODE_ENV=production
+# 复制 package.json 和 package-lock.json
+COPY package.json package-lock.json* ./
 
-# 安装 pnpm
-RUN npm install -g pnpm
-
-# 复制 package.json 和 pnpm-lock.yaml（根目录的）
-COPY package.json ./
-
-# 安装依赖（使用 --frozen-lockfile 确保依赖一致性）
-RUN pnpm install --frozen-lockfile
+# 安装依赖（仅生产依赖）
+RUN npm ci --only=production --silent
 
 # 复制源代码
 COPY . .
 
-# 构建项目
-RUN pnpm build
+# 构建应用
+RUN npm run build
 
-# 暴露端口（云托管健康检查端口）
+# 暴露端口（云托管使用 80 端口）
 EXPOSE 80
 
+# 设置环境变量
+ENV NODE_ENV=production
+ENV PORT=80
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:80/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+
 # 启动应用
-CMD ["pnpm", "start:prod"]
+CMD ["npm", "run", "start:prod"]
