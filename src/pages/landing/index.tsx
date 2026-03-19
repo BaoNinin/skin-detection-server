@@ -1,5 +1,6 @@
 import { View, Text, Image } from '@tarojs/components'
 import Taro from '@tarojs/taro'
+import landingBg from '@/assets/landing-bg.png'
 
 export default function LandingPage() {
   const handleStartDetection = () => {
@@ -24,7 +25,7 @@ export default function LandingPage() {
     <View className="min-h-screen relative bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500">
       {/* 背景图片 */}
       <Image
-        src="/assets/landing-bg.png"
+        src={landingBg}
         className="absolute inset-0 w-full h-full opacity-30"
         mode="aspectFill"
       />
