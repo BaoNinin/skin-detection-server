@@ -48,24 +48,19 @@ const appConfig = {
   // 页面预加载配置
   preloadRule: {
     'pages/landing/index': {
-      network: 'all' as const,
-      packages: ['pages/camera/index']
+      network: 'all' as const
     },
     'pages/camera/index': {
-      network: 'all' as const,
-      packages: ['pages/analyzing/index']
+      network: 'all' as const
     },
     'pages/analyzing/index': {
-      network: 'all' as const,
-      packages: ['pages/result/index']
+      network: 'all' as const
     },
     'pages/history/index': {
-      network: 'all' as const,
-      packages: ['pages/history-detail/index']
+      network: 'all' as const
     },
     'pages/result/index': {
-      network: 'all' as const,
-      packages: ['pages/recommend/index', 'pages/result-detail/index']
+      network: 'all' as const
     }
   }
 }
