@@ -90,7 +90,7 @@ export default defineConfig<'vite'>(async (merge, _env) => {
       defineConstants: {
       PROJECT_DOMAIN: JSON.stringify('https://gaodiai.cn'),
       TARO_ENV: JSON.stringify(process.env.TARO_ENV),
-      TARO_APP_WEAPP_APPID: JSON.stringify('wxa1c57025b508e913'),
+      TARO_APP_WEAPP_APPID: JSON.stringify('wx8826c7b681ec3c65'),
     },
     copy: {
       patterns: [],
