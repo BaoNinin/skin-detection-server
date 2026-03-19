@@ -87,9 +87,10 @@ export default defineConfig<'vite'>(async (merge, _env) => {
     sourceRoot: 'src',
     outputRoot,
             plugins: ['@tarojs/plugin-generator', ...buildMiniCIPluginConfig()],
-    defineConstants: {
+      defineConstants: {
       PROJECT_DOMAIN: JSON.stringify('https://gaodiai.cn'),
       TARO_ENV: JSON.stringify(process.env.TARO_ENV),
+      TARO_APP_WEAPP_APPID: JSON.stringify('wxa1c57025b508e913'),
     },
     copy: {
       patterns: [],
