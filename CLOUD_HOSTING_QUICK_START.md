@@ -3,7 +3,7 @@
 ## 📦 准备工作
 
 **已完成的配置文件：**
-- ✅ `server/Dockerfile` - Docker 配置
+- ✅ `server/Dockerfile` - Docker 配置（使用 npm 安装依赖）
 - ✅ `server/.dockerignore` - 构建忽略文件
 - ✅ `server/package.json` - 包含启动脚本
 - ✅ `DEPLOYMENT_GUIDE.md` - 完整部署文档
@@ -217,6 +217,18 @@ curl -X POST https://skin-detection-server-xxx.tcb.qcloud.la/api/user/login \
 - 检查 Dockerfile 是否正确
 - 检查 package.json 是否有启动脚本
 - 查看 Docker 构建日志
+
+**如果遇到 `npm ci` 失败的错误：**
+```
+RUN npm ci --only=production --silent did not complete successfully: exit code: 1
+```
+这是因为项目使用 pnpm 作为包管理器，没有 `package-lock.json` 文件。
+
+**解决方案：**
+Dockerfile 已更新为使用 `npm install --production`，不再需要 `package-lock.json`。如果仍然失败，请检查：
+1. package.json 中 dependencies 是否完整
+2. 所有依赖都能正常从 npm registry 下载
+3. 构建日志中是否有具体的错误信息
 
 ### Q3: 部署失败怎么办？
 - 检查镜像地址是否正确
