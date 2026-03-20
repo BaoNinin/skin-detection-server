@@ -88,7 +88,7 @@ export default defineConfig<'vite'>(async (merge, _env) => {
     outputRoot,
             plugins: ['@tarojs/plugin-generator', ...buildMiniCIPluginConfig()],
       defineConstants: {
-      PROJECT_DOMAIN: JSON.stringify('https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com'),
+      PROJECT_DOMAIN: JSON.stringify('https://api.gaodiai.cn'),
       TARO_ENV: JSON.stringify(process.env.TARO_ENV),
       TARO_APP_WEAPP_APPID: JSON.stringify('wx8826c7b681ec3c65'),
     },

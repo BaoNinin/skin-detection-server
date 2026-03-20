@@ -92,9 +92,17 @@ git push
 
 部署后，你的网页 URL 应该是：
 
+**使用默认域名：**
 ```
 https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com/nfc-redirect.html
 ```
+
+**或使用自定义域名（推荐）：**
+```
+https://api.gaodiai.cn/nfc-redirect.html
+```
+
+> 💡 **建议**：完成自定义域名配置后，使用 `https://api.gaodiai.cn/nfc-redirect.html`
 
 **测试网页：**
 在浏览器中访问该 URL，应该能看到：
