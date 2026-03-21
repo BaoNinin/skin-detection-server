@@ -1,6 +1,7 @@
 import { View, Text, Image } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import landingBg from '@/assets/landing-bg.png'
+import logoImage from '@/assets/logo.png'
 
 export default function LandingPage() {
   const handleStartDetection = () => {
@@ -36,7 +37,7 @@ export default function LandingPage() {
         <View className="mb-8">
           <View className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-lg">
             <Image
-              src="/assets/logo.png"
+              src={logoImage}
               className="w-24 h-24"
               style={{ marginLeft: '2px' }}
               mode="aspectFit"
