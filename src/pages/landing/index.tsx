@@ -38,7 +38,7 @@ export default function LandingPage() {
             <Image
               src="/assets/logo.png"
               className="w-24 h-24"
-              style={{ marginLeft: '25px' }}
+              style={{ marginRight: '15px' }}
               mode="aspectFit"
             />
           </View>
