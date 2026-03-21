@@ -2,7 +2,6 @@ import { View, Text, Button, Camera, Image } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import { Network } from '@/network'
-import logoImage from '@/assets/logo.png'
 
 interface SkinAnalysisResult {
   skinType: string
@@ -143,7 +142,7 @@ export default function SkinDetectionPage() {
         <View className="flex flex-col items-center justify-center py-20 px-4">
           <View className="w-32 h-32 bg-white rounded-full flex items-center justify-center mb-6 shadow-sm overflow-hidden">
             <Image
-              src={logoImage}
+              src="/assets/logo.png"
               mode="aspectFit"
               className="w-full h-full"
             />

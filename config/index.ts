@@ -93,7 +93,12 @@ export default defineConfig<'vite'>(async (merge, _env) => {
       TARO_APP_WEAPP_APPID: JSON.stringify('wx8826c7b681ec3c65'),
     },
     copy: {
-      patterns: [],
+      patterns: [
+        {
+          from: 'src/assets/logo.png',
+          to: 'assets/logo.png'
+        }
+      ],
       options: {},
     },
     ...(process.env.TARO_ENV === 'tt' && {
