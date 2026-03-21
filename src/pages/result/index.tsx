@@ -66,12 +66,6 @@ export default function ResultPage() {
     ]
   }
 
-  const handleViewRecommendations = () => {
-    Taro.navigateTo({
-      url: '/pages/recommend/index'
-    })
-  }
-
   const handleReDetect = () => {
     Taro.redirectTo({
       url: '/pages/camera/index'
@@ -217,14 +211,8 @@ export default function ResultPage() {
 
             <View className="flex gap-3">
               <Button
-                onClick={handleViewRecommendations}
-                className="flex-1 bg-white text-blue-700 border-2 border-blue-700 rounded-full py-3"
-              >
-                查看推荐
-              </Button>
-              <Button
                 onClick={handleViewHistory}
-                className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
+                className="w-full bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
               >
                 历史记录
               </Button>
