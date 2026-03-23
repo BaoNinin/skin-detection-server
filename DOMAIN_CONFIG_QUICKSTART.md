@@ -45,7 +45,7 @@ defineConstants: {
 
 | 主机记录 | 记录类型 | 记录值 | TTL |
 |---------|---------|--------|-----|
-| api | CNAME | skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com | 600 |
+| api | CNAME | skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com | 600 |
 
 **操作：**
 1. 登录域名注册商后台

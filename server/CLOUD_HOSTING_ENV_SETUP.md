@@ -88,7 +88,7 @@ tcb logs list \
 访问健康检查接口：
 
 ```bash
-curl https://skin-detection-api.prod-8g9r8x6c43dcafcb.sh.run.tcloudbase.com/health
+curl https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/health
 ```
 
 返回 `{ "status": "ok" }` 表示服务正常运行。
@@ -97,7 +97,7 @@ curl https://skin-detection-api.prod-8g9r8x6c43dcafcb.sh.run.tcloudbase.com/heal
 
 ```bash
 curl -X POST \
-  https://skin-detection-api.prod-8g9r8x6c43dcafcb.sh.run.tcloudbase.com/api/skin/analyze \
+  https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/api/skin/analyze \
   -H "Content-Type: application/json" \
   -d '{ "imageUrl": "https://example.com/skin-image.jpg" }'
 ```

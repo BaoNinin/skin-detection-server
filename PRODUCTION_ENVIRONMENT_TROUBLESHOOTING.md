@@ -81,7 +81,7 @@ https://mp.weixin.qq.com/
 
 #### 选项 A：使用默认域名（如果域名绑定有问题）
 ```
-https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
+https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
 ```
 
 #### 选项 B：使用自定义域名（如果已成功配置）
@@ -205,7 +205,7 @@ curl https://your-domain.com/api/health
 1. 登录微信小程序后台
 2. 开发 → 开发管理 → 开发设置
 3. 修改 request 合法域名
-4. 添加：`https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com`
+4. 添加：`https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com`
 5. 保存并等待生效
 
 ---
@@ -214,7 +214,7 @@ curl https://your-domain.com/api/health
 
 在浏览器中访问：
 ```
-https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com/api/health
+https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/api/health
 ```
 
 确认返回正常响应。
@@ -319,7 +319,7 @@ https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com/api/healt
 1. 登录微信小程序后台
 2. 开发 → 开发管理 → 开发设置
 3. 修改 request 合法域名
-4. 添加：`https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com`
+4. 添加：`https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com`
 5. 保存并等待生效
 6. 重新提交审核和发布
 

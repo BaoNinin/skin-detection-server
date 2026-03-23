@@ -18,7 +18,7 @@ wxf218fed093b4e374
 
 ### 当前使用的域名
 ```
-https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
+https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
 ```
 
 ### 自定义域名（未成功配置）
@@ -73,7 +73,7 @@ CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a
 
 ### 云托管服务地址
 ```
-https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
+https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
 ```
 
 ### 云托管环境
@@ -169,7 +169,7 @@ pages/nfc-writer/index       # NFC 写入工具页面
 
 ### 前端配置 (.env.local)
 ```bash
-PROJECT_DOMAIN=https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
+PROJECT_DOMAIN=https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
 TARO_APP_WEAPP_APPID=wxf218fed093b4e374
 TARO_ENV=weapp
 ```
