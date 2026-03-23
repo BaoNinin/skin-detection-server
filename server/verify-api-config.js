@@ -63,7 +63,7 @@ const req = http.request(options, (res) => {
           allCorrect = false;
         }
 
-        if (config.cozeApiKey && config.cozeApiKey.startsWith('8f38a8d0-...')) {
+        if (config.cozeApiKey && (config.cozeApiKey.startsWith('8f38a8d0-b') || config.cozeApiKey.startsWith('8f38a8d0-'))) {
           console.log('✅ API Key 正确');
         } else {
           console.log(`❌ API Key 不正确: ${config.cozeApiKey}`);
