@@ -1142,7 +1142,7 @@ export default function CameraPage() {
 
             {/* 说明文字 */}
             <Text className="text-sm text-gray-600 block text-center mb-6">
-              为保护您的眼睛，请等待冷却完成后再次使用
+              芯片已经激活了，请等待冷却完成后再次使用
             </Text>
 
             {/* 倒计时 */}
