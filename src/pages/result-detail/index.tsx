@@ -58,12 +58,6 @@ export default function ResultDetailPage() {
     ]
   }
 
-  const handleViewRecommendations = () => {
-    Taro.navigateTo({
-      url: '/pages/recommend/index'
-    })
-  }
-
   const handleShare = () => {
     Taro.showToast({
       title: '分享功能开发中',
@@ -381,15 +375,7 @@ export default function ResultDetailPage() {
           )}
 
           {/* 操作按钮 */}
-          <View className="space-y-3 mb-8">
-            <Button
-              onClick={handleViewRecommendations}
-              className="w-full bg-blue-700 text-white rounded-full py-4 font-medium"
-            >
-              查看推荐产品
-            </Button>
-
-            <View className="flex gap-3">
+          <View className="flex gap-3 mb-8">
               <Button
                 onClick={handleShare}
                 className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
