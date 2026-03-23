@@ -376,19 +376,18 @@ export default function ResultDetailPage() {
 
           {/* 操作按钮 */}
           <View className="flex gap-3 mb-8">
-              <Button
-                onClick={handleShare}
-                className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
-              >
-                分享报告
-              </Button>
-              <Button
-                onClick={handleDownload}
-                className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
-              >
-                下载报告
-              </Button>
-            </View>
+            <Button
+              onClick={handleShare}
+              className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
+            >
+              分享报告
+            </Button>
+            <Button
+              onClick={handleDownload}
+              className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
+            >
+              下载报告
+            </Button>
           </View>
         </View>
       </ScrollView>

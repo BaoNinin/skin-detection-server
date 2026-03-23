@@ -104,7 +104,6 @@ export default function SkinDetectionPage() {
     }
   }
 
-
   return (
     <View className="min-h-screen bg-slate-50">
       <View className="p-4">
