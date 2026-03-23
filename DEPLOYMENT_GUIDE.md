@@ -138,10 +138,8 @@ docker push ccr.ccs.tencentyun.com/<你的命名空间>/skin-detection-server:la
 PORT=80
 
 # 豆包视觉模型配置
-COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26
-COZE_MODEL=doubao-1-5-vision-pro-32k-250115
-COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/chat/completions
-COZE_USE_MOCK=false
+COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
+COZE_MODEL=doubao-vision
 
 # 微信小程序配置
 WECHAT_APPID=wx8826c7b681ec3c65
