@@ -4,7 +4,7 @@
 
 ### 小程序 AppID
 ```
-wx8826c7b681ec3c65
+wxf218fed093b4e374
 ```
 
 ### 小程序名称
@@ -33,7 +33,7 @@ https://api.gaodiai.cn
 
 ### 微信小程序密钥
 ```
-WECHAT_APP_SECRET=b5660a490882bbc56b8fcc69d2cb8cd4
+WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749
 ```
 **用途：** 
 - 微信登录
@@ -60,7 +60,7 @@ COZE_MODEL=doubao-vision
 
 ### 腾讯云开发环境 ID
 ```
-CLOUDBASE_ENV_ID=cloud1-6gzezzskad9fed0b
+CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a
 ```
 **用途：**
 - 云数据库存储
@@ -78,17 +78,17 @@ https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
 
 ### 云托管环境
 ```
-prod-3gbk859ae18cc611
+prod-8g9r8x6c43dcafcb
 ```
 
 ### 服务名称
 ```
-skin-detection-server
+skin-detection-api
 ```
 
 ### GitHub 仓库
 ```
-https://github.com/BaoNinin/skin-detection-server
+https://github.com/BaoNinin/smart-skin-detection
 ```
 
 ---
@@ -170,7 +170,7 @@ pages/nfc-writer/index       # NFC 写入工具页面
 ### 前端配置 (.env.local)
 ```bash
 PROJECT_DOMAIN=https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
-TARO_APP_WEAPP_APPID=wx8826c7b681ec3c65
+TARO_APP_WEAPP_APPID=wxf218fed093b4e374
 TARO_ENV=weapp
 ```
 
@@ -178,8 +178,8 @@ TARO_ENV=weapp
 ```bash
 COZE_API_KEY=pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh
 COZE_MODEL=doubao-vision
-CLOUDBASE_ENV_ID=cloud1-6gzezzskad9fed0b
-WECHAT_APP_SECRET=b5660a490882bbc56b8fcc69d2cb8cd4
+CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a
+WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749
 NODE_ENV=production
 ```
 
@@ -214,7 +214,7 @@ https://console.cloud.tencent.com/tcb/service
 
 ### GitHub 仓库
 ```
-https://github.com/BaoNinin/skin-detection-server
+https://github.com/BaoNinin/smart-skin-detection
 ```
 
 ---
