@@ -49,7 +49,7 @@ export default function RecommendPage() {
         icon: 'none'
       })
       setTimeout(() => {
-        Taro.switchTab({ url: '/pages/index/index' })
+        Taro.switchTab({ url: '/pages/landing/index' })
       }, 1500)
       return
     }

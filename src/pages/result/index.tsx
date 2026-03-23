@@ -36,7 +36,7 @@ export default function ResultPage() {
         icon: 'none'
       })
       setTimeout(() => {
-        Taro.switchTab({ url: '/pages/index/index' })
+        Taro.switchTab({ url: '/pages/landing/index' })
       }, 1500)
     }
   }, [])

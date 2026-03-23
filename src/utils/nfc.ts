@@ -179,7 +179,7 @@ export function handleNFCData(data: NFCData): void {
 
     default:
       console.log('未知的 NFC action:', data.action)
-      navigateToPage('/pages/index/index')
+      navigateToPage('/pages/landing/index')
   }
 }
 
@@ -198,7 +198,7 @@ function navigateToPage(pagePath: string): void {
       console.error('页面跳转失败:', err)
       // 降级到首页
       Taro.reLaunch({
-        url: '/pages/index/index',
+        url: '/pages/landing/index',
       })
     },
   })

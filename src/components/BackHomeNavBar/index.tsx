@@ -23,7 +23,7 @@ export default function BackHomeNavBar({
 
   const handleBackHome = () => {
     Taro.switchTab({
-      url: '/pages/index/index'
+      url: '/pages/landing/index'
     })
   }
 

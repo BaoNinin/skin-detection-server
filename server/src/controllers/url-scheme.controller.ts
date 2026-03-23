@@ -35,7 +35,7 @@ export class URLSchemeController {
     query?: Record<string, any>
   }) {
     try {
-      const { path = 'pages/index/index', query = {} } = body
+      const { path = 'pages/landing/index', query = {} } = body
 
       console.log('=== 生成 URL Scheme ===')
       console.log('路径:', path)

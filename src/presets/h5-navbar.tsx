@@ -57,7 +57,7 @@ const computeLeftIcon = (
   if (!route) return LeftIcon.None;
 
   const isHomePage =
-    route === 'pages/index/index' || route === '/pages/index/index';
+    route === 'pages/landing/index' || route === '/pages/landing/index';
   const isTabBarPage = tabBarPages.has(route);
   const hasHistory = historyLength > 1;
 
@@ -79,7 +79,7 @@ export const H5NavBar = () => {
     const tabBarPages = getTabBarPages();
 
     const isHomePage =
-      route === 'pages/index/index' || route === '/pages/index/index';
+      route === 'pages/landing/index' || route === '/pages/landing/index';
     const isTabBarPage = tabBarPages.has(route);
     const shouldHideNav =
       tabBarPages.size <= 1 &&
@@ -165,7 +165,7 @@ export const H5NavBar = () => {
   };
 
   const handleBack = () => Taro.navigateBack();
-  const handleGoHome = () => Taro.reLaunch({ url: '/pages/index/index' });
+  const handleGoHome = () => Taro.reLaunch({ url: '/pages/landing/index' });
 
   return (
     <>
