@@ -76,7 +76,7 @@ cloudbase init
       "minNum": 0,
       "maxNum": 10,
       "envVariables": {
-        "COZE_API_KEY": "pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh",
+        "COZE_API_KEY": "8f38a8d0-b6d4-481c-8e15-b93bb30c7444",
         "COZE_MODEL": "doubao-vision",
         "CLOUDBASE_ENV_ID": "你的环境ID",
         "NODE_ENV": "production",
@@ -146,7 +146,7 @@ https://xxx-xxx.tcb.qcloud.la
    - 逐个添加以下变量：
 
    ```bash
-   COZE_API_KEY=pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh
+   COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
    COZE_MODEL=doubao-vision
    CLOUDBASE_ENV_ID=你的环境ID
    NODE_ENV=production
@@ -210,7 +210,7 @@ zip -r server-deploy.zip server/
 
 | 变量名 | 变量值 | 说明 |
 |-------|--------|------|
-| `COZE_API_KEY` | `pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh` | 豆包 API Key |
+| `COZE_API_KEY` | `8f38a8d0-b6d4-481c-8e15-b93bb30c7444` | 豆包 API Key |
 | `COZE_MODEL` | `doubao-vision` | 豆包模型名称 |
 | `CLOUDBASE_ENV_ID` | `你的环境ID` | 云开发环境 ID |
 | `NODE_ENV` | `production` | 运行环境 |

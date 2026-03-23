@@ -60,7 +60,7 @@ cat .env.production
 
 应该看到：
 ```bash
-COZE_API_KEY=pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh
+COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
 COZE_MODEL=doubao-vision
 CLOUDBASE_ENV_ID=你的环境ID  # 👈 确认已配置
 NODE_ENV=production
@@ -160,7 +160,7 @@ nano cloudbaserc.json
       "maxNum": 10,
       "dockerfile": "./Dockerfile",
       "envVariables": {
-        "COZE_API_KEY": "pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh",
+        "COZE_API_KEY": "8f38a8d0-b6d4-481c-8e15-b93bb30c7444",
         "COZE_MODEL": "doubao-vision",
         "CLOUDBASE_ENV_ID": "你的环境ID",
         "NODE_ENV": "production",

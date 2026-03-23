@@ -3,7 +3,7 @@
 ## 🔑 环境变量
 
 ```bash
-COZE_API_KEY=pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh
+COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
 COZE_MODEL=doubao-vision
 CLOUDBASE_ENV_ID=cloud1-9gz0vft7d1ddce7f
 NODE_ENV=production
@@ -35,7 +35,7 @@ tcb run service:deploy \
   --min-num 1 \
   --max-num 1 \
   --container-port 80 \
-  --env COZE_API_KEY=pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh \
+  --env COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444 \
   --env COZE_MODEL=doubao-vision \
   --env CLOUDBASE_ENV_ID=cloud1-9gz0vft7d1ddce7f \
   --env NODE_ENV=production

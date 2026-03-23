@@ -42,7 +42,7 @@ WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749
 
 ### 豆包视觉模型 API Key
 ```
-COZE_API_KEY=pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh
+COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
 ```
 **用途：**
 - 皮肤图像分析
@@ -176,7 +176,7 @@ TARO_ENV=weapp
 
 ### 后端配置 (server/.env.production)
 ```bash
-COZE_API_KEY=pat_ShNM7FfPFQdTtQ8cTfpOzo3W0eMeMrBYLvJArawGAm6gwUC9hiBoHZbd2xDs1iZh
+COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
 COZE_MODEL=doubao-vision
 CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a
 WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749
