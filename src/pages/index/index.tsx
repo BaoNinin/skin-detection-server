@@ -18,6 +18,8 @@ export default function SkinDetectionPage() {
   const [capturedImage, setCapturedImage] = useState('')
   const [analyzing, setAnalyzing] = useState(false)
   const [result, setResult] = useState<SkinAnalysisResult | null>(null)
+  const [showCooldownModal, setShowCooldownModal] = useState(false)
+  const [remainingTime, setRemainingTime] = useState(0)
 
   useEffect(() => {
     setIsWeapp(Taro.getEnv() === Taro.ENV_TYPE.WEAPP)
@@ -31,6 +33,23 @@ export default function SkinDetectionPage() {
       })
       return
     }
+
+    // 检查冷却时间
+    const lastAnalysisTime = Taro.getStorageSync('lastAnalysisTime')
+    const cooldownPeriod = 30 * 60 * 1000 // 30分钟（毫秒）
+
+    if (lastAnalysisTime) {
+      const now = Date.now()
+      const timeSinceLastAnalysis = now - lastAnalysisTime
+
+      if (timeSinceLastAnalysis < cooldownPeriod) {
+        const remainingMinutes = Math.ceil((cooldownPeriod - timeSinceLastAnalysis) / 60 / 1000)
+        setRemainingTime(remainingMinutes)
+        setShowCooldownModal(true)
+        return
+      }
+    }
+
     setCameraActive(true)
     setResult(null)
     setCapturedImage('')
@@ -73,6 +92,9 @@ export default function SkinDetectionPage() {
         const analysisResult = data.data
         setResult(analysisResult)
 
+        // 保存分析时间戳
+        Taro.setStorageSync('lastAnalysisTime', Date.now())
+
         Taro.setStorageSync('skinAnalysisResult', analysisResult)
 
         Network.request({
@@ -102,6 +124,20 @@ export default function SkinDetectionPage() {
     } finally {
       setAnalyzing(false)
     }
+  }
+
+  const handleReactivateChip = () => {
+    // 清除冷却时间，允许立即重新检测
+    Taro.removeStorageSync('lastAnalysisTime')
+    setShowCooldownModal(false)
+    setCameraActive(true)
+    setResult(null)
+    setCapturedImage('')
+  }
+
+  const handleCloseModal = () => {
+    // 关闭弹窗，等待剩余冷却时间
+    setShowCooldownModal(false)
   }
 
   return (
@@ -246,6 +282,42 @@ export default function SkinDetectionPage() {
             <Text className="text-sm text-amber-800 text-center block">
               相机功能仅在小程序中可用{'\n'}请在微信小程序中打开体验完整功能
             </Text>
+          </View>
+        </View>
+      )}
+
+      {/* 冷却时间弹窗 */}
+      {showCooldownModal && (
+        <View className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <View className="bg-white rounded-2xl p-6 mx-4 max-w-sm w-full">
+            <View className="mb-4">
+              <View className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Text className="text-3xl">⏱️</Text>
+              </View>
+              <Text className="text-xl font-bold text-gray-800 text-center mb-2 block">
+                已经激活过芯片
+              </Text>
+              <Text className="text-sm text-gray-600 text-center mb-2 block">
+                暂时无法重新激活
+              </Text>
+              <Text className="text-sm text-orange-600 text-center block">
+                请等待 {remainingTime} 分钟后再次检测
+              </Text>
+            </View>
+            <View className="space-y-3">
+              <Button
+                onClick={handleReactivateChip}
+                className="w-full bg-blue-700 text-white rounded-full py-3 font-medium"
+              >
+                重新激活芯片
+              </Button>
+              <Button
+                onClick={handleCloseModal}
+                className="w-full bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3 font-medium"
+              >
+                关闭
+              </Button>
+            </View>
           </View>
         </View>
       )}
