@@ -225,6 +225,9 @@ export default function AnalyzingPage() {
         Taro.setStorageSync('skinAnalysisResult', result)
         Taro.setStorageSync('currentImagePath', path)
         
+        // 保存分析时间戳（用于冷却时间检查）
+        Taro.setStorageSync('lastAnalysisTime', Date.now())
+        
         // 设置预览结果
         setPreviewResult(result)
 

@@ -35,6 +35,11 @@ export default function CameraPage() {
   const [guideText, setGuideText] = useState('请将面部对准轮廓')
   const [countdown, setCountdown] = useState(5)
 
+  // 冷却时间相关状态
+  const [showCoolingModal, setShowCoolingModal] = useState(false)
+  const [remainingTime, setRemainingTime] = useState(0)
+  const [cooldownDisplay, setCooldownDisplay] = useState({ minutes: 0, seconds: 0 })
+
   // 人脸追踪相关状态
   const facePositionHistoryRef = useRef<Array<FacePosition>>([])
   const smoothedPositionRef = useRef<FacePosition | null>(null)
@@ -166,6 +171,25 @@ export default function CameraPage() {
       }
     }
   }, [isWeapp])
+
+  // 冷却时间倒计时更新
+  useEffect(() => {
+    if (showCoolingModal && remainingTime > Date.now()) {
+      const interval = setInterval(() => {
+        const remainingSeconds = Math.ceil((remainingTime - Date.now()) / 1000)
+        const minutes = Math.floor(remainingSeconds / 60)
+        const seconds = remainingSeconds % 60
+        setCooldownDisplay({ minutes, seconds })
+
+        // 如果倒计时结束，自动关闭弹窗
+        if (remainingSeconds <= 0) {
+          setShowCoolingModal(false)
+        }
+      }, 1000)
+
+      return () => clearInterval(interval)
+    }
+  }, [showCoolingModal, remainingTime])
 
   // 语音播报函数（使用小程序的 TTS）
   const playVoice = (text: string) => {
@@ -515,6 +539,22 @@ export default function CameraPage() {
       return
     }
 
+    // 检查冷却时间
+    const lastAnalysisTime = Taro.getStorageSync('lastAnalysisTime')
+    const cooldownPeriod = 30 * 60 * 1000 // 30分钟（毫秒）
+
+    if (lastAnalysisTime) {
+      const now = Date.now()
+      const timeSinceLastAnalysis = now - lastAnalysisTime
+
+      if (timeSinceLastAnalysis < cooldownPeriod) {
+        const remainingMilliseconds = cooldownPeriod - timeSinceLastAnalysis
+        setRemainingTime(now + remainingMilliseconds)
+        setShowCoolingModal(true)
+        return
+      }
+    }
+
     // 启动人脸识别
     startFaceDetect()
     
@@ -614,6 +654,85 @@ export default function CameraPage() {
         })
       }
     })
+  }
+
+  const handleReactivateChip = () => {
+    // 重新激活芯片
+    setShowCoolingModal(false)
+    
+    // 提示用户芯片已激活
+    Taro.showToast({
+      title: '芯片已激活',
+      icon: 'success',
+      duration: 1500
+    })
+    
+    // 直接开始人脸识别
+    startFaceDetect()
+    setShowFaceOutline(true)
+    setIsScanning(true)
+    setScanProgress(0)
+    
+    console.log('重新激活芯片 - 初始化皮肤指标为 0')
+    
+    // 初始化皮肤指标为 0
+    setSkinMetrics({
+      brightness: 0,
+      texture: 0,
+      pores: 0,
+      moisture: 0,
+      tone: '中性',
+      confidence: 0
+    })
+    
+    setGuideText('请将面部对准轮廓')
+    playVoice('请将面部对准轮廓')
+
+    console.log('开始扫描动画 - scanInterval')
+
+    // 扫描动画
+    let progress = 0
+    let countdownValue = 5
+    
+    // 倒计时
+    const countdownInterval = setInterval(() => {
+      countdownValue -= 1
+      setCountdown(countdownValue)
+      
+      if (countdownValue > 0) {
+        // 根据倒计时显示不同的引导文字
+        if (countdownValue === 4) {
+          setGuideText('请摘下眼镜，露出额头')
+          playVoice('请摘下眼镜，露出额头')
+        } else if (countdownValue === 3) {
+          setGuideText('请保持适当距离')
+          playVoice('请保持适当距离')
+        } else if (countdownValue === 2) {
+          setGuideText('保持当前姿势，不要移动')
+          playVoice('保持当前姿势，不要移动')
+        } else if (countdownValue === 1) {
+          setGuideText('即将扫描')
+          playVoice('即将扫描')
+        }
+      } else {
+        clearInterval(countdownInterval)
+      }
+    }, 1000)
+    
+    // 扫描进度动画
+    const scanInterval = setInterval(() => {
+      progress += 1
+      setScanProgress(progress)
+
+      // 调试日志：打印扫描进度
+      console.log('扫描进度:', progress, '%')
+
+      if (progress >= 100) {
+        console.log('扫描完成 - 清理定时器')
+        clearInterval(scanInterval)
+        takePhoto()
+      }
+    }, 50) // 5秒内完成扫描
   }
 
   const handleCameraReady = () => {
@@ -1004,6 +1123,61 @@ export default function CameraPage() {
           </View>
         </View>
       </View>
+
+      {/* 冷却弹窗 */}
+      {showCoolingModal && (
+        <View className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-8">
+          <View className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+            {/* 芯片冷却图标 */}
+            <View className="flex justify-center mb-4">
+              <View className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
+                <Text className="text-4xl">🧊</Text>
+              </View>
+            </View>
+
+            {/* 标题 */}
+            <Text className="text-xl font-bold text-gray-800 block text-center mb-2">
+              芯片冷却中
+            </Text>
+
+            {/* 说明文字 */}
+            <Text className="text-sm text-gray-600 block text-center mb-6">
+              为保护您的眼睛，请等待冷却完成后再次使用
+            </Text>
+
+            {/* 倒计时 */}
+            <View className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-4 mb-6">
+              <Text className="text-center text-gray-600 text-sm block mb-2">
+                剩余冷却时间
+              </Text>
+              <Text className="text-center text-4xl font-bold text-blue-700 block">
+                {cooldownDisplay.minutes}:{cooldownDisplay.seconds.toString().padStart(2, '0')}
+              </Text>
+            </View>
+
+            {/* 按钮组 */}
+            <View className="flex gap-3">
+              <Button
+                onClick={handleReactivateChip}
+                className="flex-1 bg-blue-700 text-white rounded-full py-3 text-base font-medium"
+              >
+                重新激活芯片
+              </Button>
+              <Button
+                onClick={() => setShowCoolingModal(false)}
+                className="flex-1 bg-white text-gray-600 border-2 border-gray-200 rounded-full py-3 text-base"
+              >
+                关闭
+              </Button>
+            </View>
+
+            {/* 提示 */}
+            <Text className="text-xs text-gray-400 text-center mt-4 block">
+              激活芯片后可立即使用，每次激活消耗 1 次检测额度
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   )
 }
