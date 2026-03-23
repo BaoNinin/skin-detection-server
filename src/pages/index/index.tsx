@@ -104,13 +104,6 @@ export default function SkinDetectionPage() {
     }
   }
 
-  const handleViewRecommendations = () => {
-    if (result) {
-      Taro.navigateTo({
-        url: '/pages/recommend/index'
-      })
-    }
-  }
 
   return (
     <View className="min-h-screen bg-slate-50">
@@ -244,13 +237,6 @@ export default function SkinDetectionPage() {
             className="w-full bg-blue-700 text-white rounded-full py-3 font-medium mb-3"
           >
             重新检测
-          </Button>
-
-          <Button
-            onClick={handleViewRecommendations}
-            className="w-full bg-white text-blue-700 border-2 border-blue-700 rounded-full py-3 font-medium"
-          >
-            查看推荐产品
           </Button>
         </View>
       )}

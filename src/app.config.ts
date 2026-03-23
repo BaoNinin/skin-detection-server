@@ -5,7 +5,6 @@ const appConfig = {
     'pages/analyzing/index',
     'pages/result/index',
     'pages/result-detail/index',
-    'pages/recommend/index',
     'pages/history/index',
     'pages/history-detail/index',
     'pages/mall/index',

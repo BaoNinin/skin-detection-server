@@ -81,31 +81,6 @@ export default function HistoryDetailPage() {
     ]
   }
 
-  const handleViewRecommendations = () => {
-    if (!record) return
-
-    Taro.setStorageSync('skinAnalysisResult', {
-      skinType: record.skin_type,
-      concerns: record.concerns,
-      moisture: record.moisture,
-      oiliness: record.oiliness,
-      sensitivity: record.sensitivity,
-      acne: record.acne,
-      wrinkles: record.wrinkles,
-      spots: record.spots,
-      pores: record.pores,
-      blackheads: record.blackheads,
-      recommendations: record.recommendations
-    })
-
-    if (record.image_url) {
-      Taro.setStorageSync('currentImagePath', record.image_url)
-    }
-
-    Taro.redirectTo({
-      url: '/pages/recommend/index'
-    })
-  }
 
   const handleShare = () => {
     Taro.showToast({
@@ -483,14 +458,6 @@ export default function HistoryDetailPage() {
 
             {/* 操作按钮 */}
             <View className="space-y-3 mb-8">
-              <Button
-                onClick={handleViewRecommendations}
-                className="w-full bg-blue-700 text-white rounded-full py-4 font-medium"
-              >
-                查看推荐产品
-              </Button>
-
-              <View className="flex gap-3">
                 <Button
                   onClick={handleShare}
                   className="flex-1 bg-white text-gray-700 border-2 border-gray-200 rounded-full py-3"
