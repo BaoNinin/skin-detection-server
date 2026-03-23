@@ -3,6 +3,7 @@ import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import RadarChart from '@/components/RadarChart'
 import OverallScore from '@/components/OverallScore'
+import BackHomeNavBar from '@/components/BackHomeNavBar'
 
 interface SkinAnalysisResult {
   skinType: string
@@ -82,9 +83,22 @@ export default function ResultDetailPage() {
     return null
   }
 
+  const statusBarHeight = Taro.getSystemInfoSync().statusBarHeight || 44
+  const navBarHeight = statusBarHeight + 44
+
   return (
     <View className="min-h-screen bg-gray-50">
-      <ScrollView scrollY className="h-screen">
+      {/* 自定义导航栏 */}
+      <BackHomeNavBar
+        title="详细报告"
+        backgroundColor="#1E40AF"
+        textColor="#FFFFFF"
+      />
+
+      {/* 导航栏占位 */}
+      <View style={{ height: `${navBarHeight}px` }} />
+
+      <ScrollView scrollY className="h-screen" style={{ height: `calc(100vh - ${navBarHeight}px)` }}>
         <View className="p-4">
           {/* 报告头部 */}
           <View className="bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl p-6 text-white mb-4">
