@@ -1,47 +1,77 @@
-// 测试豆包视觉模型配置
+// 测试配置文件 - 用于验证豆包视觉模型配置是否正确
 require('dotenv').config({ path: '.env.local' });
 
-console.log('=== 豆包视觉模型配置检查 ===\n');
+console.log('\n=== 豆包视觉模型配置检查 ===\n');
 
+// 1. 检查 API Key
+const apiKey = process.env.COZE_API_KEY;
 console.log('1. API Key:');
-console.log(`   ${process.env.COZE_API_KEY}\n`);
+console.log(`   ${apiKey || '未配置'}`);
 
-console.log('2. 模型名称:');
-console.log(`   ${process.env.COZE_MODEL}\n`);
+// 2. 检查模型名称
+const model = process.env.COZE_MODEL;
+console.log('\n2. 模型名称:');
+console.log(`   ${model || '未配置'}`);
 
-console.log('3. API 地址:');
-console.log(`   ${process.env.COZE_API_BASE}\n`);
+// 3. 检查 API 地址
+const apiBase = process.env.COZE_API_BASE;
+console.log('\n3. API 地址:');
+console.log(`   ${apiBase || '未配置'}`);
 
-console.log('4. 使用模拟数据:');
-console.log(`   ${process.env.COZE_USE_MOCK}\n`);
+// 4. 检查是否使用模拟数据
+const useMock = process.env.COZE_USE_MOCK;
+console.log('\n4. 使用模拟数据:');
+console.log(`   ${useMock === 'true' ? '是' : '否'}`);
 
-console.log('=== 预期的正确配置 ===');
+console.log('\n=== 预期的正确配置 ===');
 console.log('API Key: 8f38a8d0-b6d4-481c-8e15-b93bb30c7444');
 console.log('模型名称: doubao-1-5-vision-pro-32k-250115');
 console.log('API 地址: https://ark.cn-beijing.volces.com/api/v3/chat/completions');
-console.log('使用模拟数据: false\n');
+console.log('使用真实 API（非模拟数据）');
 
-console.log('=== 配置检查结果 ===');
-if (process.env.COZE_API_KEY === '8f38a8d0-b6d4-481c-8e15-b93bb30c7444') {
+console.log('\n=== 配置检查结果 ===');
+
+// 验证各项配置
+let allPassed = true;
+
+// 检查 API Key
+if (apiKey === '8f38a8d0-b6d4-481c-8e15-b93bb30c7444') {
   console.log('✅ API Key 正确');
 } else {
   console.log('❌ API Key 不正确');
+  allPassed = false;
 }
 
-if (process.env.COZE_MODEL === 'doubao-1-5-vision-pro-32k-250115') {
+// 检查模型名称
+if (model === 'doubao-1-5-vision-pro-32k-250115') {
   console.log('✅ 模型名称正确');
 } else {
   console.log('❌ 模型名称不正确');
+  allPassed = false;
 }
 
-if (process.env.COZE_API_BASE === 'https://ark.cn-beijing.volces.com/api/v3/chat/completions') {
+// 检查 API 地址
+if (apiBase === 'https://ark.cn-beijing.volces.com/api/v3/chat/completions') {
   console.log('✅ API 地址正确');
 } else {
   console.log('❌ API 地址不正确');
+  allPassed = false;
 }
 
-if (process.env.COZE_USE_MOCK === 'false') {
+// 检查模拟数据模式
+if (useMock === 'false') {
   console.log('✅ 使用真实 API（非模拟数据）');
 } else {
-  console.log('❌ 使用模拟数据');
+  console.log('❌ 当前使用模拟数据模式');
+  allPassed = false;
 }
+
+console.log('\n');
+if (allPassed) {
+  console.log('🎉 所有配置检查通过！');
+  console.log('您的豆包视觉模型配置完全正确。');
+} else {
+  console.log('⚠️  存在配置问题，请检查 .env.local 文件');
+}
+
+console.log('\n');
