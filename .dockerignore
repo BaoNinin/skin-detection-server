@@ -1,0 +1,54 @@
+# Node modules
+node_modules
+dist
+dist-tt
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# 文档
+*.md
+README.md
+CHANGELOG.md
+LICENSE
+
+# 构建产物
+dist
+dist-tt
+dist-web
+
+# 测试
+coverage
+*.spec.ts
+*.test.ts
+
+# 配置文件
+.eslintrc
+.prettierrc
+.prettierignore
+
+# 临时文件
+tmp
+temp
+*.tmp
+
+# 部署相关
+key/

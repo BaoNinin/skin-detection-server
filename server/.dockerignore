@@ -1,14 +1,58 @@
+# 依赖目录
 node_modules
 dist
-.env.local
-.env.*.local
+
+# 日志文件
 *.log
-.git
-.github
-.vscode
-.DS_Store
-coverage
-*.tgz
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+
+# IDE 配置文件
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# Git 文件
+.git
+.gitignore
+.gitattributes
+
+# 文档文件
+*.md
+README.md
+CHANGELOG.md
+LICENSE
+
+# 测试文件
+*.spec.ts
+*.test.ts
+__tests__
+coverage
+
+# 构建工具配置
+.eslintrc
+.prettierrc
+.prettierignore
+.npmrc
+.eslintcache
+
+# 部署脚本
+deploy-cloud-hosting.sh
+*.sh
+
+# 其他临时文件
+tmp
+temp
+*.tmp
