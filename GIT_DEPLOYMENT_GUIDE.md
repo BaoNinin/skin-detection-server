@@ -82,7 +82,7 @@ git push -u origin main
 | `PORT` | `80` | 服务端口 |
 | `NODE_ENV` | `production` | 运行环境 |
 | `COZE_API_KEY` | `8f38a8d0-b6d4-481c-8e15-b93bb30c7444` | Coze API 密钥 |
-| `COZE_MODEL` | `doubao-vision` | Coze 模型 |
+| `COZE_MODEL` | `doubao-1-5-vision-pro-32k-250115` | Coze 模型 |
 | `COZE_SUPABASE_URL` | `https://pacqfzvxkiobtxbjubil.supabase.co` | Supabase URL |
 | `COZE_SUPABASE_ANON_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` | Supabase 密钥 |
 | `WECHAT_APPID` | `wx8826c7b681ec3c65` | 微信小程序 AppID |

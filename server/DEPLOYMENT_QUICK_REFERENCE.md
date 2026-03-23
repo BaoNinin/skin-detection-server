@@ -4,7 +4,7 @@
 
 ```bash
 COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
-COZE_MODEL=doubao-vision
+COZE_MODEL=doubao-1-5-vision-pro-32k-250115
 CLOUDBASE_ENV_ID=cloud1-9gz0vft7d1ddce7f
 NODE_ENV=production
 ```
@@ -36,7 +36,7 @@ tcb run service:deploy \
   --max-num 1 \
   --container-port 80 \
   --env COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444 \
-  --env COZE_MODEL=doubao-vision \
+  --env COZE_MODEL=doubao-1-5-vision-pro-32k-250115 \
   --env CLOUDBASE_ENV_ID=cloud1-9gz0vft7d1ddce7f \
   --env NODE_ENV=production
 ```

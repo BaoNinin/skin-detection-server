@@ -134,7 +134,7 @@
   "PORT": "80",
   "NODE_ENV": "production",
   "COZE_API_KEY": "8f38a8d0-b6d4-481c-8e15-b93bb30c7444",
-  "COZE_MODEL": "doubao-vision",
+  "COZE_MODEL": "doubao-1-5-vision-pro-32k-250115",
   "COZE_SUPABASE_URL": "https://pacqfzvxkiobtxbjubil.supabase.co",
   "COZE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhY3FmenZ4a2lvYnR4Ymp1YmlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzODM1ODYsImV4cCI6MjA4ODk1OTU4Nn0.CZoSjahWflEy3vhj_Ya9ddYhie9BtmvRxhNaN8JdZs4",
   "WECHAT_APPID": "wx8826c7b681ec3c65",
@@ -154,7 +154,7 @@
 | `PORT` | `80` | 服务监听端口 | ✅ 必需 |
 | `NODE_ENV` | `production` | 运行环境 | ✅ 必需 |
 | `COZE_API_KEY` | `8f38a8d0...` | 豆包 API 密钥 | ✅ 必需 |
-| `COZE_MODEL` | `doubao-vision` | 豆包模型名称 | ✅ 必需 |
+| `COZE_MODEL` | `doubao-1-5-vision-pro-32k-250115` | 豆包模型名称 | ✅ 必需 |
 | `COZE_SUPABASE_URL` | `https://pacqfzvxkiobtxbjubil.supabase.co` | Supabase 地址 | ✅ 必需 |
 | `COZE_SUPABASE_ANON_KEY` | `eyJhbGc...` | Supabase 密钥 | ✅ 必需 |
 | `WECHAT_APPID` | `wx8826c7b681ec3c65` | 微信小程序 AppID | ✅ 必需 |

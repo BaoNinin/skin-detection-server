@@ -61,7 +61,7 @@ cat .env.production
 应该看到：
 ```bash
 COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
-COZE_MODEL=doubao-vision
+COZE_MODEL=doubao-1-5-vision-pro-32k-250115
 CLOUDBASE_ENV_ID=你的环境ID  # 👈 确认已配置
 NODE_ENV=production
 PORT=3000
@@ -161,7 +161,7 @@ nano cloudbaserc.json
       "dockerfile": "./Dockerfile",
       "envVariables": {
         "COZE_API_KEY": "8f38a8d0-b6d4-481c-8e15-b93bb30c7444",
-        "COZE_MODEL": "doubao-vision",
+        "COZE_MODEL": "doubao-1-5-vision-pro-32k-250115",
         "CLOUDBASE_ENV_ID": "你的环境ID",
         "NODE_ENV": "production",
         "PORT": "3000"

@@ -12,7 +12,7 @@ export class SkinService {
     private readonly historyService: HistoryService,
     private readonly cloudStorageService: CloudStorageService
   ) {
-    const model = process.env.COZE_MODEL || 'doubao-vision';
+    const model = process.env.COZE_MODEL || 'doubao-1-5-vision-pro-32k-250115';
     const useMock = process.env.COZE_USE_MOCK === 'true';
     console.log('SkinService 初始化完成，使用模型:', model);
     console.log('使用豆包视觉模型进行皮肤分析');
@@ -160,7 +160,7 @@ export class SkinService {
       // 使用火山引擎原生 API 调用
       const apiKey = process.env.COZE_API_KEY || '';
       const apiUrl = process.env.COZE_API_BASE || 'https://ark.cn-beijing.volces.com/api/v3/chat/completions';
-      const model = process.env.COZE_MODEL || 'doubao-vision';
+      const model = process.env.COZE_MODEL || 'doubao-1-5-vision-pro-32k-250115';
 
       const requestBody = {
         model,

@@ -194,7 +194,7 @@ WECHAT_APP_SECRET=你的AppSecret
    CLOUDBASE_ENV_ID=cloud1-你的环境ID
    WECHAT_APP_SECRET=你的AppSecret
    COZE_API_KEY=pat_xxxxx
-   COZE_MODEL=doubao-vision
+   COZE_MODEL=doubao-1-5-vision-pro-32k-250115
    ```
 
 ---
