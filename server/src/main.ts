@@ -1,8 +1,7 @@
-require('dotenv').config({ path: 'server/.env.local' });
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from '@/app.module';
+import { AppModule } from './app.module';
 import * as express from 'express';
-import { HttpStatusInterceptor } from '@/interceptors/http-status.interceptor';
+import { HttpStatusInterceptor } from './interceptors/http-status.interceptor';
 
 function parsePort(): number {
   // 优先读取 PORT 环境变量（最高优先级）
