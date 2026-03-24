@@ -1,59 +1,80 @@
 #!/bin/bash
+# 微信云托管一键部署命令
+# 使用方法: bash deploy-wechat-cloud.sh
 
-# 微信云托管部署脚本
+set -e
 
-echo "========================================"
-echo "微信云托管 - 皮肤检测后端服务部署"
-echo "========================================"
+echo "======================================"
+echo "  微信云托管 - 智能皮肤检测后端部署"
+echo "  豆包端点模型版本"
+echo "======================================"
+echo ""
 
-# 检查是否已登录微信云托管
-echo "检查微信云托管登录状态..."
+# 颜色定义
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
 
-# 检查 Supabase 配置
-if [ -z "$COZE_SUPABASE_URL" ] || [ -z "$COZE_SUPABASE_ANON_KEY" ]; then
-    echo "❌ 错误：请先配置 Supabase 环境变量"
-    echo "请在 cloudbaserc.json 中填写："
-    echo "  - COZE_SUPABASE_URL"
-    echo "  - COZE_SUPABASE_ANON_KEY"
-    exit 1
+# 环境变量
+ENV_ID="cloud1-9gz0vft7d1ddce7f"
+SERVICE_NAME="skin-detection-server"
+VERSION_NAME="latest"
+
+echo "📋 部署配置:"
+echo "  - 环境ID: $ENV_ID"
+echo "  - 服务名称: $SERVICE_NAME"
+echo "  - 版本: $VERSION_NAME"
+echo ""
+
+# 检查是否登录
+if ! tcb auth list &> /dev/null; then
+  echo -e "${RED}❌ 未登录微信云开发${NC}"
+  echo "请运行: tcb login"
+  exit 1
 fi
 
-echo "✅ 环境变量配置检查通过"
+echo -e "${GREEN}✅ 已登录微信云开发${NC}"
+echo ""
 
-# 构建 Docker 镜像（可选，微信云托管会自动构建）
-echo "提示：微信云托管将自动构建和部署"
-echo "部署完成后，你将获得一个服务访问地址"
+# 部署命令
+echo -e "${YELLOW}🚀 开始部署...${NC}"
+echo ""
+
+tcb run service:deploy \
+  --env-id $ENV_ID \
+  --service-name $SERVICE_NAME \
+  --version-name $VERSION_NAME \
+  --cpu 0.5 \
+  --memory 1 \
+  --min-num 1 \
+  --max-num 1 \
+  --container-port 80 \
+  --env COZE_API_KEY=8f60880a-1ac3-40a7-bd60-1b68dbc549e6 \
+  --env COZE_MODEL=ep-20260324135258-7shrd \
+  --env COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/chat/completions \
+  --env COZE_USE_MOCK=false \
+  --env CLOUDBASE_ENV_ID=$ENV_ID \
+  --env PORT=80 \
+  --env NODE_ENV=production \
+  --env WECHAT_APPID=wx8826c7b681ec3c65 \
+  --env WECHAT_APP_SECRET=b5660a490882bbc56b8fcc69d2cb8cd4 \
+  --env COZE_SUPABASE_URL=https://pacqfzvxkiobtxbjubil.supabase.co \
+  --env COZE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhY3FmenZ4a2lvYnR4Ymp1YmlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzODM1ODYsImV4cCI6MjA4ODk1OTU4Nn0.CZoSjahWflEy3vhj_Ya9ddYhie9BtmvRxhNaN8JdZs4
 
 echo ""
-echo "========================================"
-echo "部署步骤："
-echo "========================================"
-echo ""
-echo "1. 登录微信云托管控制台"
-echo "   https://cloud.tencent.com/product/tcb"
-echo ""
-echo "2. 创建环境或使用已有环境"
-echo ""
-echo "3. 上传配置文件："
-echo "   - Dockerfile"
-echo "   - cloudbaserc.json"
-echo "   - package.json"
-echo "   - 所有源代码文件"
-echo ""
-echo "4. 配置环境变量（在控制台设置）："
-echo "   - COZE_SUPABASE_URL = 你的 Supabase URL"
-echo "   - COZE_SUPABASE_ANON_KEY = 你的 Supabase Anon Key"
-echo "   - WECHAT_APPID = wxa1c57025b508e913"
-echo "   - WECHAT_APPSECRET = 056dc956b934bf58fc659c4b08bfa16e"
-echo ""
-echo "5. 启动服务"
-echo ""
-echo "6. 获取服务访问地址"
-echo ""
-echo "7. 在微信小程序后台配置服务器域名"
-echo "   位置：开发 → 开发管理 → 开发设置 → 服务器域名"
-echo "   添加 request 合法域名：你的服务访问地址"
-echo ""
-echo "========================================"
-echo "配置完成！"
-echo "========================================"
+if [ $? -eq 0 ]; then
+  echo -e "${GREEN}✅ 部署命令已发送${NC}"
+  echo ""
+  echo -e "${YELLOW}⏳ 等待部署完成（约 2-5 分钟）...${NC}"
+  echo ""
+  echo "查看部署进度:"
+  echo "  https://console.cloud.tencent.com/tcb/env"
+  echo ""
+  echo "查看实时日志:"
+  echo "  tcb logs --env-id $ENV_ID --service-name $SERVICE_NAME --latest"
+  echo ""
+else
+  echo -e "${RED}❌ 部署失败${NC}"
+  exit 1
+fi
