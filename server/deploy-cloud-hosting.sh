@@ -80,8 +80,8 @@ deploy() {
     --min-num 1 \
     --max-num 1 \
     --container-port 80 \
-    --env COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444 \
-    --env COZE_MODEL=doubao-1-5-vision-pro-32k-250115 \
+    --env COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678 \
+    --env COZE_MODEL=doubao-seed-1-6-vision-250815 \
     --env CLOUDBASE_ENV_ID=cloud1-9gz0vft7d1ddce7f \
     --env NODE_ENV=production
 

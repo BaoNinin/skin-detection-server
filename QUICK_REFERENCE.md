@@ -20,8 +20,8 @@
 
 ```bash
 # 豆包视觉模型配置
-COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
-COZE_MODEL=doubao-1-5-vision-pro-32k-250115
+COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
+COZE_MODEL=doubao-seed-1-6-vision-250815
 
 # 微信云开发环境配置（👈 必须修改）
 CLOUDBASE_ENV_ID=你的环境ID
@@ -62,8 +62,8 @@ PORT=3000
 
 | 变量名 | 变量值 |
 |-------|--------|
-| `COZE_API_KEY` | `8f38a8d0-b6d4-481c-8e15-b93bb30c7444` |
-| `COZE_MODEL` | `doubao-1-5-vision-pro-32k-250115` |
+| `COZE_API_KEY` | `ea77474e-46bb-4f4e-a42f-99dedce29678` |
+| `COZE_MODEL` | `doubao-seed-1-6-vision-250815` |
 | `CLOUDBASE_ENV_ID` | `你的环境ID` |
 | `NODE_ENV` | `production` |
 | `PORT` | `3000` |

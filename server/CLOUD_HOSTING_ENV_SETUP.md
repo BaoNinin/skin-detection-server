@@ -4,8 +4,8 @@
 
 | 变量名 | 值 | 说明 |
 |--------|-----|------|
-| `COZE_API_KEY` | `8f38a8d0-b6d4-481c-8e15-b93bb30c7444` | 豆包视觉模型 API Key |
-| `COZE_MODEL` | `doubao-1-5-vision-pro-32k-250115` | 豆包视觉模型名称 |
+| `COZE_API_KEY` | `ea77474e-46bb-4f4e-a42f-99dedce29678` | 豆包视觉模型 API Key |
+| `COZE_MODEL` | `doubao-seed-1-6-vision-250815` | 豆包视觉模型名称 |
 | `WECHAT_APP_ID` | `wxf218fed093b4e374` | 微信小程序 AppID |
 | `WECHAT_APP_SECRET` | `a869daf192fc52fddd1ac6269948e749` | 微信小程序密钥 |
 | `CLOUDBASE_ENV_ID` | `cloud1-7gi0fykp49ab039a` | 腾讯云开发环境 ID |
@@ -29,8 +29,8 @@
    逐个添加以下环境变量：
 
    ```
-   COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
-   COZE_MODEL=doubao-1-5-vision-pro-32k-250115
+   COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
+   COZE_MODEL=doubao-seed-1-6-vision-250815
    WECHAT_APP_ID=wxf218fed093b4e374
    WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749
    CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a
@@ -50,8 +50,8 @@
 tcb env set \
   --env-id prod-8g9r8x6c43dcafcb \
   --service skin-detection-api \
-  --env-vars 'COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444' \
-  --env-vars 'COZE_MODEL=doubao-1-5-vision-pro-32k-250115' \
+  --env-vars 'COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678' \
+  --env-vars 'COZE_MODEL=doubao-seed-1-6-vision-250815' \
   --env-vars 'WECHAT_APP_ID=wxf218fed093b4e374' \
   --env-vars 'WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749' \
   --env-vars 'CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a' \

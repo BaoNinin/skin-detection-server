@@ -42,7 +42,7 @@ WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749
 
 ### 豆包视觉模型 API Key
 ```
-COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
+COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
 ```
 **用途：**
 - 皮肤图像分析
@@ -51,7 +51,7 @@ COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
 
 ### 豆包视觉模型名称
 ```
-COZE_MODEL=doubao-1-5-vision-pro-32k-250115
+COZE_MODEL=doubao-seed-1-6-vision-250815
 ```
 
 ---
@@ -176,8 +176,8 @@ TARO_ENV=weapp
 
 ### 后端配置 (server/.env.production)
 ```bash
-COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
-COZE_MODEL=doubao-1-5-vision-pro-32k-250115
+COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
+COZE_MODEL=doubao-seed-1-6-vision-250815
 CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a
 WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749
 NODE_ENV=production
@@ -230,7 +230,7 @@ https://github.com/BaoNinin/smart-skin-detection
 ### 后端
 - **框架**: NestJS
 - **数据库**: 腾讯云开发数据库
-- **AI 模型**: 豆包视觉模型 (doubao-1-5-vision-pro-32k-250115)
+- **AI 模型**: 豆包视觉模型 (doubao-seed-1-6-vision-250815)
 - **部署**: 微信云托管
 
 ---

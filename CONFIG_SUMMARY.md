@@ -6,7 +6,7 @@
 - ✅ **CLOUDBASE_ENV_ID**: `cloud1-6gzezzskad9fed0b`
 - ✅ **WECHAT_APP_SECRET**: `b5660a490882bbc56b8fcc69d2cb8cd4`
 - ✅ **COZE_API_KEY**: 已配置
-- ✅ **COZE_MODEL**: `doubao-1-5-vision-pro-32k-250115`
+- ✅ **COZE_MODEL**: `doubao-seed-1-6-vision-250815`
 
 ### 2. 云开发状态
 - ✅ 云开发初始化成功

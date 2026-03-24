@@ -30,8 +30,8 @@
 
 ```bash
 # 豆包视觉模型配置
-COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444 
-COZE_MODEL=doubao-1-5-vision-pro-32k-250115
+COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678 
+COZE_MODEL=doubao-seed-1-6-vision-250815
 
 # 微信云开发环境配置
 CLOUDBASE_ENV_ID=your-env-id-here  # 替换为你的实际环境 ID
@@ -165,8 +165,8 @@ cloudbase deploy
 7. 配置环境变量：
    - 在控制台添加以下环境变量：
      ```bash
-     COZE_API_KEY=8f38a8d0-b6d4-481c-8e15-b93bb30c7444
-     COZE_MODEL=doubao-1-5-vision-pro-32k-250115
+     COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
+     COZE_MODEL=doubao-seed-1-6-vision-250815
      CLOUDBASE_ENV_ID=your-env-id-here
      NODE_ENV=production
      ```
