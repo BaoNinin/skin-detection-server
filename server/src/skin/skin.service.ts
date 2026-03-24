@@ -12,7 +12,7 @@ export class SkinService {
     private readonly historyService: HistoryService,
     private readonly cloudStorageService: CloudStorageService
   ) {
-    const model = process.env.COZE_MODEL || 'doubao-1-5-vision-pro-32k-250115';
+    const model = process.env.COZE_MODEL || 'doubao-seed-1-6-vision-250815';
     const useMock = process.env.COZE_USE_MOCK === 'true';
     console.log('SkinService 初始化完成，使用模型:', model);
     console.log('使用豆包视觉模型进行皮肤分析');
@@ -59,26 +59,21 @@ export class SkinService {
       const dataUri = `data:${file.mimetype || 'image/jpeg'};base64,${imageData}`;
       console.log('Data URI 前 100 字符:', dataUri.substring(0, 100));
 
+      // 构建新的 API 请求格式（Coze Responses API）
       const messages = [
-        {
-          role: 'system' as const,
-          content: `你是一位专业的皮肤科医生和美容专家，拥有10年以上的临床经验。
-你擅长通过面部照片分析皮肤状态，能够准确识别皮肤类型、问题并提供专业建议。
-
-重要规则（必须遵守）：
-1. 即使图片不清晰，也要基于可见信息进行合理推断，绝不能返回"请提供面部照片"
-2. 核心指标（moisture、oiliness、sensitivity）必须是非零值（1-100），绝不能全部返回 0
-3. 如果无法识别人脸，假设皮肤类型为"中性皮肤"，水分 70、油性 50、敏感度 30
-4. 重点关注可见的皮肤特征，合理推断缺失信息
-5. 皮肤类型必须是以下 5 个之一：干性皮肤/油性皮肤/混合性皮肤/中性皮肤/敏感性皮肤
-6. 所有数值必须是 0-100 之间的整数`
-        },
         {
           role: 'user' as const,
           content: [
             {
-              type: 'text' as const,
-              text: `请仔细分析这张面部照片的皮肤状态。请按照以下标准和流程进行评估：
+              type: 'input_image' as const,
+              image_url: dataUri
+            },
+            {
+              type: 'input_text' as const,
+              text: `你是一位专业的皮肤科医生和美容专家，拥有10年以上的临床经验。
+你擅长通过面部照片分析皮肤状态，能够准确识别皮肤类型、问题并提供专业建议。
+
+请仔细分析这张面部照片的皮肤状态。请按照以下标准和流程进行评估：
 
 【评估标准】
 1. 皮肤类型（必须选择以下 5 个之一）：
@@ -141,13 +136,6 @@ export class SkinService {
 3. 如果无法判断，使用默认值：moisture=70, oiliness=50, sensitivity=30
 4. pores 指标建议在 30-70 之间
 5. 确保 JSON 格式正确，可以被直接解析`
-            },
-            {
-              type: 'image_url' as const,
-              image_url: {
-                url: dataUri,
-                detail: 'high' as const
-              }
             }
           ]
         }
@@ -157,22 +145,19 @@ export class SkinService {
       console.log('API Key:', process.env.COZE_API_KEY?.substring(0, 10) + '...');
       console.log('模型:', process.env.COZE_MODEL);
 
-      // 使用火山引擎原生 API 调用
+      // 使用 Coze Responses API
       const apiKey = process.env.COZE_API_KEY || '';
-      const apiUrl = process.env.COZE_API_BASE || 'https://ark.cn-beijing.volces.com/api/v3/chat/completions';
-      const model = process.env.COZE_MODEL || 'doubao-1-5-vision-pro-32k-250115';
+      const apiUrl = process.env.COZE_API_BASE || 'https://ark.cn-beijing.volces.com/api/v3/responses';
+      const model = process.env.COZE_MODEL || 'doubao-seed-1-6-vision-250815';
 
       const requestBody = {
         model,
-        messages,
-        temperature: 0.1, // 降低随机性，提高稳定性
-        max_tokens: 2000,
+        input: messages
       };
 
       console.log('请求 URL:', apiUrl);
       console.log('请求体（不含图片数据）:', {
         model: requestBody.model,
-        temperature: requestBody.temperature,
       });
 
       const response = await fetch(apiUrl, {
@@ -193,8 +178,32 @@ export class SkinService {
       const responseData = await response.json();
       console.log('豆包模型响应:', JSON.stringify(responseData, null, 2));
 
-      // 解析响应
-      const responseContent = responseData.choices?.[0]?.message?.content || '{}';
+      // 解析响应 - Coze Responses API 格式
+      let responseContent = '';
+      
+      // 尝试从新 API 格式中提取内容
+      if (responseData.output && responseData.output.length > 0) {
+        const output = responseData.output[0];
+        if (output.content && output.content.length > 0) {
+          const contentItem = output.content[0];
+          if (contentItem.type === 'output_text' && contentItem.text) {
+            responseContent = contentItem.text;
+          } else if (contentItem.text) {
+            responseContent = contentItem.text;
+          }
+        }
+      }
+      
+      // 如果新格式解析失败，尝试旧格式
+      if (!responseContent && responseData.choices && responseData.choices.length > 0) {
+        responseContent = responseData.choices[0].message?.content || '{}';
+      }
+      
+      // 最后尝试直接获取
+      if (!responseContent && typeof responseData === 'string') {
+        responseContent = responseData;
+      }
+      
       console.log('响应内容长度:', responseContent.length);
       console.log('响应前 200 字符:', responseContent.substring(0, 200));
 

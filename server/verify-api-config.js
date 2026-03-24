@@ -49,24 +49,24 @@ const req = http.request(options, (res) => {
 
         let allCorrect = true;
 
-        if (config.cozeModel === 'doubao-1-5-vision-pro-32k-250115') {
+        if (config.cozeApiKey && (config.cozeApiKey.startsWith('ea77474e-4') || config.cozeApiKey.startsWith('ea77474e-'))) {
+          console.log('✅ API Key 正确');
+        } else {
+          console.log(`❌ API Key 不正确: ${config.cozeApiKey}`);
+          allCorrect = false;
+        }
+
+        if (config.cozeModel === 'doubao-seed-1-6-vision-250815') {
           console.log('✅ 模型名称正确');
         } else {
           console.log(`❌ 模型名称不正确: ${config.cozeModel}`);
           allCorrect = false;
         }
 
-        if (config.cozeApiBase === 'https://ark.cn-beijing.volces.com/api/v3/chat/completions') {
+        if (config.cozeApiBase === 'https://ark.cn-beijing.volces.com/api/v3/responses') {
           console.log('✅ API 地址正确');
         } else {
           console.log(`❌ API 地址不正确: ${config.cozeApiBase}`);
-          allCorrect = false;
-        }
-
-        if (config.cozeApiKey && (config.cozeApiKey.startsWith('8f38a8d0-b') || config.cozeApiKey.startsWith('8f38a8d0-'))) {
-          console.log('✅ API Key 正确');
-        } else {
-          console.log(`❌ API Key 不正确: ${config.cozeApiKey}`);
           allCorrect = false;
         }
 
