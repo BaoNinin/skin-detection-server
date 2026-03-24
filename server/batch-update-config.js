@@ -3,9 +3,9 @@ const fs = require('fs');
 const path = require('path');
 
 const CONFIG_MAP = {
-  'ea77474e-46bb-4f4e-a42f-99dedce29678': '8f60880a-1ac3-40a7-bd60-1b68dbc549e6', // API Key
-  'doubao-seed-1-6-vision-250815': 'ep-20260324135258-7shrd', // 模型名称
-  'https://ark.cn-beijing.volces.com/api/v3/responses': 'https://ark.cn-beijing.volces.com/api/v3/chat/completions' // API 地址
+  '8f60880a-1ac3-40a7-bd60-1b68dbc549e6': '8f60880a-1ac3-40a7-bd60-1b68dbc549e6', // API Key (保持不变)
+  'ep-20260324135258-7shrd': 'doubao-1-5-vision-pro-32k-250115', // 模型名称
+  'https://ark.cn-beijing.volces.com/api/v3/chat/completions': 'https://ark.cn-beijing.volces.com/api/v3/chat/completions' // API 地址 (保持不变)
 };
 
 const DOCS_TO_UPDATE = [
@@ -68,9 +68,7 @@ function updateFile(filePath) {
 
 console.log('=== 开始批量更新配置 ===\n');
 console.log('替换内容:');
-console.log('1. API Key: ea77474e-... → 8f60880a-...');
-console.log('2. 模型名称: doubao-seed-1-6-vision-250815 → ep-20260324135258-7shrd');
-console.log('3. API 地址: /api/v3/responses → /api/v3/chat/completions');
+console.log('1. 模型名称: ep-20260324135258-7shrd → doubao-1-5-vision-pro-32k-250115');
 console.log('\n');
 
 // 更新根目录文档

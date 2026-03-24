@@ -51,7 +51,7 @@ tcb run service:deploy \
   --max-num 1 \
   --container-port 80 \
   --env COZE_API_KEY=8f60880a-1ac3-40a7-bd60-1b68dbc549e6 \
-  --env COZE_MODEL=ep-20260324135258-7shrd \
+  --env COZE_MODEL=doubao-1-5-vision-pro-32k-250115 \
   --env COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/chat/completions \
   --env COZE_USE_MOCK=false \
   --env CLOUDBASE_ENV_ID=$ENV_ID \

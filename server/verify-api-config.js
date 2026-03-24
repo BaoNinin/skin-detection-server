@@ -56,7 +56,7 @@ const req = http.request(options, (res) => {
           allCorrect = false;
         }
 
-        if (config.cozeModel === 'ep-20260324135258-7shrd') {
+        if (config.cozeModel === 'doubao-1-5-vision-pro-32k-250115') {
           console.log('✅ 模型名称正确');
         } else {
           console.log(`❌ 模型名称不正确: ${config.cozeModel}`);

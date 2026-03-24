@@ -12,10 +12,10 @@ export class SkinService {
     private readonly historyService: HistoryService,
     private readonly cloudStorageService: CloudStorageService
   ) {
-    const model = process.env.COZE_MODEL || 'ep-20260324135258-7shrd';
+    const model = process.env.COZE_MODEL || 'doubao-1-5-vision-pro-32k-250115';
     const useMock = process.env.COZE_USE_MOCK === 'true';
     console.log('SkinService 初始化完成，使用模型:', model);
-    console.log('使用豆包端点模型进行皮肤分析');
+    console.log('使用豆包视觉模型进行皮肤分析');
     console.log('使用云存储保存图片');
     if (useMock) {
       console.log('⚠️  当前使用模拟数据模式');

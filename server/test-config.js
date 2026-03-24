@@ -25,7 +25,7 @@ console.log(`   ${useMock === 'true' ? '是' : '否'}`);
 
 console.log('\n=== 预期的正确配置 ===');
 console.log('API Key: 8f60880a-1ac3-40a7-bd60-1b68dbc549e6');
-console.log('模型名称: ep-20260324135258-7shrd');
+console.log('模型名称: doubao-1-5-vision-pro-32k-250115');
 console.log('API 地址: https://ark.cn-beijing.volces.com/api/v3/chat/completions');
 console.log('使用真实 API（非模拟数据）');
 
@@ -43,7 +43,7 @@ if (apiKey === '8f60880a-1ac3-40a7-bd60-1b68dbc549e6') {
 }
 
 // 检查模型名称
-if (model === 'ep-20260324135258-7shrd') {
+if (model === 'doubao-1-5-vision-pro-32k-250115') {
   console.log('✅ 模型名称正确');
 } else {
   console.log('❌ 模型名称不正确');
