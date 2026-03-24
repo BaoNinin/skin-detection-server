@@ -55,7 +55,7 @@ export class ProductService {
       ];
 
       const response = await this.client.invoke(messages, {
-        model: 'doubao-seed-1-6-vision-250815',
+        model: 'ep-20260324135258-7shrd',
         temperature: 0.7
       });
 

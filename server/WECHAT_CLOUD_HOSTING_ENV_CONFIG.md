@@ -7,7 +7,7 @@
 ```json
 {
   "COZE_API_KEY": "ea77474e-46bb-4f4e-a42f-99dedce29678",
-  "COZE_MODEL": "doubao-seed-1-6-vision-250815",
+  "COZE_MODEL": "ep-20260324135258-7shrd",
   "COZE_API_BASE": "https://ark.cn-beijing.volces.com/api/v3/responses",
   "COZE_USE_MOCK": "false",
   "CLOUDBASE_ENV_ID": "cloud1-6gzezzskad9fed0b",
@@ -26,7 +26,7 @@
 
 ```bash
 COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
-COZE_MODEL=doubao-seed-1-6-vision-250815
+COZE_MODEL=ep-20260324135258-7shrd
 COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/responses
 COZE_USE_MOCK=false
 CLOUDBASE_ENV_ID=cloud1-6gzezzskad9fed0b
@@ -44,7 +44,7 @@ PORT=3000
 wxcloud services:deploy \
   --service skin-detection-api \
   --env-vars 'COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678' \
-  --env-vars 'COZE_MODEL=doubao-seed-1-6-vision-250815' \
+  --env-vars 'COZE_MODEL=ep-20260324135258-7shrd' \
   --env-vars 'COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/responses' \
   --env-vars 'COZE_USE_MOCK=false' \
   --env-vars 'CLOUDBASE_ENV_ID=cloud1-6gzezzskad9fed0b' \
@@ -62,7 +62,7 @@ wxcloud services:deploy \
 | 变量名 | 值 | 说明 |
 |--------|-----|------|
 | `COZE_API_KEY` | `ea77474e-46bb-4f4e-a42f-99dedce29678` | 豆包视觉模型 API Key |
-| `COZE_MODEL` | `doubao-seed-1-6-vision-250815` | 模型名称（新版本） |
+| `COZE_MODEL` | `ep-20260324135258-7shrd` | 模型名称（新版本） |
 | `COZE_API_BASE` | `https://ark.cn-beijing.volces.com/api/v3/responses` | API 地址（新端点） |
 | `COZE_USE_MOCK` | `false` | 是否使用模拟数据（生产环境应为 false） |
 
@@ -117,7 +117,7 @@ cloudbase login
 wxcloud services:deploy \
   --service skin-detection-api \
   --env-vars 'COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678' \
-  --env-vars 'COZE_MODEL=doubao-seed-1-6-vision-250815' \
+  --env-vars 'COZE_MODEL=ep-20260324135258-7shrd' \
   --env-vars 'COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/responses' \
   --env-vars 'COZE_USE_MOCK=false' \
   --env-vars 'CLOUDBASE_ENV_ID=cloud1-6gzezzskad9fed0b' \
@@ -139,7 +139,7 @@ services:
   skin-detection-api:
     environment:
       - COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
-      - COZE_MODEL=doubao-seed-1-6-vision-250815
+      - COZE_MODEL=ep-20260324135258-7shrd
       - COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/responses
       - COZE_USE_MOCK=false
       - CLOUDBASE_ENV_ID=cloud1-6gzezzskad9fed0b

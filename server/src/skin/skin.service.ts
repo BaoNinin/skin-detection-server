@@ -12,10 +12,10 @@ export class SkinService {
     private readonly historyService: HistoryService,
     private readonly cloudStorageService: CloudStorageService
   ) {
-    const model = process.env.COZE_MODEL || 'doubao-seed-1-6-vision-250815';
+    const model = process.env.COZE_MODEL || 'ep-20260324135258-7shrd';
     const useMock = process.env.COZE_USE_MOCK === 'true';
     console.log('SkinService 初始化完成，使用模型:', model);
-    console.log('使用豆包视觉模型进行皮肤分析');
+    console.log('使用豆包端点模型进行皮肤分析');
     console.log('使用云存储保存图片');
     if (useMock) {
       console.log('⚠️  当前使用模拟数据模式');
@@ -141,23 +141,108 @@ export class SkinService {
         }
       ];
 
-      console.log('调用豆包视觉模型...');
+      console.log('调用豆包端点模型...');
       console.log('API Key:', process.env.COZE_API_KEY?.substring(0, 10) + '...');
       console.log('模型:', process.env.COZE_MODEL);
+      console.log('API Base:', process.env.COZE_API_BASE);
 
-      // 使用 Coze Responses API
+      // 使用标准 chat/completions API
       const apiKey = process.env.COZE_API_KEY || '';
-      const apiUrl = process.env.COZE_API_BASE || 'https://ark.cn-beijing.volces.com/api/v3/responses';
-      const model = process.env.COZE_MODEL || 'doubao-seed-1-6-vision-250815';
+      const apiUrl = process.env.COZE_API_BASE || 'https://ark.cn-beijing.volces.com/api/v3/chat/completions';
+      const model = process.env.COZE_MODEL || 'ep-20260324135258-7shrd';
 
+      // 构建标准 chat/completions 请求体
       const requestBody = {
-        model,
-        input: messages
+        model: model,
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'image_url',
+                image_url: { url: dataUri }
+              },
+              {
+                type: 'text',
+                text: `你是一位专业的皮肤科医生和美容专家，拥有10年以上的临床经验。
+你擅长通过面部照片分析皮肤状态，能够准确识别皮肤类型、问题并提供专业建议。
+
+请仔细分析这张面部照片的皮肤状态。请按照以下标准和流程进行评估：
+
+【评估标准】
+1. 皮肤类型（必须选择以下 5 个之一）：
+   - 干性皮肤：皮肤缺乏水分，容易起皮，毛孔细小，T区不油腻
+   - 油性皮肤：T区和全脸油腻，毛孔粗大，容易长痘
+   - 混合性皮肤：T区油腻，两颊干燥
+   - 中性皮肤：水油平衡，毛孔适中，肤质健康
+   - 敏感性皮肤：容易泛红、刺痛、过敏
+
+2. 水分含量（1-100，必须非零）：
+   - 80-100：水分充足
+   - 60-79：水分良好
+   - 40-59：水分不足
+   - 20-39：水分缺乏
+   - 1-19：极度干燥
+   - 默认值：70（如无法判断）
+
+3. 油性程度（1-100，必须非零）：
+   - 0-20：几乎无油（建议使用 15）
+   - 21-40：轻微出油
+   - 41-60：中度出油
+   - 61-80：重度出油
+   - 81-100：极度油腻
+   - 默认值：50（如无法判断）
+
+4. 敏感度（1-100，必须非零）：
+   - 1-20：健康稳定（建议使用 15）
+   - 21-40：轻微敏感
+   - 41-60：中度敏感
+   - 61-80：高度敏感
+   - 81-100：极度敏感
+   - 默认值：30（如无法判断）
+
+5. 问题指标（0-100）：
+   - 痘痘：根据痘痘数量和严重程度评估（无明显问题则为 0-20）
+   - 皱纹：根据细纹、皱纹数量和深度评估（无明显问题则为 0-20）
+   - 色斑：根据色斑数量、面积和颜色深浅评估（无明显问题则为 0-20）
+   - 毛孔：根据毛孔粗大程度评估（正常为 30-50）
+   - 黑头：根据黑头数量和明显程度评估（无明显问题则为 0-20）
+
+【输出格式】
+请严格按照以下 JSON 格式返回结果（只返回 JSON，不要有任何其他文字或说明）：
+{
+  "skinType": "皮肤类型（必须从5个选项中选择，不能是其他值）",
+  "concerns": ["主要皮肤问题1", "主要皮肤问题2", "主要皮肤问题3"],
+  "moisture": 水分百分比（1-100的整数，不能为0）,
+  "oiliness": 油性百分比（1-100的整数，不能为0）,
+  "sensitivity": 敏感度百分比（1-100的整数，不能为0）,
+  "acne": 痘痘严重程度（0-100的整数）,
+  "wrinkles": 皱纹严重程度（0-100的整数）,
+  "spots": 色斑严重程度（0-100的整数）,
+  "pores": 毛孔粗大程度（0-100的整数）,
+  "blackheads": 黑头严重程度（0-100的整数）,
+  "recommendations": ["专业护肤建议1", "专业护肤建议2", "专业护肤建议3"]
+}
+
+【强制要求】
+1. skinType 必须是：干性皮肤/油性皮肤/混合性皮肤/中性皮肤/敏感性皮肤 之一
+2. moisture、oiliness、sensitivity 三个指标必须非零（>= 1）
+3. 如果无法判断，使用默认值：moisture=70, oiliness=50, sensitivity=30
+4. pores 指标建议在 30-70 之间
+5. 确保 JSON 格式正确，可以被直接解析`
+              }
+            ]
+          }
+        ],
+        max_tokens: 2000,
+        temperature: 0.7
       };
 
       console.log('请求 URL:', apiUrl);
-      console.log('请求体（不含图片数据）:', {
+      console.log('请求体结构:', {
         model: requestBody.model,
+        messages_count: requestBody.messages.length,
+        content_types: requestBody.messages[0].content.map((c: any) => c.type)
       });
 
       const response = await fetch(apiUrl, {
@@ -176,32 +261,23 @@ export class SkinService {
       }
 
       const responseData = await response.json();
-      console.log('豆包模型响应:', JSON.stringify(responseData, null, 2));
+      console.log('豆包模型响应状态:', responseData);
+      console.log('API 响应结构:', JSON.stringify({
+        has_id: !!responseData.id,
+        has_object: !!responseData.object,
+        has_choices: !!responseData.choices,
+        choices_count: responseData.choices?.length,
+        usage: responseData.usage
+      }));
 
-      // 解析响应 - Coze Responses API 格式
+      // 解析响应 - 标准 chat/completions API 格式
       let responseContent = '';
       
-      // 尝试从新 API 格式中提取内容
-      if (responseData.output && responseData.output.length > 0) {
-        const output = responseData.output[0];
-        if (output.content && output.content.length > 0) {
-          const contentItem = output.content[0];
-          if (contentItem.type === 'output_text' && contentItem.text) {
-            responseContent = contentItem.text;
-          } else if (contentItem.text) {
-            responseContent = contentItem.text;
-          }
+      if (responseData.choices && responseData.choices.length > 0) {
+        const choice = responseData.choices[0];
+        if (choice.message && choice.message.content) {
+          responseContent = choice.message.content;
         }
-      }
-      
-      // 如果新格式解析失败，尝试旧格式
-      if (!responseContent && responseData.choices && responseData.choices.length > 0) {
-        responseContent = responseData.choices[0].message?.content || '{}';
-      }
-      
-      // 最后尝试直接获取
-      if (!responseContent && typeof responseData === 'string') {
-        responseContent = responseData;
       }
       
       console.log('响应内容长度:', responseContent.length);

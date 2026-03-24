@@ -24,9 +24,9 @@ console.log('\n4. 使用模拟数据:');
 console.log(`   ${useMock === 'true' ? '是' : '否'}`);
 
 console.log('\n=== 预期的正确配置 ===');
-console.log('API Key: ea77474e-46bb-4f4e-a42f-99dedce29678');
-console.log('模型名称: doubao-seed-1-6-vision-250815');
-console.log('API 地址: https://ark.cn-beijing.volces.com/api/v3/responses');
+console.log('API Key: 8f60880a-1ac3-40a7-bd60-1b68dbc549e6');
+console.log('模型名称: ep-20260324135258-7shrd');
+console.log('API 地址: https://ark.cn-beijing.volces.com/api/v3/chat/completions');
 console.log('使用真实 API（非模拟数据）');
 
 console.log('\n=== 配置检查结果 ===');
@@ -35,7 +35,7 @@ console.log('\n=== 配置检查结果 ===');
 let allPassed = true;
 
 // 检查 API Key
-if (apiKey === 'ea77474e-46bb-4f4e-a42f-99dedce29678') {
+if (apiKey === '8f60880a-1ac3-40a7-bd60-1b68dbc549e6') {
   console.log('✅ API Key 正确');
 } else {
   console.log('❌ API Key 不正确');
@@ -43,7 +43,7 @@ if (apiKey === 'ea77474e-46bb-4f4e-a42f-99dedce29678') {
 }
 
 // 检查模型名称
-if (model === 'doubao-seed-1-6-vision-250815') {
+if (model === 'ep-20260324135258-7shrd') {
   console.log('✅ 模型名称正确');
 } else {
   console.log('❌ 模型名称不正确');
@@ -51,7 +51,7 @@ if (model === 'doubao-seed-1-6-vision-250815') {
 }
 
 // 检查 API 地址
-if (apiBase === 'https://ark.cn-beijing.volces.com/api/v3/responses') {
+if (apiBase === 'https://ark.cn-beijing.volces.com/api/v3/chat/completions') {
   console.log('✅ API 地址正确');
 } else {
   console.log('❌ API 地址不正确');
