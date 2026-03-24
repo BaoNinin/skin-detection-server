@@ -30,5 +30,5 @@ ENV NODE_ENV=production
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:80/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# 启动应用
-CMD ["npm", "run", "start"]
+# 启动应用（直接使用 node 运行编译后的代码）
+CMD ["node", "dist/main.js"]
