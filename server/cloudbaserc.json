@@ -8,7 +8,7 @@
   },
   "services": [
     {
-      "name": "nestjs-server",
+      "name": "skin-detection-api",
       "type": "container",
       "containerPort": 80,
       "cpu": 0.5,
