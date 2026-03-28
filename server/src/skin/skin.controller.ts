@@ -26,17 +26,7 @@ export class SkinController {
     console.log('用户ID:', body.userId);
 
     try {
-      const result = await this.skinService.analyzeSkinImage(file, body.userId);
-
-      // 分析成功后，增加用户的检测次数
-      try {
-        await this.skinService.incrementDetectionCount(body.userId);
-        console.log('用户检测次数已增加');
-      } catch (error) {
-        console.error('增加检测次数失败:', error);
-        // 即使增加检测次数失败，也返回分析结果（容错处理）
-      }
-
+      const result = await this.skinService.analyzeSkinImage(file);
       return {
         code: 200,
         msg: '分析成功',

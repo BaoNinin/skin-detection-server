@@ -4,15 +4,13 @@ import { UploadedFile, SkinAnalysisResult } from './skin.types';
 import { ProductService } from './product.service';
 import { HistoryService } from './history.service';
 import { CloudStorageService } from '@/config/cloud-storage.service';
-import { UserService } from '@/user/user.service';
 
 @Injectable()
 export class SkinService {
   constructor(
     private readonly productService: ProductService,
     private readonly historyService: HistoryService,
-    private readonly cloudStorageService: CloudStorageService,
-    private readonly userService: UserService
+    private readonly cloudStorageService: CloudStorageService
   ) {
     const model = process.env.COZE_MODEL || 'doubao-1-5-vision-pro-32k-250115';
     const useMock = process.env.COZE_USE_MOCK === 'true';
@@ -24,13 +22,12 @@ export class SkinService {
     }
   }
 
-  async analyzeSkinImage(file: UploadedFile, userId?: number): Promise<SkinAnalysisResult> {
+  async analyzeSkinImage(file: UploadedFile): Promise<SkinAnalysisResult> {
     try {
       console.log('开始分析皮肤图像...');
       console.log('文件路径:', file.path);
       console.log('文件大小:', file.size);
       console.log('MIME 类型:', file.mimetype);
-      console.log('用户ID:', userId);
 
       // 检查是否使用模拟数据
       const useMock = process.env.COZE_USE_MOCK === 'true';
@@ -343,17 +340,6 @@ export class SkinService {
     } catch (error) {
       console.error('皮肤分析失败:', error);
       console.error('错误详情:', JSON.stringify(error, null, 2));
-      throw error;
-    }
-  }
-
-  async incrementDetectionCount(userId: number) {
-    try {
-      console.log('增加用户检测次数，用户ID:', userId);
-      await this.userService.incrementDetectionCount(userId);
-      console.log('检测次数增加成功');
-    } catch (error) {
-      console.error('增加检测次数失败:', error);
       throw error;
     }
   }

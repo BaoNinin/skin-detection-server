@@ -35,11 +35,6 @@ export default function CameraPage() {
   const [guideText, setGuideText] = useState('请将面部对准轮廓')
   const [countdown, setCountdown] = useState(5)
 
-  // 新增：检测次数相关状态
-  const [hasUsedDetection, setHasUsedDetection] = useState(false)
-  const [isLoadingDetectionStatus, setIsLoadingDetectionStatus] = useState(true)
-  const [detectionLimitReached, setDetectionLimitReached] = useState(false)
-
   // 冷却时间相关状态
   const [showCoolingModal, setShowCoolingModal] = useState(false)
   const [remainingTime, setRemainingTime] = useState(0)
@@ -70,19 +65,19 @@ export default function CameraPage() {
   useEffect(() => {
     const launchOptions = Taro.getLaunchOptionsSync()
     const { query, scene } = launchOptions
-
+    
     console.log('启动参数:', { query, scene })
-
+    
     // 检查是否来自 NFC
     if (query?.from === 'nfc' || scene === 1047) {
       console.log('NFC 触发跳转')
-
+      
       // 记录设备ID（如果有）
       if (query?.deviceId) {
         console.log('设备ID:', query.deviceId)
         Taro.setStorageSync('nfc_device_id', query.deviceId)
       }
-
+      
       // 显示提示
       if (query?.deviceId) {
         setGuideText(`已连接设备 ${query.deviceId}`)
@@ -90,53 +85,6 @@ export default function CameraPage() {
         setGuideText('NFC 触发，请开始检测')
       }
     }
-  }, [])
-
-  // 检查用户的检测次数限制
-  useEffect(() => {
-    const checkDetectionLimit = async () => {
-      const userId = Taro.getStorageSync('userId')
-
-      if (!userId) {
-        setIsLoadingDetectionStatus(false)
-        return
-      }
-
-      try {
-        const response = await Network.request({
-          url: `/api/user/${userId}`,
-          method: 'GET'
-        })
-
-        console.log('用户信息:', response.data)
-
-        if (response.data && response.data.data) {
-          const user = response.data.data
-          console.log('用户检测次数:', user.detectionCount)
-
-          // 检查是否已经使用过检测
-          if (user.detectionCount >= 1) {
-            console.log('用户已使用过检测，禁止再次使用')
-            setHasUsedDetection(true)
-            setDetectionLimitReached(true)
-            setGuideText('您已使用过面部识别功能')
-          } else {
-            console.log('用户尚未使用过检测')
-            setHasUsedDetection(false)
-            setDetectionLimitReached(false)
-          }
-        }
-      } catch (error) {
-        console.error('检查检测次数失败:', error)
-        // 即使检查失败，也允许继续使用（容错处理）
-        setHasUsedDetection(false)
-        setDetectionLimitReached(false)
-      } finally {
-        setIsLoadingDetectionStatus(false)
-      }
-    }
-
-    checkDetectionLimit()
   }, [])
 
   // NFC 实时监听
@@ -572,7 +520,7 @@ export default function CameraPage() {
     })
   }
 
-  const handleStartDetection = async () => {
+  const handleStartDetection = () => {
     if (!isWeapp) return
 
     const userId = Taro.getStorageSync('userId')
@@ -591,19 +539,7 @@ export default function CameraPage() {
       return
     }
 
-    // 检查检测次数限制
-    if (detectionLimitReached || hasUsedDetection) {
-      console.log('检测次数已用尽，禁止使用')
-      Taro.showModal({
-        title: '提示',
-        content: '您已使用过面部识别功能，芯片只允许激活一次。如需再次使用，请联系客服。',
-        showCancel: false,
-        confirmText: '我知道了'
-      })
-      return
-    }
-
-    // 检查冷却时间（保留原有逻辑，但不会触发，因为只允许使用一次）
+    // 检查冷却时间
     const lastAnalysisTime = Taro.getStorageSync('lastAnalysisTime')
     const cooldownPeriod = 30 * 60 * 1000 // 30分钟（毫秒）
 
@@ -621,14 +557,14 @@ export default function CameraPage() {
 
     // 启动人脸识别
     startFaceDetect()
-
+    
     // 显示人脸轮廓并开始扫描
     setShowFaceOutline(true)
     setIsScanning(true)
     setScanProgress(0)
-
+    
     console.log('开始扫描 - 初始化皮肤指标为 0')
-
+    
     // 初始化皮肤指标为 0
     setSkinMetrics({
       brightness: 0,
@@ -638,7 +574,7 @@ export default function CameraPage() {
       tone: '中性',
       confidence: 0
     })
-
+    
     setGuideText('请将面部对准轮廓')
     playVoice('请将面部对准轮廓')
 
@@ -647,12 +583,12 @@ export default function CameraPage() {
     // 扫描动画
     let progress = 0
     let countdownValue = 5
-
+    
     // 倒计时
     const countdownInterval = setInterval(() => {
       countdownValue -= 1
       setCountdown(countdownValue)
-
+      
       if (countdownValue > 0) {
         // 根据倒计时显示不同的引导文字
         if (countdownValue === 4) {
@@ -672,7 +608,7 @@ export default function CameraPage() {
         clearInterval(countdownInterval)
       }
     }, 1000)
-
+    
     // 扫描进度动画
     const scanInterval = setInterval(() => {
       progress += 1
@@ -850,60 +786,7 @@ export default function CameraPage() {
 
       {/* 中间显示区域 */}
       <View className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-        {detectionLimitReached ? (
-          // 检测次数已用尽提示界面
-          <View className="flex flex-col items-center justify-center gap-6 px-8">
-            {/* 锁定图标 */}
-            <View className="relative w-32 h-32">
-              <View className="absolute inset-0 bg-red-500/20 rounded-full animate-ping" />
-              <View className="absolute inset-2 bg-red-500/30 rounded-full" />
-              <View className="absolute inset-4 bg-red-500/40 rounded-full" />
-              <View className="relative w-20 h-20 bg-red-500 rounded-full flex items-center justify-center shadow-2xl">
-                <Text className="text-4xl">🔒</Text>
-              </View>
-            </View>
-
-            {/* 提示文字 */}
-            <View className="flex flex-col items-center gap-3">
-              <Text className="text-white text-xl font-bold block text-center">
-                芯片已激活
-              </Text>
-              <Text className="text-white/80 text-sm block text-center leading-relaxed">
-                每个芯片只允许激活一次{'\n'}您已使用过面部识别功能
-              </Text>
-            </View>
-
-            {/* 限制说明 */}
-            <View className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 mt-2">
-              <View className="flex items-center gap-2 mb-2">
-                <Text className="text-rose-400 text-lg">⚠️</Text>
-                <Text className="text-white/90 text-xs font-medium block">
-                  使用限制
-                </Text>
-              </View>
-              <Text className="text-white/70 text-xs block leading-relaxed">
-                为了确保芯片的唯一性和安全性，每个设备仅限使用一次面部识别功能。如需再次使用，请联系客服。
-              </Text>
-            </View>
-
-            {/* 联系客服按钮 */}
-            <View
-              onClick={() => {
-                Taro.showModal({
-                  title: '联系客服',
-                  content: '请添加客服微信：\nSkinCare_Assistant',
-                  showCancel: false,
-                  confirmText: '我知道了'
-                })
-              }}
-              className="mt-4 bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 rounded-full shadow-lg"
-            >
-              <Text className="text-white text-sm font-medium block">
-                联系客服
-              </Text>
-            </View>
-          </View>
-        ) : showFaceOutline ? (
+        {showFaceOutline ? (
           // 人脸检测框
           <View className="relative w-[280px] h-[380px]">
             {/* 面部轮廓 */}
@@ -1191,21 +1074,14 @@ export default function CameraPage() {
             <View
               onClick={handleSwitchCamera}
               className={`bg-white/20 w-14 h-14 flex items-center justify-center rounded-2xl transition-colors flex-shrink-0 ${
-                isScanning || detectionLimitReached ? 'opacity-30 pointer-events-none' : 'active:bg-white/30'
+                isScanning ? 'opacity-50' : 'active:bg-white/30'
               }`}
             >
               <Text className="text-2xl block">🔄</Text>
             </View>
 
             {/* 开始检测按钮 */}
-            {detectionLimitReached ? (
-              // 检测次数已用尽，显示禁用按钮
-              <View className="relative w-24 h-24 bg-gray-500 rounded-full flex items-center justify-center shadow-2xl flex-shrink-0 opacity-50">
-                <View className="w-20 h-20 bg-gray-500 rounded-full border-4 border-gray-600 flex items-center justify-center">
-                  <Text className="text-white text-xs font-bold">已用尽</Text>
-                </View>
-              </View>
-            ) : isScanning ? (
+            {isScanning ? (
               <View className={`relative w-24 h-24 rounded-full flex items-center justify-center shadow-2xl ${
                 isAligned ? 'bg-green-400 shadow-green-400/50' : 'bg-blue-700 shadow-blue-700/50'
               }`}
@@ -1237,7 +1113,7 @@ export default function CameraPage() {
             <View
               onClick={handleSwitchFlash}
               className={`bg-white/20 w-14 h-14 flex items-center justify-center rounded-2xl transition-colors flex-shrink-0 ${
-                isScanning || detectionLimitReached ? 'opacity-30 pointer-events-none' : 'active:bg-white/30'
+                isScanning ? 'opacity-50' : 'active:bg-white/30'
               }`}
             >
               <Text className="text-2xl block">
