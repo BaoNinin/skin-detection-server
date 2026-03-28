@@ -24,10 +24,16 @@ export class SkinService {
 
   async analyzeSkinImage(file: UploadedFile): Promise<SkinAnalysisResult> {
     try {
-      console.log('开始分析皮肤图像...');
-      console.log('文件路径:', file.path);
-      console.log('文件大小:', file.size);
-      console.log('MIME 类型:', file.mimetype);
+      const timestamp = Date.now()
+      console.log(`\n========== [${timestamp}] 开始新的皮肤分析 ==========`)
+      console.log('文件路径:', file.path)
+      console.log('文件大小:', file.size)
+      console.log('MIME 类型:', file.mimetype)
+      console.log('Buffer 是否存在:', !!file.buffer)
+      
+      // 生成文件唯一标识（用于调试）
+      const fileHash = file.path ? file.path.slice(-20) : file.buffer?.slice(0, 20).toString('hex') || 'unknown'
+      console.log('文件标识:', fileHash)
 
       // 检查是否使用模拟数据
       const useMock = process.env.COZE_USE_MOCK === 'true';
@@ -42,22 +48,27 @@ export class SkinService {
 
       // 真实 API 调用逻辑
       let imageData: string;
+      const imageTimestamp = Date.now()
 
       if (file.path) {
         const imageBuffer = fs.readFileSync(file.path);
-        console.log('从路径读取，buffer 大小:', imageBuffer.length);
+        console.log(`[${imageTimestamp}] 从路径读取，buffer 大小:`, imageBuffer.length);
+        console.log(`[${imageTimestamp}] Buffer 前10字节:`, imageBuffer.slice(0, 10).toString('hex'));
         imageData = imageBuffer.toString('base64');
       } else if (file.buffer) {
-        console.log('从 buffer 读取，buffer 大小:', file.buffer.length);
+        console.log(`[${imageTimestamp}] 从 buffer 读取，buffer 大小:`, file.buffer.length);
+        console.log(`[${imageTimestamp}] Buffer 前10字节:`, file.buffer.slice(0, 10).toString('hex'));
         imageData = file.buffer.toString('base64');
       } else {
+        console.error(`[${imageTimestamp}] 无法读取文件数据`);
         throw new Error('无法读取文件数据');
       }
 
-      console.log('Base64 数据长度:', imageData.length);
+      console.log(`[${imageTimestamp}] Base64 数据长度:`, imageData.length);
+      console.log(`[${imageTimestamp}] Base64 前50字符:`, imageData.substring(0, 50));
 
       const dataUri = `data:${file.mimetype || 'image/jpeg'};base64,${imageData}`;
-      console.log('Data URI 前 100 字符:', dataUri.substring(0, 100));
+      console.log(`[${imageTimestamp}] Data URI 前 100 字符:`, dataUri.substring(0, 100));
 
       // 构建新的 API 请求格式（Coze Responses API）
       const messages = [
@@ -291,6 +302,18 @@ export class SkinService {
 
       const result = JSON.parse(jsonMatch[0]);
 
+      console.log(`[${imageTimestamp}] === 豆包模型分析结果 ===`);
+      console.log(`[${imageTimestamp}] 皮肤类型:`, result.skinType);
+      console.log(`[${imageTimestamp}] 主要问题:`, result.concerns);
+      console.log(`[${imageTimestamp}] 水分:`, result.moisture);
+      console.log(`[${imageTimestamp}] 油性:`, result.oiliness);
+      console.log(`[${imageTimestamp}] 敏感度:`, result.sensitivity);
+      console.log(`[${imageTimestamp}] 痘痘:`, result.acne);
+      console.log(`[${imageTimestamp}] 皱纹:`, result.wrinkles);
+      console.log(`[${imageTimestamp}] 色斑:`, result.spots);
+      console.log(`[${imageTimestamp}] 毛孔:`, result.pores);
+      console.log(`[${imageTimestamp}] 黑头:`, result.blackheads);
+
       // 验证和限制数值范围
       const validateAndClamp = (value: any, defaultValue: number) => {
         const num = parseInt(value);
@@ -298,33 +321,7 @@ export class SkinService {
         return Math.min(100, Math.max(0, num));
       };
 
-      // 检查结果是否有效
-      const isValidResult = (
-        result.skinType &&
-        result.skinType !== '请提供面部照片' &&
-        result.skinType !== '无法识别' &&
-        (result.moisture > 0 || result.oiliness > 0 || result.sensitivity > 0 ||
-         result.acne > 0 || result.wrinkles > 0 || result.spots > 0 ||
-         result.pores > 0 || result.blackheads > 0)
-      );
-
-      if (!isValidResult) {
-        console.warn('=== 豆包模型返回无效结果，使用模拟数据 ===');
-        console.warn('皮肤类型:', result.skinType);
-        console.warn('各项指标:', {
-          moisture: result.moisture,
-          oiliness: result.oiliness,
-          sensitivity: result.sensitivity,
-          acne: result.acne,
-          wrinkles: result.wrinkles,
-          spots: result.spots,
-          pores: result.pores,
-          blackheads: result.blackheads
-        });
-        return this.getMockAnalysisResult();
-      }
-
-      return {
+      const finalResult = {
         skinType: result.skinType || '中性皮肤',
         concerns: Array.isArray(result.concerns) ? result.concerns : [],
         moisture: validateAndClamp(result.moisture, 70),
@@ -337,6 +334,38 @@ export class SkinService {
         blackheads: validateAndClamp(result.blackheads, 0),
         recommendations: Array.isArray(result.recommendations) ? result.recommendations : []
       };
+
+      console.log(`[${imageTimestamp}] === 最终返回结果 ===`);
+      console.log(`[${imageTimestamp}]`, JSON.stringify(finalResult, null, 2));
+
+      // 检查结果是否有效
+      const isValidResult = (
+        result.skinType &&
+        result.skinType !== '请提供面部照片' &&
+        result.skinType !== '无法识别' &&
+        (result.moisture > 0 || result.oiliness > 0 || result.sensitivity > 0 ||
+         result.acne > 0 || result.wrinkles > 0 || result.spots > 0 ||
+         result.pores > 0 || result.blackheads > 0)
+      );
+
+      if (!isValidResult) {
+        console.warn(`[${imageTimestamp}] === 豆包模型返回无效结果，使用模拟数据 ===`);
+        console.warn(`[${imageTimestamp}] 皮肤类型:`, result.skinType);
+        console.warn(`[${imageTimestamp}] 各项指标:`, {
+          moisture: result.moisture,
+          oiliness: result.oiliness,
+          sensitivity: result.sensitivity,
+          acne: result.acne,
+          wrinkles: result.wrinkles,
+          spots: result.spots,
+          pores: result.pores,
+          blackheads: result.blackheads
+        });
+        return this.getMockAnalysisResult();
+      }
+
+      console.log(`[${imageTimestamp}] 分析完成，返回结果`);
+      return finalResult;
     } catch (error) {
       console.error('皮肤分析失败:', error);
       console.error('错误详情:', JSON.stringify(error, null, 2));

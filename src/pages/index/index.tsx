@@ -58,12 +58,30 @@ export default function SkinDetectionPage() {
   const handleTakePhoto = async () => {
     try {
       const ctx = Taro.createCameraContext()
+      
+      // 先清除之前的缓存
+      setCapturedImage('')
+      setResult(null)
+      
       ctx.takePhoto({
         quality: 'high',
-        success: (res) => {
-          setCapturedImage(res.tempImagePath)
+        success: async (res) => {
+          console.log('拍照成功，临时文件路径:', res.tempImagePath)
+          console.log('文件大小:', res.tempFilePaths?.[0] || '未知')
+          
+          // 获取文件信息
+          const fileInfo = await Taro.getFileInfo({
+            filePath: res.tempFilePath
+          })
+          console.log('文件信息:', fileInfo)
+          
+          setCapturedImage(res.tempFilePath)
           setCameraActive(false)
-          analyzeSkin(res.tempImagePath)
+          
+          // 稍微延迟一下再上传，确保文件完全准备好
+          setTimeout(() => {
+            analyzeSkin(res.tempFilePath)
+          }, 500)
         },
         fail: (err) => {
           console.error('拍照失败:', err)
@@ -81,15 +99,27 @@ export default function SkinDetectionPage() {
   const analyzeSkin = async (imagePath: string) => {
     setAnalyzing(true)
     try {
+      // 添加时间戳确保每次请求都是唯一的
+      const timestamp = Date.now()
+      console.log('上传图片路径:', imagePath)
+      console.log('请求时间戳:', timestamp)
+      
       const res = await Network.uploadFile({
-        url: '/api/skin/analyze',
+        url: `/api/skin/analyze?t=${timestamp}`,
         filePath: imagePath,
-        name: 'image'
+        name: 'image',
+        formData: {
+          timestamp: String(timestamp)
+        }
       })
 
+      console.log('API响应:', res)
       const data = JSON.parse(res.data)
+      console.log('解析后的数据:', data)
+      
       if (data.code === 200) {
         const analysisResult = data.data
+        console.log('皮肤分析结果:', analysisResult)
         setResult(analysisResult)
 
         // 保存分析时间戳
