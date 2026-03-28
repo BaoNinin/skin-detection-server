@@ -173,6 +173,7 @@ export default function SkinDetectionPage() {
               src="/assets/logo.png"
               mode="aspectFit"
               className="w-full h-full"
+              style={{ marginLeft: '10px' }}
             />
           </View>
           <Text className="text-lg text-gray-700 text-center mb-8 block">
