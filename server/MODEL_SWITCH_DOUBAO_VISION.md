@@ -12,7 +12,7 @@
 | 模型类型 | 自定义端点模型 | 官方视觉模型 |
 | 视觉能力 | ✅ 支持图片分析 | ✅ 支持图片分析 |
 | API 端点 | `/api/v3/chat/completions` | `/api/v3/chat/completions` |
-| API Key | `8f60880a-1ac3-40a7-bd60-1b68dbc549e6` | `8f60880a-1ac3-40a7-bd60-1b68dbc549e6` |
+| API Key | `654a810c-bc85-44b1-8d21-ab53cbdf5d26` | `654a810c-bc85-44b1-8d21-ab53cbdf5d26` |
 | 测试状态 | ❌ 未测试 | ✅ 测试成功 |
 
 ## API 测试结果
@@ -22,7 +22,7 @@
 ```bash
 curl https://ark.cn-beijing.volces.com/api/v3/chat/completions \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer 8f60880a-1ac3-40a7-bd60-1b68dbc549e6" \
+  -H "Authorization: Bearer 654a810c-bc85-44b1-8d21-ab53cbdf5d26" \
   -d '{
     "model": "doubao-1-5-vision-pro-32k-250115",
     "messages": [
@@ -119,7 +119,7 @@ node test-config.js
 ```
 === 豆包视觉模型配置检查 ===
 
-1. API Key: 8f60880a-1ac3-40a7-bd60-1b68dbc549e6
+1. API Key: 654a810c-bc85-44b1-8d21-ab53cbdf5d26
 2. 模型名称: doubao-1-5-vision-pro-32k-250115
 3. API 地址: https://ark.cn-beijing.volces.com/api/v3/chat/completions
 4. 使用模拟数据: 否

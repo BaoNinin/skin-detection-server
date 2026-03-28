@@ -42,7 +42,7 @@ PORT=3000
 
 ```bash
 wxcloud services:deploy \
-  --service skin-detection-api \
+  --service skin-detection-serve \
   --env-vars 'COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678' \
   --env-vars 'COZE_MODEL=ep-20260324135258-7shrd' \
   --env-vars 'COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/responses' \
@@ -115,7 +115,7 @@ cloudbase login
 3. 部署：
 ```bash
 wxcloud services:deploy \
-  --service skin-detection-api \
+  --service skin-detection-serve \
   --env-vars 'COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678' \
   --env-vars 'COZE_MODEL=ep-20260324135258-7shrd' \
   --env-vars 'COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/responses' \
@@ -136,7 +136,7 @@ wxcloud services:deploy \
 ```yaml
 version: '3.8'
 services:
-  skin-detection-api:
+  skin-detection-serve:
     environment:
       - COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
       - COZE_MODEL=ep-20260324135258-7shrd

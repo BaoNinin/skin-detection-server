@@ -4,11 +4,11 @@
 
 | 变量名 | 值 | 说明 |
 |--------|-----|------|
-| `COZE_API_KEY` | `ea77474e-46bb-4f4e-a42f-99dedce29678` | 豆包视觉模型 API Key |
+| `COZE_API_KEY` | `654a810c-bc85-44b1-8d21-ab53cbdf5d26` | 豆包视觉模型 API Key |
 | `COZE_MODEL` | `doubao-1-5-vision-pro-32k-250115` | 豆包视觉模型名称 |
-| `WECHAT_APP_ID` | `wxf218fed093b4e374` | 微信小程序 AppID |
-| `WECHAT_APP_SECRET` | `a869daf192fc52fddd1ac6269948e749` | 微信小程序密钥 |
-| `CLOUDBASE_ENV_ID` | `cloud1-7gi0fykp49ab039a` | 腾讯云开发环境 ID |
+| `WECHAT_APPID` | `wx8826c7b681ec3c65` | 微信小程序 AppID |
+| `WECHAT_APPSECRET` | `e5efd96897d4574e10a235733d9962ea` | 微信小程序密钥 |
+| `CLOUDBASE_ENV_ID` | `prod-3gbk859ae18cc611` | 腾讯云开发环境 ID |
 | `NODE_ENV` | `production` | 运行环境 |
 
 ## 🔧 配置步骤
@@ -17,8 +17,8 @@
 
 1. **登录微信云托管控制台**
    - 访问：https://console.cloud.tencent.com/tcb/service
-   - 选择环境：`prod-8g9r8x6c43dcafcb`
-   - 选择服务：`skin-detection-api`
+   - 选择环境：`prod-3gbk859ae18cc611`
+   - 选择服务：`skin-detection-serve`
 
 2. **进入环境变量配置页面**
    - 点击「服务配置」
@@ -29,11 +29,11 @@
    逐个添加以下环境变量：
 
    ```
-   COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
+   COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26
    COZE_MODEL=doubao-1-5-vision-pro-32k-250115
-   WECHAT_APP_ID=wxf218fed093b4e374
-   WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749
-   CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a
+   WECHAT_APPID=wx8826c7b681ec3c65
+   WECHAT_APPSECRET=e5efd96897d4574e10a235733d9962ea
+   CLOUDBASE_ENV_ID=prod-3gbk859ae18cc611
    NODE_ENV=production
    ```
 
@@ -48,13 +48,13 @@
 ```bash
 # 设置服务环境变量
 tcb env set \
-  --env-id prod-8g9r8x6c43dcafcb \
-  --service skin-detection-api \
-  --env-vars 'COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678' \
+  --env-id prod-3gbk859ae18cc611 \
+  --service skin-detection-serve \
+  --env-vars 'COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26' \
   --env-vars 'COZE_MODEL=doubao-1-5-vision-pro-32k-250115' \
-  --env-vars 'WECHAT_APP_ID=wxf218fed093b4e374' \
-  --env-vars 'WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749' \
-  --env-vars 'CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a' \
+  --env-vars 'WECHAT_APPID=wx8826c7b681ec3c65' \
+  --env-vars 'WECHAT_APPSECRET=e5efd96897d4574e10a235733d9962ea' \
+  --env-vars 'CLOUDBASE_ENV_ID=prod-3gbk859ae18cc611' \
   --env-vars 'NODE_ENV=production'
 ```
 
@@ -78,8 +78,8 @@ cd server
 ```bash
 # 查看服务日志
 tcb logs list \
-  --env-id prod-8g9r8x6c43dcafcb \
-  --service skin-detection-api \
+  --env-id prod-3gbk859ae18cc611 \
+  --service skin-detection-serve \
   --limit 100
 ```
 
@@ -88,7 +88,7 @@ tcb logs list \
 访问健康检查接口：
 
 ```bash
-curl https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/health
+curl https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com/health
 ```
 
 返回 `{ "status": "ok" }` 表示服务正常运行。
@@ -97,7 +97,7 @@ curl https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/health
 
 ```bash
 curl -X POST \
-  https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/api/skin/analyze \
+  https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com/api/skin/analyze \
   -H "Content-Type: application/json" \
   -d '{ "imageUrl": "https://example.com/skin-image.jpg" }'
 ```

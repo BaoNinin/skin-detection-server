@@ -5,7 +5,7 @@
 - **域名**：`gaodiai.cn`
 - **云托管服务**：`skin-detection-server`
 - **环境**：`prod-3gbk859ae18cc611`
-- **当前默认域名**：`https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com`
+- **当前默认域名**：`https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com`
 - **目标自定义域名**：`https://api.gaodiai.cn`
 
 ---
@@ -36,7 +36,7 @@
 **1.5 获取 CNAME 记录**
 系统会自动生成 CNAME 记录，格式类似：
 ```
-skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
+skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
 ```
 
 ✅ **复制这个 CNAME 值**（下一步 DNS 解析需要用到）
@@ -62,7 +62,7 @@ skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
 
 | 主机记录 | 记录类型 | 记录值 | TTL |
 |---------|---------|--------|-----|
-| api | CNAME | skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com | 600 |
+| api | CNAME | skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com | 600 |
 
 **操作步骤：**
 1. 点击「添加记录」
@@ -170,7 +170,7 @@ DNS 生效和 HTTPS 证书申请成功后，更新项目配置。
 
 ```bash
 # 修改前
-PROJECT_DOMAIN=https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
+PROJECT_DOMAIN=https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
 
 # 修改后
 PROJECT_DOMAIN=https://api.gaodiai.cn
@@ -192,7 +192,7 @@ PROJECT_DOMAIN=https://api.gaodiai.cn
 ```typescript
 // 修改前
 defineConstants: {
-  PROJECT_DOMAIN: JSON.stringify('https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com'),
+  PROJECT_DOMAIN: JSON.stringify('https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com'),
   TARO_ENV: JSON.stringify(process.env.TARO_ENV),
   TARO_APP_WEAPP_APPID: JSON.stringify('wx8826c7b681ec3c65'),
 },
@@ -378,12 +378,12 @@ curl -X POST https://api.gaodiai.cn/api/skin/analyze \
 云托管信息：
 - 环境：prod-3gbk859ae18cc611
 - 服务：skin-detection-server
-- 原默认域名：https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
+- 原默认域名：https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
 
 DNS 配置：
 - 记录类型：CNAME
 - 主机记录：api
-- 记录值：skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
+- 记录值：skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
 - TTL：600
 
 HTTPS 证书：

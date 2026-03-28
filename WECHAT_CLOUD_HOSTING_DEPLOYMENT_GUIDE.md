@@ -5,7 +5,7 @@
 ### 1. 确认 GitHub 仓库
 
 ```
-仓库地址：https://github.com/BaoNinin/smart-skin-detection.git
+仓库地址：https://github.com/BaoNinin/skin-detection-server.git
 分支：main
 ```
 
@@ -13,11 +13,11 @@
 
 | 变量名 | 值 |
 |--------|-----|
-| COZE_API_KEY | ea77474e-46bb-4f4e-a42f-99dedce29678 |
-| COZE_MODEL | doubao-seed-1-6-vision-250815 |
-| WECHAT_APP_ID | wxf218fed093b4e374 |
-| WECHAT_APP_SECRET | a869daf192fc52fddd1ac6269948e749 |
-| CLOUDBASE_ENV_ID | cloud1-7gi0fykp49ab039a |
+| COZE_API_KEY | 654a810c-bc85-44b1-8d21-ab53cbdf5d26 |
+| COZE_MODEL | doubao-1-5-vision-pro-32k-250115 |
+| WECHAT_APPID | wx8826c7b681ec3c65 |
+| WECHAT_APPSECRET | e5efd96897d4574e10a235733d9962ea |
+| CLOUDBASE_ENV_ID | prod-3gbk859ae18cc611 |
 | NODE_ENV | production |
 
 ---
@@ -30,14 +30,14 @@
 
 访问：https://console.cloud.tencent.com/tcb/service
 
-选择环境：`prod-8g9r8x6c43dcafcb`
+选择环境：`prod-3gbk859ae18cc611`
 
 #### 2. 创建新服务
 
 点击「新建服务」，填写以下信息：
 
 ```
-服务名称：skin-detection-api
+服务名称：skin-detection-serve
 服务版本：v1
 ```
 
@@ -45,7 +45,7 @@
 
 ```
 代码来源：GitHub
-仓库地址：https://github.com/BaoNinin/smart-skin-detection.git
+仓库地址：https://github.com/BaoNinin/skin-detection-server.git
 分支：main
 目标目录：server/
 ```
@@ -77,11 +77,11 @@ Dockerfile 路径：Dockerfile（在 server 目录下）
 点击「添加环境变量」，逐个添加：
 
 ```
-COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
-COZE_MODEL=doubao-seed-1-6-vision-250815
-WECHAT_APP_ID=wxf218fed093b4e374
-WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749
-CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a
+COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26
+COZE_MODEL=doubao-1-5-vision-pro-32k-250115
+WECHAT_APPID=wx8826c7b681ec3c65
+WECHAT_APPSECRET=e5efd96897d4574e10a235733d9962ea
+CLOUDBASE_ENV_ID=prod-3gbk859ae18cc611
 NODE_ENV=production
 ```
 
@@ -107,13 +107,13 @@ NODE_ENV=production
 
 部署成功后，服务地址为：
 ```
-https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
+https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
 ```
 
 ### 3. 测试健康检查接口
 
 ```bash
-curl https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/health
+curl https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com/health
 ```
 
 返回 `{ "status": "ok" }` 表示服务正常运行。
@@ -206,8 +206,8 @@ CMD ["node", "dist/main"]
 
 ```bash
 cd server
-docker build -t skin-detection-api .
-docker run -p 80:80 -e COZE_API_KEY=xxx skin-detection-api
+docker build -t skin-detection-serve .
+docker run -p 80:80 -e COZE_API_KEY=xxx skin-detection-serve
 ```
 
 ### 2. 查看构建日志

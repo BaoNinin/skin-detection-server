@@ -85,7 +85,7 @@ API 调用失败: model not found
 
 | 环境变量 | 正确值 | 必须一致 |
 |---------|--------|----------|
-| `COZE_API_KEY` | `8f60880a-1ac3-40a7-bd60-1b68dbc549e6` | ✅ |
+| `COZE_API_KEY` | `654a810c-bc85-44b1-8d21-ab53cbdf5d26` | ✅ |
 | `COZE_MODEL` | `doubao-1-5-vision-pro-32k-250115` | ✅ |
 | `COZE_API_BASE` | `https://ark.cn-beijing.volces.com/api/v3/chat/completions` | ✅ |
 | `COZE_USE_MOCK` | `false` | ✅ **重要** |
@@ -111,7 +111,7 @@ API 调用失败: model not found
 
 ```bash
 # 设置 API Key
-export ARK_API_KEY="8f60880a-1ac3-40a7-bd60-1b68dbc549e6"
+export ARK_API_KEY="654a810c-bc85-44b1-8d21-ab53cbdf5d26"
 
 # 测试 API
 curl https://ark.cn-beijing.volces.com/api/v3/chat/completions \
@@ -228,7 +228,7 @@ const result = await Network.uploadFile({
 - API Key 错误或过期
 
 **解决方案**：
-1. 确认 API Key：`8f60880a-1ac3-40a7-bd60-1b68dbc549e6`
+1. 确认 API Key：`654a810c-bc85-44b1-8d21-ab53cbdf5d26`
 2. 更新环境变量
 3. 重新部署
 

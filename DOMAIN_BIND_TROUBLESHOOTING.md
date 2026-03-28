@@ -195,27 +195,27 @@ defineConstants: {
 
 **当前默认域名：**
 ```
-https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
+https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
 ```
 
 **临时配置：**
 
 **.env.local:**
 ```bash
-PROJECT_DOMAIN=https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
+PROJECT_DOMAIN=https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
 ```
 
 **config/index.ts:**
 ```typescript
 defineConstants: {
-  PROJECT_DOMAIN: JSON.stringify('https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com'),
+  PROJECT_DOMAIN: JSON.stringify('https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com'),
   ...
 }
 ```
 
 **NFC 配置：**
 ```
-https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/nfc-redirect.html
+https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com/nfc-redirect.html
 ```
 
 ---

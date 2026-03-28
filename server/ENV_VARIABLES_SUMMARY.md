@@ -10,7 +10,7 @@
 
 ```json
 {
-  "COZE_API_KEY": "8f60880a-1ac3-40a7-bd60-1b68dbc549e6",
+  "COZE_API_KEY": "654a810c-bc85-44b1-8d21-ab53cbdf5d26",
   "COZE_MODEL": "ep-20260324135258-7shrd",
   "COZE_API_BASE": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
   "COZE_USE_MOCK": "false",
@@ -34,7 +34,7 @@
 
 ```bash
 # 豆包端点模型配置
-COZE_API_KEY=8f60880a-1ac3-40a7-bd60-1b68dbc549e6
+COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26
 COZE_MODEL=ep-20260324135258-7shrd
 COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/chat/completions
 COZE_USE_MOCK=false
@@ -62,7 +62,7 @@ COZE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 **文件路径**: `server/.env.wechat-cloud`
 
 ```bash
-COZE_API_KEY=8f60880a-1ac3-40a7-bd60-1b68dbc549e6
+COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26
 COZE_MODEL=ep-20260324135258-7shrd
 COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/chat/completions
 COZE_USE_MOCK=false
@@ -160,7 +160,7 @@ bash deploy-wechat-cloud.sh
 
 | 配置项 | 旧值 | 新值 |
 |--------|------|------|
-| API Key | `ea77474e-46bb-4f4e-a42f-99dedce29678` | `8f60880a-1ac3-40a7-bd60-1b68dbc549e6` |
+| API Key | `ea77474e-46bb-4f4e-a42f-99dedce29678` | `654a810c-bc85-44b1-8d21-ab53cbdf5d26` |
 | 模型名称 | `doubao-seed-1-6-vision-250815` | `ep-20260324135258-7shrd` |
 | API 端点 | `/api/v3/responses` | `/api/v3/chat/completions` |
 
@@ -184,7 +184,7 @@ bash deploy-wechat-cloud.sh
 
 部署前请确认：
 
-- [ ] API Key: `8f60880a-1ac3-40a7-bd60-1b68dbc549e6`
+- [ ] API Key: `654a810c-bc85-44b1-8d21-ab53cbdf5d26`
 - [ ] 模型名称: `ep-20260324135258-7shrd`
 - [ ] API 端点: `https://ark.cn-beijing.volces.com/api/v3/chat/completions`
 - [ ] 环境ID: `cloud1-9gz0vft7d1ddce7f`

@@ -183,7 +183,7 @@ WECHAT_APP_SECRET=你的AppSecret
 1. 进入「云托管」标签页
 2. 点击「新建服务」
 3. 配置服务信息：
-   - 服务名称：`skin-detection-api`
+   - 服务名称：`skin-detection-serve`
    - 运行环境：Node.js 18+
    - 实例规格：按需选择（测试可用 0.5CPU/1GB）
 4. 部署代码：

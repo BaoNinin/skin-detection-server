@@ -4,7 +4,7 @@
 
 ### 小程序 AppID
 ```
-wxf218fed093b4e374
+wx8826c7b681ec3c65
 ```
 
 ### 小程序名称
@@ -18,14 +18,8 @@ wxf218fed093b4e374
 
 ### 当前使用的域名
 ```
-https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
+https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
 ```
-
-### 自定义域名（未成功配置）
-```
-https://api.gaodiai.cn
-```
-**状态：** DNS 解析失败，暂不可用
 
 ---
 
@@ -33,16 +27,16 @@ https://api.gaodiai.cn
 
 ### 微信小程序密钥
 ```
-WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749
+WECHAT_APP_SECRET=e5efd96897d4574e10a235733d9962ea
 ```
-**用途：** 
+**用途：**
 - 微信登录
 - 获取用户信息
 - 调用微信 API
 
 ### 豆包视觉模型 API Key
 ```
-COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
+COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26
 ```
 **用途：**
 - 皮肤图像分析
@@ -51,7 +45,7 @@ COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
 
 ### 豆包视觉模型名称
 ```
-COZE_MODEL=doubao-seed-1-6-vision-250815
+COZE_MODEL=doubao-1-5-vision-pro-32k-250115
 ```
 
 ---
@@ -60,7 +54,7 @@ COZE_MODEL=doubao-seed-1-6-vision-250815
 
 ### 腾讯云开发环境 ID
 ```
-CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a
+CLOUDBASE_ENV_ID=prod-3gbk859ae18cc611
 ```
 **用途：**
 - 云数据库存储
@@ -73,22 +67,22 @@ CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a
 
 ### 云托管服务地址
 ```
-https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
+https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
 ```
 
 ### 云托管环境
 ```
-prod-8g9r8x6c43dcafcb
+prod-3gbk859ae18cc611
 ```
 
 ### 服务名称
 ```
-skin-detection-api
+skin-detection-serve
 ```
 
 ### GitHub 仓库
 ```
-https://github.com/BaoNinin/smart-skin-detection
+https://github.com/BaoNinin/skin-detection-server
 ```
 
 ---
@@ -169,17 +163,17 @@ pages/nfc-writer/index       # NFC 写入工具页面
 
 ### 前端配置 (.env.local)
 ```bash
-PROJECT_DOMAIN=https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com
-TARO_APP_WEAPP_APPID=wxf218fed093b4e374
+PROJECT_DOMAIN=https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com
+TARO_APP_WEAPP_APPID=wx8826c7b681ec3c65
 TARO_ENV=weapp
 ```
 
 ### 后端配置 (server/.env.production)
 ```bash
-COZE_API_KEY=ea77474e-46bb-4f4e-a42f-99dedce29678
-COZE_MODEL=doubao-seed-1-6-vision-250815
-CLOUDBASE_ENV_ID=cloud1-7gi0fykp49ab039a
-WECHAT_APP_SECRET=a869daf192fc52fddd1ac6269948e749
+COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26
+COZE_MODEL=doubao-1-5-vision-pro-32k-250115
+CLOUDBASE_ENV_ID=prod-3gbk859ae18cc611
+WECHAT_APP_SECRET=e5efd96897d4574e10a235733d9962ea
 NODE_ENV=production
 ```
 

@@ -94,7 +94,7 @@ git push
 
 **使用默认域名：**
 ```
-https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/nfc-redirect.html
+https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com/nfc-redirect.html
 ```
 
 **或使用自定义域名（推荐）：**
@@ -143,7 +143,7 @@ https://api.gaodiai.cn/nfc-redirect.html
 5. 填写 URI：
 
 ```
-https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/nfc-redirect.html
+https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com/nfc-redirect.html
 ```
 
 6. 点击：**「写入」**

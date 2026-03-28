@@ -2,7 +2,7 @@
 
 ## ✅ 部署状态
 
-- **服务地址**：`https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com`
+- **服务地址**：`https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com`
 - **环境名称**：`prod-3gbk859ae18cc611`
 - **服务名称**：`skin-detection-server`
 - **版本**：`skin-detection-serve-007`
@@ -86,13 +86,13 @@ pnpm build:weapp
 
 ```bash
 # 测试健康检查
-curl https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/api/health
+curl https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com/api/health
 
 # 预期返回：
 # {"status":"success","data":"2025-01-22T10:00:00.000Z"}
 
 # 测试 Hello 接口
-curl https://skin-detection-api-237195-6-1414623738.sh.run.tcloudbase.com/api/hello
+curl https://skin-detection-serve-235668-9-1411837125.sh.run.tcloudbase.com/api/hello
 
 # 预期返回：
 # {"status":"success","data":"Hello, welcome to coze coding mini-program server!"}

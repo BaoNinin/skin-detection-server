@@ -83,7 +83,7 @@ tcb services get skin-detection-server --env-id cloud1-9gz0vft7d1ddce7f
 ```
 
 确认以下环境变量正确：
-- `COZE_API_KEY=8f60880a-1ac3-40a7-bd60-1b68dbc549e6`
+- `COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26`
 - `COZE_MODEL=ep-20260324135258-7shrd`
 - `COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/chat/completions`
 - `COZE_USE_MOCK=false`
@@ -110,7 +110,7 @@ tcb logs --env-id cloud1-9gz0vft7d1ddce7f --service-name skin-detection-server -
 手动测试 API 是否正常：
 
 ```bash
-export ARK_API_KEY="8f60880a-1ac3-40a7-bd60-1b68dbc549e6"
+export ARK_API_KEY="654a810c-bc85-44b1-8d21-ab53cbdf5d26"
 
 curl https://ark.cn-beijing.volces.com/api/v3/chat/completions \
   -H "Content-Type: application/json" \
@@ -147,7 +147,7 @@ curl https://ark.cn-beijing.volces.com/api/v3/chat/completions \
 
 ```json
 {
-  "COZE_API_KEY": "8f60880a-1ac3-40a7-bd60-1b68dbc549e6",
+  "COZE_API_KEY": "654a810c-bc85-44b1-8d21-ab53cbdf5d26",
   "COZE_MODEL": "ep-20260324135258-7shrd",
   "COZE_API_BASE": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
   "COZE_USE_MOCK": "false"

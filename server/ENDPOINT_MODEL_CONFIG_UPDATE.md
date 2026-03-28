@@ -19,7 +19,7 @@
 
 | 配置项 | 旧值 | 新值 |
 |--------|------|------|
-| `COZE_API_KEY` | `ea77474e-46bb-4f4e-a42f-99dedce29678` | `8f60880a-1ac3-40a7-bd60-1b68dbc549e6` |
+| `COZE_API_KEY` | `ea77474e-46bb-4f4e-a42f-99dedce29678` | `654a810c-bc85-44b1-8d21-ab53cbdf5d26` |
 | `COZE_MODEL` | `doubao-seed-1-6-vision-250815` | `ep-20260324135258-7shrd` |
 | `COZE_API_BASE` | `https://ark.cn-beijing.volces.com/api/v3/responses` | `https://ark.cn-beijing.volces.com/api/v3/chat/completions` |
 
@@ -122,7 +122,7 @@ $ cd server && node test-config.js
 
 === 豆包视觉模型配置检查 ===
 
-1. API Key: 8f60880a-1ac3-40a7-bd60-1b68dbc549e6
+1. API Key: 654a810c-bc85-44b1-8d21-ab53cbdf5d26
 2. 模型名称: ep-20260324135258-7shrd
 3. API 地址: https://ark.cn-beijing.volces.com/api/v3/chat/completions
 4. 使用模拟数据: 否
@@ -265,7 +265,7 @@ tcb run service:deploy \
   --min-num 1 \
   --max-num 1 \
   --container-port 80 \
-  --env COZE_API_KEY=8f60880a-1ac3-40a7-bd60-1b68dbc549e6 \
+  --env COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26 \
   --env COZE_MODEL=ep-20260324135258-7shrd \
   --env COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/chat/completions \
   --env CLOUDBASE_ENV_ID=cloud1-9gz0vft7d1ddce7f \

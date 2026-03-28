@@ -93,10 +93,10 @@ CMD ["node", "dist/main.js"]
 
 ```bash
 # 本地构建测试
-docker build -t skin-detection-api .
+docker build -t skin-detection-serve .
 
 # 本地运行测试
-docker run -p 3000:80 -e PORT=80 skin-detection-api
+docker run -p 3000:80 -e PORT=80 skin-detection-serve
 
 # 检查日志
 docker logs <container-id>

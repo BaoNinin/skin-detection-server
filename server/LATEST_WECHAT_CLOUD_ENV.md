@@ -6,7 +6,7 @@
 
 ```json
 {
-  "COZE_API_KEY": "8f60880a-1ac3-40a7-bd60-1b68dbc549e6",
+  "COZE_API_KEY": "654a810c-bc85-44b1-8d21-ab53cbdf5d26",
   "COZE_MODEL": "doubao-1-5-vision-pro-32k-250115",
   "COZE_API_BASE": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
   "COZE_USE_MOCK": "false",
@@ -24,7 +24,7 @@
 
 ```bash
 # 豆包视觉模型配置
-COZE_API_KEY=8f60880a-1ac3-40a7-bd60-1b68dbc549e6
+COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26
 COZE_MODEL=doubao-1-5-vision-pro-32k-250115
 COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/chat/completions
 COZE_USE_MOCK=false
@@ -68,7 +68,7 @@ tcb run service:deploy \
   --min-num 1 \
   --max-num 1 \
   --container-port 80 \
-  --env COZE_API_KEY=8f60880a-1ac3-40a7-bd60-1b68dbc549e6 \
+  --env COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26 \
   --env COZE_MODEL=doubao-1-5-vision-pro-32k-250115 \
   --env COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/chat/completions \
   --env COZE_USE_MOCK=false \
@@ -101,7 +101,7 @@ tcb run service:deploy \
 
 | 环境变量 | 值 |
 |---------|-----|
-| `COZE_API_KEY` | `8f60880a-1ac3-40a7-bd60-1b68dbc549e6` |
+| `COZE_API_KEY` | `654a810c-bc85-44b1-8d21-ab53cbdf5d26` |
 | `COZE_MODEL` | `doubao-1-5-vision-pro-32k-250115` ⭐ |
 | `COZE_API_BASE` | `https://ark.cn-beijing.volces.com/api/v3/chat/completions` |
 
@@ -144,7 +144,7 @@ SkinService 初始化完成，使用模型: doubao-1-5-vision-pro-32k-250115
 ## 🔗 快速链接
 
 - 微信云开发控制台: https://console.cloud.tencent.com/tcb/env
-- GitHub 仓库: https://github.com/BaoNinin/smart-skin-detection
+- GitHub 仓库: https://github.com/BaoNinin/skin-detection-server
 
 ---
 

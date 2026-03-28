@@ -6,7 +6,7 @@
 
 | 环境变量 | 值 | 说明 | 是否必填 |
 |---------|-----|------|----------|
-| `COZE_API_KEY` | `8f60880a-1ac3-40a7-bd60-1b68dbc549e6` | 豆包端点模型 API Key | ✅ 必填 |
+| `COZE_API_KEY` | `654a810c-bc85-44b1-8d21-ab53cbdf5d26` | 豆包端点模型 API Key | ✅ 必填 |
 | `COZE_MODEL` | `ep-20260324135258-7shrd` | 豆包端点模型名称 | ✅ 必填 |
 | `COZE_API_BASE` | `https://ark.cn-beijing.volces.com/api/v3/chat/completions` | API 端点地址 | ✅ 必填 |
 | `COZE_USE_MOCK` | `false` | 是否使用模拟数据（生产环境必须为 false） | ✅ 必填 |
@@ -55,7 +55,7 @@
 
 ```json
 {
-  "COZE_API_KEY": "8f60880a-1ac3-40a7-bd60-1b68dbc549e6",
+  "COZE_API_KEY": "654a810c-bc85-44b1-8d21-ab53cbdf5d26",
   "COZE_MODEL": "ep-20260324135258-7shrd",
   "COZE_API_BASE": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
   "COZE_USE_MOCK": "false",
@@ -122,7 +122,7 @@ tcb run service:deploy \
   --min-num 1 \
   --max-num 1 \
   --container-port 80 \
-  --env COZE_API_KEY=8f60880a-1ac3-40a7-bd60-1b68dbc549e6 \
+  --env COZE_API_KEY=654a810c-bc85-44b1-8d21-ab53cbdf5d26 \
   --env COZE_MODEL=ep-20260324135258-7shrd \
   --env COZE_API_BASE=https://ark.cn-beijing.volces.com/api/v3/chat/completions \
   --env COZE_USE_MOCK=false \
@@ -222,7 +222,7 @@ SkinService 初始化完成，使用模型: ep-20260324135258-7shrd
 
 | 环境变量 | 旧值 | 新值 |
 |---------|------|------|
-| `COZE_API_KEY` | `ea77474e-46bb-4f4e-a42f-99dedce29678` | `8f60880a-1ac3-40a7-bd60-1b68dbc549e6` |
+| `COZE_API_KEY` | `ea77474e-46bb-4f4e-a42f-99dedce29678` | `654a810c-bc85-44b1-8d21-ab53cbdf5d26` |
 | `COZE_MODEL` | `doubao-seed-1-6-vision-250815` | `ep-20260324135258-7shrd` |
 | `COZE_API_BASE` | `https://ark.cn-beijing.volces.com/api/v3/responses` | `https://ark.cn-beijing.volces.com/api/v3/chat/completions` |
 
