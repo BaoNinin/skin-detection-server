@@ -1,0 +1,57 @@
+{
+  "service_name": "skin-detection-serve",
+  "environment": "prod-3gbk859ae18cc611",
+  "description": "微信云托管环境变量配置",
+  "variables": [
+    {
+      "key": "COZE_API_KEY",
+      "value": "654a810c-bc85-44b1-8d21-ab53cbdf5d26",
+      "description": "豆包视觉模型 API Key"
+    },
+    {
+      "key": "COZE_MODEL",
+      "value": "doubao-1-5-vision-pro-32k-250115",
+      "description": "豆包视觉模型名称"
+    },
+    {
+      "key": "COZE_API_BASE",
+      "value": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+      "description": "豆包 API 端点"
+    },
+    {
+      "key": "COZE_SUPABASE_URL",
+      "value": "https://pacqfzvxkiobtxbjubil.supabase.co",
+      "description": "Supabase 数据库 URL"
+    },
+    {
+      "key": "COZE_SUPABASE_ANON_KEY",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhY3FmenZ4a2lvYnR4Ymp1YmlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzODM1ODYsImV4cCI6MjA4ODk1OTU4Nn0.CZoSjahWflEy3vhj_Ya9ddYhie9BtmvRxhNaN8JdZs4",
+      "description": "Supabase 匿名访问 Key"
+    },
+    {
+      "key": "WECHAT_APPID",
+      "value": "wx8826c7b681ec3c65",
+      "description": "微信小程序 AppID"
+    },
+    {
+      "key": "WECHAT_APPSECRET",
+      "value": "e5efd96897d4574e10a235733d9962ea",
+      "description": "微信小程序密钥"
+    },
+    {
+      "key": "CLOUDBASE_ENV_ID",
+      "value": "prod-3gbk859ae18cc611",
+      "description": "腾讯云开发环境 ID"
+    },
+    {
+      "key": "NODE_ENV",
+      "value": "production",
+      "description": "运行环境"
+    },
+    {
+      "key": "COZE_USE_MOCK",
+      "value": "false",
+      "description": "禁用模拟数据模式"
+    }
+  ]
+}
