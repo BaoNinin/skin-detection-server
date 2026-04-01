@@ -236,8 +236,8 @@ export default function ProfilePage() {
     <View className="min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       {/* 背景图片 */}
       <Image
-        src="/assets/profile-bg.png"
-        className="absolute inset-0 w-full h-full opacity-30"
+        src="/assets/landing-bg.png"
+        className="absolute inset-0 w-full h-full opacity-20"
         mode="aspectFill"
       />
 

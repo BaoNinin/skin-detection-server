@@ -16,16 +16,7 @@ const appConfig = {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#1E40AF',
     navigationBarTitleText: '智能皮肤检测',
-    navigationBarTextStyle: 'white',
-    animationType: 'slide-in-right'
-  },
-  permission: {
-    'scope.camera': {
-      desc: '用于拍摄面部照片进行皮肤状态分析'
-    },
-    'scope.writePhotosAlbum': {
-      desc: '用于保存皮肤检测报告图片'
-    }
+    navigationBarTextStyle: 'white'
   },
   tabBar: {
     color: '#94A3B8',

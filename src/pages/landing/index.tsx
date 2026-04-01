@@ -1,8 +1,8 @@
 import { View, Text, Image } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState } from 'react'
-import landingBg from '@/assets/landing-bg.png'
-import logoImage from '@/assets/logo.png'
+const landingBg = '/assets/landing-bg.png'
+const logoImage = '/assets/logo.png'
 
 export default function LandingPage() {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false)
