@@ -109,7 +109,10 @@ export default function LandingPage() {
 
       {/* 隐私授权弹窗 */}
       {showPrivacyModal && (
-        <View className="fixed inset-0 bg-black/60 flex items-end justify-center z-50">
+        <View
+          className="fixed inset-0 bg-black/60 flex items-end justify-center z-50"
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
+        >
           <View className="bg-white rounded-t-3xl p-6 w-full max-h-screen overflow-y-auto">
             <Text className="text-xl font-bold text-gray-800 mb-4 block text-center">
               使用前请阅读
