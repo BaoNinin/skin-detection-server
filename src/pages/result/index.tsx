@@ -128,7 +128,7 @@ export default function ResultPage() {
           <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
             <View className="flex items-center justify-between mb-4">
               <Text className="text-lg font-semibold text-gray-800 block">五维雷达图</Text>
-              <Text className="text-sm text-gray-500 block">基于 2000 万数据分析</Text>
+              <Text className="text-sm text-gray-500 block">基于深度学习模型分析</Text>
             </View>
             <RadarChart data={getRadarData()} width={280} height={280} />
             <View className="mt-4 text-center">

@@ -14,7 +14,14 @@
       "Bash(git --version)",
       "Bash(git config:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"Initial commit:*)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(git commit:*)",
+      "Bash(find /Users/nini/project/src -name Preset* -o -name preset*)",
+      "Bash(grep -r \"隐私\\\\|privacy\\\\|政策\\\\|policy\\\\|用户协议\\\\|服务条款\" /Users/nini/project/src --include=*.tsx --include=*.ts)",
+      "Bash(git rm:*)"
     ]
   }
 }

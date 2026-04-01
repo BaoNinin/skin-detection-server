@@ -19,6 +19,14 @@ const appConfig = {
     navigationBarTextStyle: 'white',
     animationType: 'slide-in-right'
   },
+  permission: {
+    'scope.camera': {
+      desc: '用于拍摄面部照片进行皮肤状态分析'
+    },
+    'scope.writePhotosAlbum': {
+      desc: '用于保存皮肤检测报告图片'
+    }
+  },
   tabBar: {
     color: '#94A3B8',
     selectedColor: '#1E40AF',

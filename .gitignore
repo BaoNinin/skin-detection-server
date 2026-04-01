@@ -5,4 +5,9 @@ dist-web/
 key/
 .env
 .env.local
+.env.production
+.env.wechat-cloud
+.env.wechat-cloud.json
+.env.wechat-cloud.txt
+server/.env*
 project.private.config.json

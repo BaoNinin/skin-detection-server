@@ -117,10 +117,10 @@ export default function AnalyzingPage() {
 
   const steps = scanSuccess
     ? [
-        { icon: '🔌', text: '正在激活芯片...', step: 'activating' },
+        { icon: '🔌', text: '正在准备分析...', step: 'activating' },
         { icon: '✅', text: '识别成功', step: 'success' },
         { icon: '🔬', text: 'AI 正在分析肤质...', step: 'analyzing' },
-        { icon: '⚡', text: '芯片激活中...', step: 'processing' },
+        { icon: '⚡', text: '深度分析中...', step: 'processing' },
         { icon: '📊', text: '生成报告...', step: 'preview' },
         { icon: '✨', text: '分析完成！', step: 'completed' }
       ]
@@ -467,7 +467,7 @@ export default function AnalyzingPage() {
               <Text className="text-6xl font-bold text-blue-700 block" style={{ textShadow: '0 0 20px rgba(251, 113, 133, 0.8)' }}>
                 {activationCountdown}
               </Text>
-              <Text className="text-sm text-gray-600 mt-2 block">AI芯片激活中</Text>
+              <Text className="text-sm text-gray-600 mt-2 block">深度分析中</Text>
             </View>
 
             {/* 激活进度条 */}
@@ -624,11 +624,11 @@ export default function AnalyzingPage() {
         {/* 预计时间 */}
         <Text className="text-sm text-gray-500 text-center block">
           {currentStep === 'activating'
-            ? '激活芯片中，请稍候...'
+            ? '准备分析中，请稍候...'
             : currentStep === 'analyzing'
             ? 'AI分析中，请稍候...'
             : currentStep === 'processing'
-            ? '芯片激活中，请稍候...'
+            ? '深度分析中，请稍候...'
             : currentStep === 'preview'
             ? '报告已生成'
             : '分析完成'}
