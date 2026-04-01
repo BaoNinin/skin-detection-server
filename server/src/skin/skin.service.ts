@@ -338,6 +338,63 @@ export class SkinService {
     return result;
   }
 
+  async checkFaceAlignment(file: UploadedFile): Promise<{ hasFace: boolean; aligned: boolean; direction: string }> {
+    const fallback = { hasFace: false, aligned: false, direction: 'none' };
+    try {
+      let imageData: string;
+      if (file.path) {
+        imageData = fs.readFileSync(file.path).toString('base64');
+      } else if (file.buffer) {
+        imageData = file.buffer.toString('base64');
+      } else {
+        return fallback;
+      }
+
+      const dataUri = `data:${file.mimetype || 'image/jpeg'};base64,${imageData}`;
+      const apiKey = process.env.COZE_API_KEY || '';
+      const apiUrl = process.env.COZE_API_BASE || 'https://ark.cn-beijing.volces.com/api/v3/chat/completions';
+      const model = process.env.COZE_MODEL || 'ep-20260324135258-7shrd';
+
+      const requestBody = {
+        model,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image_url', image_url: { url: dataUri } },
+            {
+              type: 'text',
+              text: '判断照片中是否有人脸，以及人脸是否在画面中央位置。只返回JSON不要有其他内容：{"hasFace":true或false,"aligned":true或false,"direction":"none或up或down或left或right或far或close"}\ndirection含义：none=已居中, up=脸偏下需抬头, down=脸偏上需低头, left=脸偏右需向左移, right=脸偏左需向右移, far=距离太远, close=距离太近'
+            }
+          ]
+        }],
+        max_tokens: 80,
+        temperature: 0.1
+      };
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) return fallback;
+
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content || '';
+      const jsonMatch = content.match(/\{[\s\S]*?\}/);
+      if (!jsonMatch) return fallback;
+
+      const result = JSON.parse(jsonMatch[0]);
+      return {
+        hasFace: !!result.hasFace,
+        aligned: !!result.aligned,
+        direction: result.direction || 'none'
+      };
+    } catch {
+      return fallback;
+    }
+  }
+
   async recommendProducts(skinData: {
     skinType: string;
     concerns: string[];

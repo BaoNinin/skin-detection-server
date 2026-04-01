@@ -38,6 +38,14 @@ export class SkinController {
     }
   }
 
+  @Post('check-face')
+  @UseInterceptors(FileInterceptor('image'))
+  async checkFace(@UploadedFile() file: UploadedFileType) {
+    if (!file) throw new BadRequestException('未上传图片');
+    const result = await this.skinService.checkFaceAlignment(file);
+    return { code: 200, msg: 'ok', data: result };
+  }
+
   @Get('recommend')
   async recommendProducts(@Query() query: any) {
     const { skinType, moisture, oiliness, sensitivity, concerns, acne, wrinkles, spots, pores, blackheads } = query;
