@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Frontend (H5)",
+      "runtimeExecutable": "/usr/local/lib/node_modules/corepack/shims/pnpm",
+      "runtimeArgs": ["dev:web"],
+      "port": 5000,
+      "autoPort": true
+    },
+    {
+      "name": "Backend (NestJS)",
+      "runtimeExecutable": "/usr/local/lib/node_modules/corepack/shims/pnpm",
+      "runtimeArgs": ["dev:server"],
+      "port": 3000
+    }
+  ]
+}

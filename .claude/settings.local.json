@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(command -v pnpm)",
+      "Read(//Users/nini/.local/share/pnpm/**)",
+      "Read(//opt/homebrew/bin/**)",
+      "Read(//Users/nini/Library/pnpm/**)",
+      "Bash(npx --yes which pnpm)",
+      "Bash(node -e \"console.log\\(process.execPath\\)\")",
+      "Bash(/usr/local/lib/node_modules/corepack/shims/pnpm install:*)",
+      "Bash(gh auth:*)",
+      "Bash(cat /Users/nini/project/key/*)",
+      "Bash(git --version)",
+      "Bash(git config:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

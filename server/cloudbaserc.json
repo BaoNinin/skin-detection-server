@@ -1,0 +1,35 @@
+{
+  "envId": "prod-3gbk859ae18cc611",
+  "version": "2.0",
+  "$schema": "https://framework-1258016615.tcloudbaseapp.com/schema/latest.json",
+  "framework": {
+    "name": "skin-analysis-backend",
+    "plugins": {}
+  },
+  "services": [
+    {
+      "name": "skin-detection-serve",
+      "type": "container",
+      "containerPort": 80,
+      "cpu": 0.5,
+      "mem": 1.0,
+      "minNum": 1,
+      "maxNum": 10,
+      "dockerfile": "./Dockerfile",
+      "envVariables": {
+        "COZE_API_KEY": "{{env.COZE_API_KEY}}",
+        "COZE_MODEL": "{{env.COZE_MODEL}}",
+        "COZE_API_BASE": "{{env.COZE_API_BASE}}",
+        "COZE_SUPABASE_URL": "{{env.COZE_SUPABASE_URL}}",
+        "COZE_SUPABASE_ANON_KEY": "{{env.COZE_SUPABASE_ANON_KEY}}",
+        "WECHAT_APPID": "{{env.WECHAT_APPID}}",
+        "WECHAT_APPSECRET": "{{env.WECHAT_APPSECRET}}",
+        "CLOUDBASE_ENV_ID": "{{env.CLOUDBASE_ENV_ID}}",
+        "NODE_ENV": "{{env.NODE_ENV}}",
+        "COZE_USE_MOCK": "{{env.COZE_USE_MOCK}}"
+      },
+      "customLogs": "./logs",
+      "volumeMounts": []
+    }
+  ]
+}

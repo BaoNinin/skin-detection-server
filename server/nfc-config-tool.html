@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFC 配置工具</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      color: #333;
+      font-size: 28px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .subtitle {
+      color: #666;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .step {
+      margin-bottom: 25px;
+    }
+
+    .step-title {
+      color: #667eea;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .step-number {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    .step-content {
+      margin-left: 40px;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      color: #333;
+      font-weight: 500;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .input-group textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e5e5;
+    }
+
+    .result {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+
+    .result-title {
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .result-content {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #666;
+      word-break: break-all;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .tips {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    .tips-text {
+      color: #856404;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .copy-feedback {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #28a745;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1000;
+    }
+
+    .copy-feedback.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>🎯 NFC 配置工具</h1>
+      <p class="subtitle">快速配置 NFC 标签，实现跳转微信小程序</p>
+
+      <!-- 步骤 1：配置网页 URL -->
+      <div class="step">
+        <div class="step-title">
+          <span class="step-number">1</span>
+          配置网页 URL
+        </div>
+        <div class="step-content">
+          <div class="input-group">
+            <label>跳转网页 URL</label>
+            <input
+              type="text"
+              id="webUrl"
+              placeholder="https://your-service-url/nfc-redirect.html"
+              value="https://your-service-url/nfc-redirect.html"
+            >
+            <div class="tips">
+              <div class="tips-text">
+                💡 这是部署后网页的完整访问地址，请替换为你实际的服务地址
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 步骤 2：配置小程序 URL Scheme -->
+      <div class="step">
+        <div class="step-title">
+          <span class="step-number">2</span>
+          配置小程序 URL Scheme
+        </div>
+        <div class="step-content">
+          <div class="input-group">
+            <label>小程序 URL Scheme</label>
+            <textarea
+              id="urlScheme"
+              placeholder="weixin://dl/business/?t=YOUR_TICKET_HERE"
+            >weixin://dl/business/?t=YOUR_TICKET_HERE</textarea>
+            <div class="tips">
+              <div class="tips-text">
+                💡 在微信公众平台 → 开发管理 → 开发设置 → URL Scheme 中生成
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 步骤 3：生成配置 -->
+      <div class="step">
+        <div class="step-title">
+          <span class="step-number">3</span>
+          生成配置代码
+        </div>
+        <div class="step-content">
+          <button class="btn" onclick="generateConfig()">生成配置</button>
+
+          <div id="result" class="result" style="display: none;">
+            <div class="result-title">📄 nfc-redirect.html 配置代码</div>
+            <div class="result-content" id="configCode"></div>
+            <div style="margin-top: 10px;">
+              <button class="btn btn-secondary" onclick="copyCode()">复制代码</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 步骤 4：NFC 写入 -->
+      <div class="step">
+        <div class="step-title">
+          <span class="step-number">4</span>
+          写入 NFC 标签
+        </div>
+        <div class="step-content">
+          <div class="input-group">
+            <label>要写入的网页 URL</label>
+            <input
+              type="text"
+              id="nfcUrl"
+              readonly
+            >
+          </div>
+
+          <div class="tips">
+            <div class="tips-text">
+              💡 <strong>使用 Android 手机写入（推荐）</strong><br>
+              1. 下载 NFC Tools App<br>
+              2. 选择"写入" → "添加记录" → "URI"<br>
+              3. 输入上面的网页 URL<br>
+              4. 靠近 NFC 标签写入
+            </div>
+          </div>
+
+          <button class="btn btn-secondary" onclick="copyNfcUrl()">复制网页 URL</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 使用说明 -->
+    <div class="card">
+      <div class="step-title">
+        <span class="step-number">?</span>
+        使用说明
+      </div>
+      <div class="step-content" style="margin-left: 0;">
+        <div class="tips">
+          <div class="tips-text">
+            <strong>完整配置流程：</strong><br><br>
+            1. 部署网页到服务器<br>
+            2. 获取小程序 URL Scheme<br>
+            3. 在此工具中生成配置代码<br>
+            4. 将配置代码复制到 nfc-redirect.html<br>
+            5. 使用 NFC Tools 写入网页 URL 到标签<br><br>
+            <strong>详细文档：</strong>查看 NFC_CONFIG.md
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 复制成功提示 -->
+  <div id="copyFeedback" class="copy-feedback">✅ 已复制到剪贴板</div>
+
+  <script>
+    // 生成配置代码
+    function generateConfig() {
+      const urlScheme = document.getElementById('urlScheme').value.trim();
+      const webUrl = document.getElementById('webUrl').value.trim();
+
+      if (!urlScheme || urlScheme === 'weixin://dl/business/?t=YOUR_TICKET_HERE') {
+        alert('请先配置小程序 URL Scheme');
+        return;
+      }
+
+      const configCode = `// 配置小程序 URL Scheme
+const MINIPRAM_URL = '${urlScheme}';
+
+// 配置完成！`;
+
+      document.getElementById('configCode').textContent = configCode;
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('nfcUrl').value = webUrl;
+    }
+
+    // 复制代码
+    function copyCode() {
+      const code = document.getElementById('configCode').textContent;
+      copyToClipboard(code);
+    }
+
+    // 复制 NFC URL
+    function copyNfcUrl() {
+      const url = document.getElementById('nfcUrl').value;
+      if (!url) {
+        alert('请先生成配置');
+        return;
+      }
+      copyToClipboard(url);
+    }
+
+    // 复制到剪贴板
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showCopyFeedback();
+        }).catch(err => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    // 降级复制方案
+    function fallbackCopy(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+
+      try {
+        document.execCommand('copy');
+        showCopyFeedback();
+      } catch (err) {
+        alert('复制失败，请手动选择文本复制');
+      }
+
+      document.body.removeChild(textArea);
+    }
+
+    // 显示复制成功提示
+    function showCopyFeedback() {
+      const feedback = document.getElementById('copyFeedback');
+      feedback.classList.add('show');
+      setTimeout(() => {
+        feedback.classList.remove('show');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

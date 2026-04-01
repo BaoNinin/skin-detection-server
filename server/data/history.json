@@ -1,0 +1,1317 @@
+[
+  {
+    "id": 1,
+    "userId": 14,
+    "skinType": "干性皮肤",
+    "concerns": [
+      "干燥",
+      "细纹"
+    ],
+    "moisture": 45,
+    "oiliness": 30,
+    "sensitivity": 40,
+    "acne": 0,
+    "wrinkles": 15,
+    "spots": 0,
+    "pores": 25,
+    "blackheads": 10,
+    "recommendations": [
+      "加强保湿",
+      "使用温和的洁面产品"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-10T10:30:00.000Z",
+    "updatedAt": "2026-03-10T10:30:00.000Z"
+  },
+  {
+    "id": 2,
+    "userId": 14,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "T区油腻",
+      "毛孔粗大"
+    ],
+    "moisture": 65,
+    "oiliness": 60,
+    "sensitivity": 35,
+    "acne": 20,
+    "wrinkles": 5,
+    "spots": 10,
+    "pores": 50,
+    "blackheads": 30,
+    "recommendations": [
+      "平衡水油",
+      "定期深层清洁"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-12T14:20:00.000Z",
+    "updatedAt": "2026-03-12T14:20:00.000Z"
+  },
+  {
+    "id": 3,
+    "userId": 14,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 75,
+    "oiliness": 45,
+    "sensitivity": 30,
+    "acne": 5,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 30,
+    "blackheads": 15,
+    "recommendations": [
+      "保持现有护肤习惯",
+      "注意防晒"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-13T09:15:00.000Z",
+    "updatedAt": "2026-03-13T09:15:00.000Z"
+  },
+  {
+    "id": 4,
+    "userId": 14,
+    "skinType": "油性皮肤",
+    "concerns": [
+      "痘痘",
+      "黑头"
+    ],
+    "moisture": 55,
+    "oiliness": 75,
+    "sensitivity": 45,
+    "acne": 40,
+    "wrinkles": 10,
+    "spots": 20,
+    "pores": 60,
+    "blackheads": 45,
+    "recommendations": [
+      "控油祛痘",
+      "使用水杨酸产品"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-14T16:45:00.000Z",
+    "updatedAt": "2026-03-14T16:45:00.000Z"
+  },
+  {
+    "id": 5,
+    "userId": 14,
+    "skinType": "敏感性皮肤",
+    "concerns": [
+      "泛红",
+      "刺痛"
+    ],
+    "moisture": 50,
+    "oiliness": 35,
+    "sensitivity": 70,
+    "acne": 10,
+    "wrinkles": 5,
+    "spots": 0,
+    "pores": 35,
+    "blackheads": 20,
+    "recommendations": [
+      "使用舒缓产品",
+      "避免刺激性成分"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-15T11:20:00.000Z",
+    "updatedAt": "2026-03-15T11:20:00.000Z"
+  },
+  {
+    "id": 6,
+    "userId": 1,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "T区油腻",
+      "毛孔粗大"
+    ],
+    "moisture": 60,
+    "oiliness": 55,
+    "sensitivity": 40,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "注意控油",
+      "定期清洁"
+    ],
+    "imageUrl": null,
+    "createdAt": "2026-03-15T07:44:00.148Z",
+    "updatedAt": "2026-03-15T07:44:00.148Z"
+  },
+  {
+    "id": 7,
+    "userId": 14,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "轻微毛孔问题"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 10,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好防晒，减少紫外线对皮肤的伤害，预防色斑加重",
+      "使用温和的洁面产品，保持皮肤清洁的同时避免过度清洁",
+      "可以适当使用含有保湿成分的护肤品，维持皮肤水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_3d3a292a40223954cd2b5903d5f3789598d6dba3c2ffe7af.jpg",
+    "createdAt": "2026-03-15T07:48:13.510Z",
+    "updatedAt": "2026-03-15T07:48:13.510Z"
+  },
+  {
+    "id": 8,
+    "userId": 14,
+    "skinType": "油性皮肤",
+    "concerns": [
+      "痘痘",
+      "毛孔粗大",
+      "黑头"
+    ],
+    "moisture": 55,
+    "oiliness": 65,
+    "sensitivity": 25,
+    "acne": 30,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 40,
+    "blackheads": 35,
+    "recommendations": [
+      "使用温和的氨基酸洁面产品，每天清洁面部2次，避免过度清洁导致皮肤屏障受损",
+      "选择含有水杨酸、壬二酸等成分的护肤品，帮助改善痘痘和黑头问题，同时定期使用清洁面膜清理毛孔内的油脂和污垢",
+      "注意饮食清淡，减少高糖、高脂肪和辛辣食物的摄入，多吃蔬菜水果，保持充足的睡眠和规律的作息，有助于调节皮肤油脂分泌"
+    ],
+    "imageUrl": "wxfile://tmp_b3375bbaed8a643a56bcc542c5deffb8b3206828800ddab5.jpg",
+    "createdAt": "2026-03-15T07:50:36.340Z",
+    "updatedAt": "2026-03-15T07:50:36.340Z"
+  },
+  {
+    "id": 9,
+    "userId": 15,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "痘痘",
+      "毛孔粗大",
+      "黑头"
+    ],
+    "moisture": 55,
+    "oiliness": 50,
+    "sensitivity": 20,
+    "acne": 30,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 40,
+    "blackheads": 30,
+    "recommendations": [
+      "使用温和的洁面产品，避免过度清洁导致皮肤屏障受损",
+      "定期使用含有水杨酸或果酸的护肤品，帮助疏通毛孔，减少黑头和痘痘",
+      "注意饮食清淡，减少高糖、高油食物的摄入，多喝水，保持充足的睡眠"
+    ],
+    "imageUrl": "wxfile://tmp_c71778a57885821e2fdaaa50714443f41c8ca0c150fbdff7.jpg",
+    "createdAt": "2026-03-15T08:10:54.227Z",
+    "updatedAt": "2026-03-15T08:10:54.227Z"
+  },
+  {
+    "id": 10,
+    "userId": 15,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "毛孔问题",
+      "轻微色斑"
+    ],
+    "moisture": 65,
+    "oiliness": 45,
+    "sensitivity": 20,
+    "acne": 15,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 25,
+    "blackheads": 10,
+    "recommendations": [
+      "使用温和的洁面产品，避免过度清洁T区",
+      "T区使用控油爽肤水，两颊使用保湿精华",
+      "定期去角质，注意防晒以减少色斑生成"
+    ],
+    "imageUrl": "wxfile://tmp_e61a767603049d416fd75ffa6cef860e3fecb1531551f28b.jpg",
+    "createdAt": "2026-03-15T08:11:47.984Z",
+    "updatedAt": "2026-03-15T08:11:47.984Z"
+  },
+  {
+    "id": 11,
+    "userId": 16,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "轻微痘痘"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 15,
+    "pores": 10,
+    "blackheads": 5,
+    "recommendations": [
+      "日常做好防晒，减少紫外线对皮肤的伤害，预防色斑加重",
+      "选择温和的洁面产品，保持皮肤清洁，避免过度清洁导致皮肤屏障受损",
+      "可以适当使用含有水杨酸成分的护肤品，帮助改善轻微痘痘问题"
+    ],
+    "imageUrl": "wxfile://tmp_3d5f880577af9019d07be7924017565daa727e2bbc6914c5.jpg",
+    "createdAt": "2026-03-15T08:24:24.145Z",
+    "updatedAt": "2026-03-15T08:24:24.145Z"
+  },
+  {
+    "id": 12,
+    "userId": 19,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "少量色斑",
+      "轻微痘痘"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 15,
+    "pores": 10,
+    "blackheads": 5,
+    "recommendations": [
+      "唇部可使用滋润型润唇膏，保持唇部水分",
+      "日常做好防晒，减少色斑形成风险",
+      "选择温和的洁面产品，避免过度清洁"
+    ],
+    "imageUrl": "wxfile://tmp_01e7e20779cdd7e0b1c541f0d780885a8d2f1835d7893072.jpg",
+    "createdAt": "2026-03-15T08:34:39.385Z",
+    "updatedAt": "2026-03-15T08:34:39.385Z"
+  },
+  {
+    "id": 13,
+    "userId": 22,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "面部轻度色素沉着",
+      "T区轻微出油"
+    ],
+    "moisture": 65,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 15,
+    "pores": 10,
+    "blackheads": 5,
+    "recommendations": [
+      "唇部使用滋润型唇膏，如含凡士林、角鲨烷成分的产品，保持唇部湿润",
+      "面部色素沉着处可使用含有烟酰胺、维生素C成分的护肤品，帮助提亮肤色",
+      "T区可适当使用控油爽肤水，保持皮肤水油平衡，整体护肤以温和保湿为主"
+    ],
+    "imageUrl": "wxfile://tmp_59528115278a897e5d037f6e467e90345d9117e054c86a6e.jpg",
+    "createdAt": "2026-03-15T08:54:25.499Z",
+    "updatedAt": "2026-03-15T08:54:25.499Z"
+  },
+  {
+    "id": 14,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "毛孔细腻"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 20,
+    "pores": 10,
+    "blackheads": 0,
+    "recommendations": [
+      "使用滋润型唇膏，保持唇部水分，避免舔唇等不良习惯",
+      "日常注意防晒，减少色斑形成风险，可适当使用含有美白成分的护肤品预防色斑加重",
+      "继续维持当前良好的皮肤状态，选择温和的洁面产品，避免过度清洁"
+    ],
+    "imageUrl": "wxfile://tmp_421108214124b3cf4e86ce651cf2e2a434c44497ab0de5ed.jpg",
+    "createdAt": "2026-03-15T09:10:12.605Z",
+    "updatedAt": "2026-03-15T09:10:12.605Z"
+  },
+  {
+    "id": 15,
+    "userId": 23,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "T区出油",
+      "唇部干燥起皮",
+      "轻微黑头",
+      "少量色斑"
+    ],
+    "moisture": 65,
+    "oiliness": 45,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 25,
+    "blackheads": 15,
+    "recommendations": [
+      "使用温和的氨基酸洁面产品，重点清洁T区，避免过度清洁两颊",
+      "日常护肤注重补水保湿，可选用含有透明质酸的护肤品",
+      "唇部干燥起皮可使用滋润型唇膏，避免舔唇、撕皮等不良习惯",
+      "注意防晒，减少紫外线对皮肤的伤害，预防色斑加重"
+    ],
+    "imageUrl": "wxfile://tmp_00e35a9780c8a06d7a944dadd032632d3942b84e90a2a470.jpg",
+    "createdAt": "2026-03-15T09:11:16.120Z",
+    "updatedAt": "2026-03-15T09:11:16.120Z"
+  },
+  {
+    "id": 16,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "无明显问题"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 10,
+    "blackheads": 10,
+    "recommendations": [
+      "继续保持良好的护肤习惯，维持皮肤水油平衡",
+      "注意防晒，预防色斑形成",
+      "定期进行温和的皮肤清洁，防止黑头和毛孔问题加重"
+    ],
+    "imageUrl": "wxfile://tmp_8ece3d4dcfa65d7d178d2636082604a74e2312c9e91cb71c.jpg",
+    "createdAt": "2026-03-15T09:15:01.729Z",
+    "updatedAt": "2026-03-15T09:15:01.729Z"
+  },
+  {
+    "id": 17,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 20,
+    "pores": 10,
+    "blackheads": 10,
+    "recommendations": [
+      "日常注意唇部护理，可使用滋润型润唇膏保持唇部水分",
+      "对于面部色斑，可适当使用含有美白淡斑成分（如维生素C、烟酰胺）的护肤品，同时注意防晒，减少紫外线对皮肤的刺激以预防色斑加重",
+      "整体肤质较好，可维持现有的基础护肤流程，使用温和的洁面产品和保湿护肤品，保持皮肤水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_b7d19436e442bfa9bacef7a9f457e01d95f4326c6466cabc.jpg",
+    "createdAt": "2026-03-15T09:18:32.265Z",
+    "updatedAt": "2026-03-15T09:18:32.265Z"
+  },
+  {
+    "id": 18,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好唇部保湿，可使用滋润型润唇膏",
+      "对于面部的轻微色斑，可使用含有美白淡斑成分（如维生素C、烟酰胺）的护肤品进行护理",
+      "继续保持良好的护肤习惯，维持皮肤的水油平衡状态"
+    ],
+    "imageUrl": "wxfile://tmp_30708fcfab68ac2713963f57d5759902a0654a9f941a0921.jpg",
+    "createdAt": "2026-03-15T09:20:15.657Z",
+    "updatedAt": "2026-03-15T09:20:15.657Z"
+  },
+  {
+    "id": 19,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常注意唇部保湿，可使用无刺激的润唇膏",
+      "对于面部的轻微色斑，可使用含有美白成分如维生素C的护肤品进行护理",
+      "继续保持良好的护肤习惯，维持皮肤的水油平衡状态"
+    ],
+    "imageUrl": "wxfile://tmp_cf15920431364a0c1c24d1696a3c3725574d6b0eca5ca971.jpg",
+    "createdAt": "2026-03-15T09:20:25.800Z",
+    "updatedAt": "2026-03-15T09:20:25.800Z"
+  },
+  {
+    "id": 20,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "轻微痘痘"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "使用温和的唇部护理产品，如含有凡士林、角鲨烷等成分的润唇膏，保持唇部滋润",
+      "日常注意防晒，可选择物理防晒或化学防晒产品，减少色斑形成的诱因",
+      "对于轻微痘痘，可使用含有水杨酸或茶树精油成分的护肤品，注意不要用手挤压痘痘"
+    ],
+    "imageUrl": "wxfile://tmp_87272f55f059a50a4230e918d8d9596d9b9cfe0673e73298.jpg",
+    "createdAt": "2026-03-15T09:25:29.312Z",
+    "updatedAt": "2026-03-15T09:25:29.312Z"
+  },
+  {
+    "id": 21,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 5,
+    "pores": 10,
+    "blackheads": 5,
+    "recommendations": [
+      "保持良好的作息习惯，避免熬夜，以维持皮肤的正常代谢",
+      "日常做好基础的清洁、保湿和防晒工作，可选择温和的洁面产品和保湿护肤品",
+      "饮食上注意营养均衡，多摄入富含维生素的食物，有助于皮肤健康"
+    ],
+    "imageUrl": "wxfile://tmp_b4f490eb488ece4ef0aa567a26d376b427543461f42d78fb.jpg",
+    "createdAt": "2026-03-15T09:25:50.203Z",
+    "updatedAt": "2026-03-15T09:25:50.203Z"
+  },
+  {
+    "id": 22,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "唇部可使用滋润型润唇膏，保持唇部水分防止起皮",
+      "日常注意防晒，减少色斑形成和加重",
+      "可适当使用含有美白淡斑成分的护肤品改善轻微色斑"
+    ],
+    "imageUrl": "wxfile://tmp_2ab4b16119ca3b5e0c0126d117ffb890779721d96048e3f6.jpg",
+    "createdAt": "2026-03-15T09:26:19.588Z",
+    "updatedAt": "2026-03-15T09:26:19.588Z"
+  },
+  {
+    "id": 23,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 5,
+    "blackheads": 0,
+    "recommendations": [
+      "日常使用含有保湿成分（如透明质酸）的护肤品，维持皮肤水分平衡",
+      "唇部干燥起皮时，可涂抹滋润型润唇膏，避免舔唇、撕皮等不良习惯",
+      "对于面部的轻微色斑，可使用含有美白成分（如维生素C、烟酰胺）的护肤品，同时注意做好防晒，防止色斑加重"
+    ],
+    "imageUrl": "wxfile://tmp_eb9f5f1fb7e51330bc96a5351dd674b3db8ce40863247386.jpg",
+    "createdAt": "2026-03-15T09:36:38.599Z",
+    "updatedAt": "2026-03-15T09:36:38.599Z"
+  },
+  {
+    "id": 24,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 10,
+    "blackheads": 0,
+    "recommendations": [
+      "日常注意唇部护理，可使用滋润型润唇膏保持唇部水分，避免舔唇、撕皮等不良习惯",
+      "对于面部的轻微色斑，可适当使用含有美白淡斑成分（如维生素C、烟酰胺等）的护肤品，同时注意做好防晒，减少紫外线对皮肤的刺激以防止色斑加重",
+      "整体肤质较为健康，继续保持良好的护肤习惯，如使用温和的洁面产品清洁皮肤，维持皮肤的水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_f0267766b2802dc91a78c7346928d8fab8e32ce3f9d7c2da.jpg",
+    "createdAt": "2026-03-15T09:36:47.765Z",
+    "updatedAt": "2026-03-15T09:36:47.765Z"
+  },
+  {
+    "id": 25,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "继续保持良好的护肤习惯，维持水油平衡",
+      "注意防晒，预防色斑和光老化",
+      "可定期使用温和的清洁产品，保持皮肤清洁"
+    ],
+    "imageUrl": "wxfile://tmp_964c0cd145adefdbfeba1d0818087fda14d67ec58ee5f2ed.jpg",
+    "createdAt": "2026-03-15T09:37:52.179Z",
+    "updatedAt": "2026-03-15T09:37:52.179Z"
+  },
+  {
+    "id": 26,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 10,
+    "blackheads": 0,
+    "recommendations": [
+      "日常使用温和的洁面产品，保持皮肤清洁",
+      "唇部可涂抹滋润型唇膏，缓解干燥起皮问题",
+      "注意防晒，减少紫外线对皮肤的伤害，预防色斑加重"
+    ],
+    "imageUrl": "wxfile://tmp_db8bd1f9c4623e280348148a5fd7478ff3cb7a114d5e243b.jpg",
+    "createdAt": "2026-03-15T09:39:51.185Z",
+    "updatedAt": "2026-03-15T09:39:51.185Z"
+  },
+  {
+    "id": 27,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "少量色斑"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 20,
+    "wrinkles": 0,
+    "spots": 20,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "使用温和的洁面产品，避免过度清洁",
+      "注意防晒，减少色斑加重的可能",
+      "对于轻微痘痘，可使用含有水杨酸的护肤品进行调理"
+    ],
+    "imageUrl": "wxfile://tmp_53c310cd812950c4dcfa230274ed0346e06793020e76965d.jpg",
+    "createdAt": "2026-03-15T09:41:09.175Z",
+    "updatedAt": "2026-03-15T09:41:09.175Z"
+  },
+  {
+    "id": 28,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "皮肤整体状态良好"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 5,
+    "blackheads": 5,
+    "recommendations": [
+      "唇部可使用滋润型唇膏，保持唇部水分，避免舔唇等不良习惯",
+      "日常注意防晒，减少色斑形成的诱因",
+      "继续保持良好的护肤习惯，维持皮肤的水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_c0c6a5ea8a40d2ddf3319863e641acb6139e925e1a121a3d.jpg",
+    "createdAt": "2026-03-15T09:46:07.180Z",
+    "updatedAt": "2026-03-15T09:46:07.180Z"
+  },
+  {
+    "id": 29,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 80,
+    "oiliness": 20,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "继续维持当前良好的护肤习惯，使用温和的洁面产品",
+      "定期使用保湿面膜来巩固皮肤的水分含量",
+      "注意防晒，预防光老化和色斑生成"
+    ],
+    "imageUrl": "wxfile://tmp_f75ac14ed5b80e75d3ee5887f6c1ef48b8425d430ff989e8.jpg",
+    "createdAt": "2026-03-15T09:47:16.065Z",
+    "updatedAt": "2026-03-15T09:47:16.065Z"
+  },
+  {
+    "id": 30,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "皮肤整体状态良好"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "使用润唇膏保持唇部滋润，避免舔唇等不良习惯",
+      "日常注意防晒，减少色斑加深风险",
+      "继续保持良好的护肤习惯，维持水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_c5ad3802a6e9c0fb57415c1b754bcfa76c337c7342a99640.jpg",
+    "createdAt": "2026-03-15T09:52:21.616Z",
+    "updatedAt": "2026-03-15T09:52:21.616Z"
+  },
+  {
+    "id": 31,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "继续保持良好的护肤习惯，维持水油平衡",
+      "注意防晒，预防皮肤光老化",
+      "可适当使用具有抗氧化功效的护肤品，提升皮肤健康度"
+    ],
+    "imageUrl": "wxfile://tmp_dced35a73b592f0f8405ce9f64053f07e6b54c018af850e8.jpg",
+    "createdAt": "2026-03-15T10:06:09.722Z",
+    "updatedAt": "2026-03-15T10:06:09.722Z"
+  },
+  {
+    "id": 32,
+    "userId": 23,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "痘痘",
+      "轻微色斑"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 30,
+    "wrinkles": 0,
+    "spots": 20,
+    "pores": 20,
+    "blackheads": 10,
+    "recommendations": [
+      "使用温和的洁面产品，避免过度清洁",
+      "针对痘痘区域可使用含有水杨酸的护肤品",
+      "注意防晒，减少色斑加重的风险"
+    ],
+    "imageUrl": "wxfile://tmp_cfc320a5f774fd8f53490dff6f807e52a8b407d1f6bb7619.jpg",
+    "createdAt": "2026-03-15T10:24:26.043Z",
+    "updatedAt": "2026-03-15T10:24:26.043Z"
+  },
+  {
+    "id": 33,
+    "userId": 24,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "轻微痘痘"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "唇部可使用滋润型唇膏，如含有凡士林、角鲨烷成分的产品，保持唇部湿润",
+      "日常注意防晒，可选择物理防晒或化学防晒产品，预防色斑加重",
+      "注意面部清洁，选择温和的洁面产品，避免过度清洁导致皮肤干燥"
+    ],
+    "imageUrl": "wxfile://tmp_16706830ce44acd78151dd641c52215e.jpg",
+    "createdAt": "2026-03-16T03:07:54.111Z",
+    "updatedAt": "2026-03-16T03:07:54.111Z"
+  },
+  {
+    "id": 34,
+    "userId": 25,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "唇部干燥"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 5,
+    "pores": 5,
+    "blackheads": 5,
+    "recommendations": [
+      "注意唇部保湿，可使用无刺激的润唇膏",
+      "对于面部少量痘痘，注意清洁皮肤，避免用手挤压",
+      "日常做好基础护肤，维持皮肤水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_7be7aec4282936ac202581d8aaa391c74c968e968afe72a4.jpg",
+    "createdAt": "2026-03-16T04:03:11.307Z",
+    "updatedAt": "2026-03-16T04:03:11.307Z"
+  },
+  {
+    "id": 35,
+    "userId": 25,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "少量色斑",
+      "唇部干燥"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 15,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好基础清洁和保湿，保持水油平衡",
+      "唇部干燥时可使用无刺激的润唇膏",
+      "对于少量痘痘可使用温和的祛痘产品，避免挤压",
+      "注意防晒，预防色斑加重"
+    ],
+    "imageUrl": "wxfile://tmp_d14be1b27e8a7219307944f4ffe60fc3b0aad6419ac2506b.jpg",
+    "createdAt": "2026-03-16T04:04:26.983Z",
+    "updatedAt": "2026-03-16T04:04:26.983Z"
+  },
+  {
+    "id": 36,
+    "userId": 26,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "少量色斑"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 5,
+    "blackheads": 5,
+    "recommendations": [
+      "日常注意清洁，可选择温和的洁面产品，避免过度清洁破坏皮肤屏障",
+      "对于轻微痘痘，可使用含有水杨酸或茶树精油的护肤品进行局部护理，帮助消炎祛痘",
+      "针对少量色斑，可使用含有维生素C、烟酰胺等成分的护肤品，帮助淡化色斑，同时注意做好防晒，避免色斑加重"
+    ],
+    "imageUrl": "wxfile://tmp_9741ae46dc331d1a82616bd2762b1ad81783366d8527507e.jpg",
+    "createdAt": "2026-03-16T04:37:54.621Z",
+    "updatedAt": "2026-03-16T04:37:54.621Z"
+  },
+  {
+    "id": 37,
+    "userId": 27,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "整体肤质维持"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 5,
+    "blackheads": 0,
+    "recommendations": [
+      "唇部使用滋润型唇膏，如含有凡士林、角鲨烷成分的产品，缓解干燥起皮",
+      "日常做好防晒，可选择轻薄的物理防晒或化学防晒，预防色斑加深",
+      "继续保持良好的护肤习惯，使用温和的洁面产品和保湿产品维持水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_2fdaf4efd47183ded3be7c7b653e7266a17e9aedf3cd6bdc.jpg",
+    "createdAt": "2026-03-16T05:47:03.126Z",
+    "updatedAt": "2026-03-16T05:47:03.126Z"
+  },
+  {
+    "id": 38,
+    "userId": 28,
+    "skinType": "干性皮肤",
+    "concerns": [
+      "嘴唇干燥起皮",
+      "皮肤缺水",
+      "可能存在轻微敏感"
+    ],
+    "moisture": 50,
+    "oiliness": 20,
+    "sensitivity": 30,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 10,
+    "blackheads": 0,
+    "recommendations": [
+      "使用温和的保湿洁面产品，避免过度清洁带走皮肤水分",
+      "加强唇部护理，使用滋润型唇膏，可定期进行唇部去角质和唇膜护理",
+      "日常护肤注重补水保湿，选择含有透明质酸、神经酰胺等成分的保湿护肤品，同时注意环境湿度的调节，可使用加湿器"
+    ],
+    "imageUrl": "wxfile://tmp_ec9b43f54b3d74b855a7056f04a7a57e6b7688bcab22a37c.jpg",
+    "createdAt": "2026-03-16T05:55:23.203Z",
+    "updatedAt": "2026-03-16T05:55:23.203Z"
+  },
+  {
+    "id": 39,
+    "userId": 31,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "T区出油",
+      "嘴唇周围干燥起皮",
+      "轻微色斑"
+    ],
+    "moisture": 65,
+    "oiliness": 45,
+    "sensitivity": 25,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 20,
+    "blackheads": 15,
+    "recommendations": [
+      "T区使用控油护肤品，如含有水杨酸的爽肤水或乳液，帮助调节油脂分泌；两颊和嘴唇周围使用滋润保湿的面霜，缓解干燥起皮问题",
+      "日常注意防晒，可选择物理防晒产品，减少色斑加深和新色斑形成的可能",
+      "定期使用温和的去角质产品（如含有氨基酸成分的），帮助清理T区的黑头和老旧角质，但注意频率不要过高，避免损伤皮肤"
+    ],
+    "imageUrl": "wxfile://tmp_4b15b2e065d066654394f2a46c70978011b63c3cc602bd3c.jpg",
+    "createdAt": "2026-03-16T06:41:27.914Z",
+    "updatedAt": "2026-03-16T06:41:27.914Z"
+  },
+  {
+    "id": 40,
+    "userId": 32,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "痘痘",
+      "毛孔粗大",
+      "轻微色斑"
+    ],
+    "moisture": 65,
+    "oiliness": 50,
+    "sensitivity": 25,
+    "acne": 30,
+    "wrinkles": 0,
+    "spots": 15,
+    "pores": 35,
+    "blackheads": 20,
+    "recommendations": [
+      "使用温和的洁面产品，避免过度清洁导致皮肤屏障受损",
+      "T区使用控油产品，两颊使用保湿产品，维持水油平衡",
+      "注意防晒，减少色斑形成和加重的风险"
+    ],
+    "imageUrl": "wxfile://tmp_6d902fd606c1d1cdbc391d6db38c6e29a8fb3a9c4132cfba.jpg",
+    "createdAt": "2026-03-16T07:21:47.606Z",
+    "updatedAt": "2026-03-16T07:21:47.606Z"
+  },
+  {
+    "id": 41,
+    "userId": 32,
+    "skinType": "混合性皮肤",
+    "concerns": [
+      "痘痘",
+      "毛孔",
+      "皮肤水油不平衡"
+    ],
+    "moisture": 65,
+    "oiliness": 45,
+    "sensitivity": 25,
+    "acne": 30,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 35,
+    "blackheads": 20,
+    "recommendations": [
+      "使用温和的氨基酸洁面产品，避免过度清洁导致皮肤屏障受损",
+      "T区使用控油爽肤水，两颊使用保湿爽肤水，分区护理",
+      "定期使用清洁面膜（如每周1-2次）清洁毛孔，减少黑头和痘痘产生"
+    ],
+    "imageUrl": "wxfile://tmp_3aab45e7af433c38481045450d2fd2108c4c39df36ea1b1c.jpg",
+    "createdAt": "2026-03-16T07:22:48.714Z",
+    "updatedAt": "2026-03-16T07:22:48.714Z"
+  },
+  {
+    "id": 42,
+    "userId": 33,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部周围皮肤状态需关注"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好防晒，可选择物理防晒或温和的化学防晒产品，减少色斑加深风险",
+      "唇部周围可适当使用温和的保湿产品，保持皮肤滋润",
+      "保持良好的作息和饮食习惯，维持皮肤的健康状态"
+    ],
+    "imageUrl": "wxfile://tmp_7ec34305e1d0f3cd27a69fcc7cbfe058a6dd00163a7c2674.jpg",
+    "createdAt": "2026-03-16T07:32:13.537Z",
+    "updatedAt": "2026-03-16T07:32:13.537Z"
+  },
+  {
+    "id": 43,
+    "userId": 34,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "轻微毛孔问题",
+      "轻微皱纹"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 20,
+    "spots": 20,
+    "pores": 20,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好防晒，减少色斑加深和新色斑形成",
+      "使用含有抗氧化成分的护肤品，延缓皮肤衰老",
+      "定期进行温和的深层清洁，保持毛孔通畅"
+    ],
+    "imageUrl": "wxfile://tmp_8e2c5603842a7c7d2a1691500d78bdeb73d6f1b6619e3d43.jpg",
+    "createdAt": "2026-03-16T07:55:13.383Z",
+    "updatedAt": "2026-03-16T07:55:13.383Z"
+  },
+  {
+    "id": 44,
+    "userId": 35,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "唇部干燥起皮"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好基础清洁与保湿，可选用温和的洁面产品和保湿乳液",
+      "唇部干燥起皮可使用滋润型唇膏，避免舔唇等不良习惯",
+      "对于轻微痘痘，注意饮食清淡，减少高糖高脂食物摄入，可适当使用含有水杨酸成分的护肤品进行调理"
+    ],
+    "imageUrl": "wxfile://tmp_94f9a553790aab2992d4e8f4743a3f80d415aa4009b48588.jpg",
+    "createdAt": "2026-03-16T09:23:05.910Z",
+    "updatedAt": "2026-03-16T09:23:05.910Z"
+  },
+  {
+    "id": 45,
+    "userId": 35,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "唇部干燥起皮",
+      "轻微色斑",
+      "少量痘痘"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 15,
+    "pores": 10,
+    "blackheads": 5,
+    "recommendations": [
+      "唇部使用滋润型润唇膏，保持唇部水分防止起皮",
+      "日常做好防晒，减少色斑形成和加重",
+      "注意面部清洁和保湿，预防痘痘产生"
+    ],
+    "imageUrl": "wxfile://tmp_0650dcb8de7ff9902e316d43d5393ee55e0ebd8714b95310.jpg",
+    "createdAt": "2026-03-16T10:25:08.467Z",
+    "updatedAt": "2026-03-16T10:25:08.467Z"
+  },
+  {
+    "id": 46,
+    "userId": 35,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微痘痘",
+      "唇部干燥起皮"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 10,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好基础清洁和保湿工作，可选择温和的洁面产品和保湿乳液",
+      "对于唇部干燥起皮，可使用滋润型的润唇膏，避免舔唇、撕皮等不良习惯",
+      "饮食上多摄入富含维生素的食物，保持充足的水分摄入，规律作息，减少痘痘的产生"
+    ],
+    "imageUrl": "wxfile://tmp_9587121c4e04f36ca8df6df3f4b5fa177fac9ff1c1b509d7.jpg",
+    "createdAt": "2026-03-16T10:25:41.290Z",
+    "updatedAt": "2026-03-16T10:25:41.290Z"
+  },
+  {
+    "id": 47,
+    "userId": 35,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微色斑",
+      "唇部问题"
+    ],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常注意防晒，减少紫外线对皮肤的伤害，预防色斑加重",
+      "唇部出现破损，可涂抹温和的润唇膏或唇部修复产品，保持唇部滋润清洁",
+      "继续维持良好的护肤习惯，保持皮肤水油平衡"
+    ],
+    "imageUrl": "wxfile://tmp_08392680cb53e2c58c1977b1312ec6c1f7b390448126e3fb.jpg",
+    "createdAt": "2026-03-16T10:28:40.401Z",
+    "updatedAt": "2026-03-16T10:28:40.401Z"
+  },
+  {
+    "id": 48,
+    "userId": 38,
+    "skinType": "中性皮肤",
+    "concerns": [
+      "轻微黑头",
+      "毛孔轻微粗大",
+      "唇部干燥"
+    ],
+    "moisture": 75,
+    "oiliness": 30,
+    "sensitivity": 15,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 5,
+    "pores": 20,
+    "blackheads": 15,
+    "recommendations": [
+      "日常使用温和的洁面产品，避免过度清洁导致皮肤干燥",
+      "可以定期使用含有水杨酸的护肤品，帮助改善黑头和毛孔问题",
+      "唇部可涂抹润唇膏保持滋润，避免舔唇等不良习惯"
+    ],
+    "imageUrl": "wxfile://tmp_c40596016201bdf6004ff90867a7f7437cb9d58e421081ef.jpg",
+    "createdAt": "2026-03-17T03:11:47.611Z",
+    "updatedAt": "2026-03-17T03:11:47.611Z"
+  },
+  {
+    "id": 49,
+    "userId": 38,
+    "skinType": "油性皮肤",
+    "concerns": [
+      "出油",
+      "毛孔粗大",
+      "轻微黑头"
+    ],
+    "moisture": 55,
+    "oiliness": 65,
+    "sensitivity": 20,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 10,
+    "pores": 40,
+    "blackheads": 25,
+    "recommendations": [
+      "使用温和的洁面产品，早晚清洁面部，避免过度清洁导致油脂分泌失衡",
+      "选择清爽型的爽肤水和乳液，调节皮肤水油平衡",
+      "定期使用清洁面膜或去角质产品（每周1-2次），清理毛孔内的污垢和黑头"
+    ],
+    "imageUrl": "wxfile://tmp_90d23d099dff0a270749168c9d5c682876bfde419cb6ad47.jpg",
+    "createdAt": "2026-03-17T03:43:22.054Z",
+    "updatedAt": "2026-03-17T03:43:22.054Z"
+  },
+  {
+    "id": 50,
+    "userId": 43,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好基础清洁，使用温和的洁面产品",
+      "坚持日常防晒，防止紫外线伤害",
+      "保持良好的生活作息，避免熬夜"
+    ],
+    "imageUrl": "wxfile://tmp_1b18f49bcd12aec0f171fea0d95c81fef0b568596d2123c3.jpg",
+    "createdAt": "2026-03-17T09:37:36.393Z",
+    "updatedAt": "2026-03-17T09:37:36.393Z"
+  },
+  {
+    "id": 51,
+    "userId": 43,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好基础清洁，使用温和的洁面产品",
+      "坚持日常防晒，防止紫外线伤害",
+      "保持良好的生活作息，保证充足睡眠"
+    ],
+    "imageUrl": "wxfile://tmp_cda9e38b935477fafa66cdac9189995805fbb3403da467f7.jpg",
+    "createdAt": "2026-03-17T11:08:33.752Z",
+    "updatedAt": "2026-03-17T11:08:33.752Z"
+  },
+  {
+    "id": 52,
+    "userId": 44,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好基础清洁，保持皮肤干净",
+      "坚持使用温和的保湿护肤品",
+      "注意防晒，避免紫外线伤害"
+    ],
+    "imageUrl": "wxfile://tmp_115dd30fa395a737e77ba9948260dac3a4c7fa45410620d2.jpg",
+    "createdAt": "2026-03-18T02:59:09.807Z",
+    "updatedAt": "2026-03-18T02:59:09.807Z"
+  },
+  {
+    "id": 53,
+    "userId": 44,
+    "skinType": "中性皮肤",
+    "concerns": [],
+    "moisture": 70,
+    "oiliness": 30,
+    "sensitivity": 10,
+    "acne": 0,
+    "wrinkles": 0,
+    "spots": 0,
+    "pores": 0,
+    "blackheads": 0,
+    "recommendations": [
+      "日常做好基础清洁，使用温和的洁面产品",
+      "注意防晒，可选择物理防晒霜",
+      "保持良好的作息和饮食习惯，多喝水"
+    ],
+    "imageUrl": "wxfile://tmp_6574d69dd002ec00809f14f42f38ff5ec3ac6839e020b3bf.jpg",
+    "createdAt": "2026-03-18T03:38:54.811Z",
+    "updatedAt": "2026-03-18T03:38:54.811Z"
+  }
+]

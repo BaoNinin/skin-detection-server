@@ -1,0 +1,47 @@
+{
+  "miniprogramRoot": "",
+  "__compileDebugInfo__": {
+    "from": "ci",
+    "useNewCompileModule": true,
+    "devtoolsVersion": "0",
+    "compileSetting": {
+      "es6": true,
+      "es7": true,
+      "minify": true,
+      "autoPrefixWXSS": false
+    },
+    "ciVersion": "1.7.17"
+  },
+  "appid": "wxcd58ea3e10e31dd1",
+  "setting": {
+    "es6": false,
+    "postcss": false,
+    "compileWorklet": false,
+    "minified": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "enhance": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
+  },
+  "compileType": "miniprogram",
+  "simulatorPluginLibVersion": {},
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "editorSetting": {}
+}
