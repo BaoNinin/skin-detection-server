@@ -310,7 +310,7 @@ export default function CameraPage() {
         {/* 冷却弹窗 */}
         {showCoolingModal && (
           <CoverView style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)' }}>
-            <CoverView style={{ position: 'absolute', top: `${Math.round(screenHeight * 0.3)}px`, left: '24px', width: `${screenWidth - 48}px`, backgroundColor: '#fff', borderRadius: '16px', padding: '24px' }}>
+            <CoverView style={{ position: 'absolute', top: `${Math.round(screenHeight * 0.32)}px`, left: `${Math.round((screenWidth - 260) / 2)}px`, width: '260px', backgroundColor: '#fff', borderRadius: '16px', padding: '20px' }}>
               <CoverView style={{ fontSize: '18px', fontWeight: '700', color: '#1f2937', textAlign: 'center', marginBottom: '8px' }}>检测冷却中</CoverView>
               <CoverView style={{ fontSize: '13px', color: '#6b7280', textAlign: 'center', marginBottom: '20px' }}>为确保检测准确性，请稍后再试</CoverView>
               <CoverView style={{ backgroundColor: '#eff6ff', borderRadius: '12px', padding: '16px', marginBottom: '20px', textAlign: 'center' }}>
