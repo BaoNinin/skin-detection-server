@@ -17,6 +17,11 @@ export default function CameraPage() {
   const [devicePosition, setDevicePosition] = useState<'front' | 'back'>('front')
   const [flashMode, setFlashMode] = useState<FlashMode>('off')
 
+  // 冷却弹窗状态
+  const [showCoolingModal, setShowCoolingModal] = useState(false)
+  const [remainingTime, setRemainingTime] = useState(0)
+  const [cooldownDisplay, setCooldownDisplay] = useState({ minutes: 0, seconds: 0 })
+
   // 相机初始化完成标志
   const [cameraReady, setCameraReady] = useState(false)
 
@@ -39,6 +44,35 @@ export default function CameraPage() {
   const shutterLeft = Math.round((screenWidth - 72) / 2)
   const albumLeft = Math.round(screenWidth * 0.16)
   const flipLeft = screenWidth - Math.round(screenWidth * 0.16) - 54
+
+  // 冷却倒计时
+  useEffect(() => {
+    if (!showCoolingModal || remainingTime <= Date.now()) return
+    const interval = setInterval(() => {
+      const remainingSeconds = Math.ceil((remainingTime - Date.now()) / 1000)
+      setCooldownDisplay({ minutes: Math.floor(remainingSeconds / 60), seconds: remainingSeconds % 60 })
+      if (remainingSeconds <= 0) setShowCoolingModal(false)
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [showCoolingModal, remainingTime])
+
+  // 冷却检查
+  const checkCooldown = (): boolean => {
+    const last = Taro.getStorageSync('lastAnalysisTime')
+    if (last) {
+      const CD = 5 * 60 * 1000
+      const elapsed = Date.now() - last
+      if (elapsed < CD) {
+        const remaining = CD - elapsed
+        setRemainingTime(Date.now() + remaining)
+        const s = Math.ceil(remaining / 1000)
+        setCooldownDisplay({ minutes: Math.floor(s / 60), seconds: s % 60 })
+        setShowCoolingModal(true)
+        return false
+      }
+    }
+    return true
+  }
 
   // NFC
   useEffect(() => {
@@ -111,6 +145,18 @@ export default function CameraPage() {
   }, [scanning])
 
   const goToAnalyzing = (path: string) => {
+    if (!checkCooldown()) {
+      // 冷却中：重新开始扫描
+      takingPhotoRef.current = false
+      setTimeout(() => {
+        setCountdown(4)
+        setScanY(10)
+        scanDirRef.current = 1
+        setScanning(true)
+      }, 500)
+      return
+    }
+    Taro.setStorageSync('lastAnalysisTime', Date.now())
     Taro.redirectTo({
       url: `/pages/analyzing/index?imagePath=${encodeURIComponent(path)}&scanSuccess=true`,
     })
@@ -260,6 +306,23 @@ export default function CameraPage() {
         {/* 翻转 */}
         <CoverView onClick={toggleCamera}
           style={{ position: 'absolute', top: `${btnTop}px`, left: `${flipLeft}px`, width: '54px', height: '54px', borderRadius: '14px', backgroundColor: 'rgba(255,255,255,0.18)', fontSize: '12px', color: 'white', textAlign: 'center', lineHeight: '54px' }}>翻转</CoverView>
+
+        {/* 冷却弹窗 */}
+        {showCoolingModal && (
+          <CoverView style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)' }}>
+            <CoverView style={{ position: 'absolute', top: `${Math.round(screenHeight * 0.3)}px`, left: '24px', width: `${screenWidth - 48}px`, backgroundColor: '#fff', borderRadius: '16px', padding: '24px' }}>
+              <CoverView style={{ fontSize: '18px', fontWeight: '700', color: '#1f2937', textAlign: 'center', marginBottom: '8px' }}>检测冷却中</CoverView>
+              <CoverView style={{ fontSize: '13px', color: '#6b7280', textAlign: 'center', marginBottom: '20px' }}>为确保检测准确性，请稍后再试</CoverView>
+              <CoverView style={{ backgroundColor: '#eff6ff', borderRadius: '12px', padding: '16px', marginBottom: '20px', textAlign: 'center' }}>
+                <CoverView style={{ fontSize: '36px', fontWeight: '700', color: '#1d4ed8' }}>
+                  {String(cooldownDisplay.minutes).padStart(2, '0')}:{String(cooldownDisplay.seconds).padStart(2, '0')}
+                </CoverView>
+              </CoverView>
+              <CoverView onClick={() => setShowCoolingModal(false)}
+                style={{ backgroundColor: '#f3f4f6', borderRadius: '12px', height: '44px', textAlign: 'center', lineHeight: '44px', fontSize: '15px', color: '#374151' }}>知道了</CoverView>
+            </CoverView>
+          </CoverView>
+        )}
 
       </CoverView>
     </View>
