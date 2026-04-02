@@ -17,9 +17,12 @@ export default function CameraPage() {
   const [devicePosition, setDevicePosition] = useState<'front' | 'back'>('front')
   const [flashMode, setFlashMode] = useState<FlashMode>('off')
 
-  // 倒计时状态 — 用 React state + useEffect 驱动，不依赖 setInterval + ref 闭包
-  const [scanning, setScanning] = useState(false)   // 扫描动画开关
-  const [countdown, setCountdown] = useState(4)      // 4→3→2→1→0 触发拍照
+  // 相机初始化完成标志
+  const [cameraReady, setCameraReady] = useState(false)
+
+  // 扫描动画状态
+  const [scanning, setScanning] = useState(false)
+  const [countdown, setCountdown] = useState(4)
   const [scanY, setScanY] = useState(10)
   const scanDirRef = useRef(1)
   const takingPhotoRef = useRef(false)
@@ -45,47 +48,50 @@ export default function CameraPage() {
     return () => stopNFCDiscovery()
   }, [])
 
-  // 进入页面 1s 后自动开始扫描
+  // 相机就绪后 500ms 开始扫描倒计时
   useEffect(() => {
+    if (!cameraReady) return
     const t = setTimeout(() => {
       setCountdown(4)
+      setScanY(10)
+      scanDirRef.current = 1
       setScanning(true)
-    }, 1000)
+    }, 500)
     return () => clearTimeout(t)
-  }, [])
+  }, [cameraReady])
 
-  // 核心：useEffect 驱动倒计时 + 自动拍照（取代 setInterval + doTakePhotoRef）
+  // useEffect 驱动倒计时：归零时静默拍照
   useEffect(() => {
     if (!scanning) return
 
-    // 倒计时归零时静默拍照
     if (countdown <= 0) {
       setScanning(false)
       if (takingPhotoRef.current) return
       takingPhotoRef.current = true
-      const ctx = Taro.createCameraContext()
-      ctx.takePhoto({
-        quality: 'high',
-        success: (res: any) => {
-          takingPhotoRef.current = false
-          Taro.redirectTo({
-            url: `/pages/analyzing/index?imagePath=${encodeURIComponent(res.tempFilePath)}&scanSuccess=true`,
-          })
-        },
-        fail: (err: any) => {
-          console.error('autoTakePhoto fail', JSON.stringify(err))
-          takingPhotoRef.current = false
-          // 拍照失败时静默重试
-          setTimeout(() => {
-            setCountdown(4)
-            setScanning(true)
-          }, 1500)
-        },
-      })
+
+      try {
+        const ctx = Taro.createCameraContext()
+        ctx.takePhoto({
+          quality: 'high',
+          success: (res: any) => {
+            takingPhotoRef.current = false
+            goToAnalyzing(res.tempFilePath)
+          },
+          fail: (err: any) => {
+            // takePhoto 失败：降级到系统相机
+            console.error('takePhoto fail, fallback to chooseMedia', JSON.stringify(err))
+            takingPhotoRef.current = false
+            openSystemCamera()
+          },
+        })
+      } catch (e) {
+        // createCameraContext 异常：降级
+        takingPhotoRef.current = false
+        openSystemCamera()
+      }
       return
     }
 
-    // 每秒递减
     const t = setTimeout(() => setCountdown(c => c - 1), 1000)
     return () => clearTimeout(t)
   }, [scanning, countdown])
@@ -104,62 +110,84 @@ export default function CameraPage() {
     return () => clearInterval(id)
   }, [scanning])
 
-  const startScan = () => {
-    if (takingPhotoRef.current) return
-    setCountdown(4)
-    setScanY(10)
-    scanDirRef.current = 1
-    setScanning(true)
+  const goToAnalyzing = (path: string) => {
+    Taro.redirectTo({
+      url: `/pages/analyzing/index?imagePath=${encodeURIComponent(path)}&scanSuccess=true`,
+    })
   }
 
-  // 手动拍照按钮
-  const doTakePhoto = () => {
-    if (takingPhotoRef.current) return
-    takingPhotoRef.current = true
-    setScanning(false)
-    const ctx = Taro.createCameraContext()
-    ctx.takePhoto({
-      quality: 'high',
-      success: (res: any) => {
-        takingPhotoRef.current = false
-        Taro.redirectTo({
-          url: `/pages/analyzing/index?imagePath=${encodeURIComponent(res.tempFilePath)}&scanSuccess=true`,
-        })
+  // 降级方案：用原始的 chooseMedia 打开系统相机（原始代码的可靠做法）
+  const openSystemCamera = () => {
+    Taro.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['camera'],
+      camera: 'front',
+      success: (res) => {
+        const path = res.tempFiles[0]?.tempFilePath
+        if (path) goToAnalyzing(path)
       },
-      fail: (err: any) => {
-        console.error('manualTakePhoto fail', JSON.stringify(err))
-        takingPhotoRef.current = false
-        Taro.showToast({ title: '拍照失败，请重试', icon: 'none' })
-        setTimeout(() => startScan(), 1200)
+      fail: () => {
+        // 用户取消或失败，重新开始扫描
+        setTimeout(() => {
+          setCountdown(4)
+          setScanY(10)
+          scanDirRef.current = 1
+          setScanning(true)
+        }, 800)
       },
     })
   }
 
+  // 手动快门
+  const doTakePhoto = () => {
+    if (takingPhotoRef.current) return
+    takingPhotoRef.current = true
+    setScanning(false)
+    try {
+      const ctx = Taro.createCameraContext()
+      ctx.takePhoto({
+        quality: 'high',
+        success: (res: any) => {
+          takingPhotoRef.current = false
+          goToAnalyzing(res.tempFilePath)
+        },
+        fail: () => {
+          takingPhotoRef.current = false
+          openSystemCamera()
+        },
+      })
+    } catch {
+      takingPhotoRef.current = false
+      openSystemCamera()
+    }
+  }
+
+  // 相册
   const pickFromAlbum = () => {
     setScanning(false)
     Taro.chooseMedia({
       count: 1, mediaType: ['image'], sourceType: ['camera', 'album'], camera: 'front',
       success: (res) => {
         const path = res.tempFiles[0]?.tempFilePath
-        if (path) {
-          Taro.redirectTo({
-            url: `/pages/analyzing/index?imagePath=${encodeURIComponent(path)}&scanSuccess=true`,
-          })
-        }
+        if (path) goToAnalyzing(path)
       },
       fail: (err) => {
         if (err.errMsg && !err.errMsg.includes('cancel')) {
           Taro.showToast({ title: '获取图片失败', icon: 'none' })
         }
-        setTimeout(() => startScan(), 800)
+        setTimeout(() => {
+          setCountdown(4)
+          setScanning(true)
+        }, 800)
       },
     })
   }
 
   const toggleCamera = () => {
     setScanning(false)
+    setCameraReady(false)
     setDevicePosition(prev => prev === 'front' ? 'back' : 'front')
-    setTimeout(() => startScan(), 900)
   }
 
   // 扫描线坐标
@@ -170,12 +198,20 @@ export default function CameraPage() {
   return (
     <View style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: '#000', overflow: 'hidden' }}>
 
-      {/* 全屏 Camera */}
+      {/* 全屏 Camera — onInitDone 确保就绪后才开始倒计时 */}
       {isWeapp && (
         <Camera
           devicePosition={devicePosition}
           flash={flashMode}
           mode="normal"
+          onInitDone={() => setCameraReady(true)}
+          onError={(e: any) => {
+            console.error('camera error', JSON.stringify(e))
+            // 相机初始化失败时直接降级
+            setCameraReady(false)
+            setScanning(false)
+            openSystemCamera()
+          }}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
         />
       )}
@@ -201,17 +237,17 @@ export default function CameraPage() {
           backgroundColor: 'transparent',
         }} />
 
-        {/* 扫描线（仅扫描中显示）*/}
+        {/* 扫描线 */}
         {scanning && (
           <CoverView style={{ position: 'absolute', top: `${scanTop}px`, left: `${scanLeft}px`, width: `${scanW}px`, height: '2px', backgroundColor: '#4ade80', borderRadius: '1px' }} />
         )}
 
         {/* 提示文字 */}
         <CoverView style={{ position: 'absolute', top: `${ovalT + ovalH + 14}px`, left: 0, width: '100%', fontSize: '13px', color: scanning ? '#4ade80' : 'rgba(255,255,255,0.85)', textAlign: 'center' }}>
-          {scanning ? '正在识别，请保持面部不动' : '请将面部对准椭圆框'}
+          {!cameraReady ? '相机准备中...' : scanning ? '正在识别，请保持面部不动' : '请将面部对准椭圆框'}
         </CoverView>
 
-        {/* 相册按钮 */}
+        {/* 相册 */}
         <CoverView onClick={pickFromAlbum}
           style={{ position: 'absolute', top: `${btnTop}px`, left: `${albumLeft}px`, width: '54px', height: '54px', borderRadius: '14px', backgroundColor: 'rgba(255,255,255,0.18)', fontSize: '12px', color: 'white', textAlign: 'center', lineHeight: '54px' }}>相册</CoverView>
 
@@ -221,7 +257,7 @@ export default function CameraPage() {
           <CoverView style={{ position: 'absolute', top: '6px', left: '6px', width: '60px', height: '60px', borderRadius: '30px', borderWidth: '2px', borderStyle: 'solid', borderColor: 'rgba(0,0,0,0.15)', backgroundColor: 'transparent' }} />
         </CoverView>
 
-        {/* 翻转按钮 */}
+        {/* 翻转 */}
         <CoverView onClick={toggleCamera}
           style={{ position: 'absolute', top: `${btnTop}px`, left: `${flipLeft}px`, width: '54px', height: '54px', borderRadius: '14px', backgroundColor: 'rgba(255,255,255,0.18)', fontSize: '12px', color: 'white', textAlign: 'center', lineHeight: '54px' }}>翻转</CoverView>
 
