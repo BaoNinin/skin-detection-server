@@ -2,8 +2,6 @@ import { View, Camera, CoverView } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect, useRef } from 'react'
 import { startNFCDiscovery, stopNFCDiscovery, NFCData } from '@/utils/nfc'
-import { cameraState } from '@/utils/cameraState'
-
 type FlashMode = 'off' | 'on' | 'torch'
 const FLASH_NEXT: Record<FlashMode, FlashMode> = { off: 'on', on: 'torch', torch: 'off' }
 const FLASH_LABEL: Record<FlashMode, string> = { off: '闪光关', on: '闪光开', torch: '常亮' }
@@ -26,6 +24,21 @@ export default function CameraPage() {
   const cdTimerRef = useRef<any>(null)
   const cdValueRef = useRef(5)
   const doTakePhotoRef = useRef<() => void>(() => {})
+
+  const checkCooldown = (): boolean => {
+    const last = Taro.getStorageSync('lastAnalysisTime')
+    if (last) {
+      const CD = 5 * 60 * 1000
+      const elapsed = Date.now() - last
+      if (elapsed < CD) {
+        const s = Math.ceil((CD - elapsed) / 1000)
+        const m = Math.floor(s / 60)
+        Taro.showToast({ title: `冷却中，还需 ${m}:${String(s % 60).padStart(2, '0')}`, icon: 'none', duration: 2500 })
+        return false
+      }
+    }
+    return true
+  }
 
   // 椭圆框尺寸
   const ovalW = Math.round(screenWidth * 0.68)
@@ -103,28 +116,15 @@ export default function CameraPage() {
     }, 1000)
   }
 
-  // 把文件读成 base64 存入内存，完全不依赖跨页面文件路径
-  const readFileToMemory = (filePath: string): Promise<string> => {
-    return new Promise((resolve) => {
-      try {
-        const fs = Taro.getFileSystemManager()
-        fs.readFile({
-          filePath,
-          encoding: 'base64',
-          success: (res: any) => resolve(`data:image/jpeg;base64,${res.data}`),
-          fail: () => resolve(filePath), // fallback: 直接用路径
-        })
-      } catch {
-        resolve(filePath)
-      }
-    })
-  }
-
   const goToPreview = (path: string) => {
-    readFileToMemory(path).then((src) => {
-      cameraState.previewImageSrc = src
-      Taro.navigateTo({ url: '/pages/camera-preview/index' })
-    })
+    if (!checkCooldown()) {
+      takingPhotoRef.current = false
+      setTimeout(() => startCountdown(), 1000)
+      return
+    }
+    Taro.setStorageSync('lastAnalysisTime', Date.now())
+    stopCountdown()
+    Taro.redirectTo({ url: `/pages/analyzing/index?imagePath=${encodeURIComponent(path)}&scanSuccess=true` })
   }
 
   const doTakePhoto = () => {
