@@ -25,21 +25,6 @@ export default function CameraPage() {
   const cdValueRef = useRef(5)
   const doTakePhotoRef = useRef<() => void>(() => {})
 
-  const checkCooldown = (): boolean => {
-    const last = Taro.getStorageSync('lastAnalysisTime')
-    if (last) {
-      const CD = 5 * 60 * 1000
-      const elapsed = Date.now() - last
-      if (elapsed < CD) {
-        const s = Math.ceil((CD - elapsed) / 1000)
-        const m = Math.floor(s / 60)
-        Taro.showToast({ title: `冷却中，还需 ${m}:${String(s % 60).padStart(2, '0')}`, icon: 'none', duration: 2500 })
-        return false
-      }
-    }
-    return true
-  }
-
   // 椭圆框尺寸
   const ovalW = Math.round(screenWidth * 0.68)
   const ovalH = Math.round(ovalW * 1.28)
@@ -116,14 +101,7 @@ export default function CameraPage() {
     }, 1000)
   }
 
-  const goToPreview = (path: string) => {
-    if (!checkCooldown()) {
-      takingPhotoRef.current = false
-      setTimeout(() => startCountdown(), 1000)
-      return
-    }
-    Taro.setStorageSync('lastAnalysisTime', Date.now())
-    stopCountdown()
+  const goToAnalyzing = (path: string) => {
     Taro.redirectTo({ url: `/pages/analyzing/index?imagePath=${encodeURIComponent(path)}&scanSuccess=true` })
   }
 
@@ -136,7 +114,7 @@ export default function CameraPage() {
       quality: 'high',
       success: (res) => {
         takingPhotoRef.current = false
-        goToPreview(res.tempFilePath)
+        goToAnalyzing(res.tempFilePath)
       },
       fail: (err) => {
         console.error('takePhoto fail', JSON.stringify(err))
@@ -154,7 +132,7 @@ export default function CameraPage() {
       count: 1, mediaType: ['image'], sourceType: ['camera', 'album'], camera: 'front',
       success: (res) => {
         const path = res.tempFiles[0]?.tempFilePath
-        if (path) goToPreview(path)
+        if (path) goToAnalyzing(path)
       },
       fail: (err) => {
         if (err.errMsg && !err.errMsg.includes('cancel')) {
