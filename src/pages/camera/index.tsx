@@ -31,16 +31,20 @@ export default function CameraPage() {
   const [cooldown, setCooldown] = useState({ minutes: 0, seconds: 0 })
   const coolingEndRef = useRef(0)
 
-  // 椭圆框尺寸（居中偏上）
-  const ovalW = Math.round(screenWidth * 0.64)
-  const ovalH = Math.round(ovalW * 1.3)
+  // 椭圆框尺寸
+  const ovalW = Math.round(screenWidth * 0.68)
+  const ovalH = Math.round(ovalW * 1.28)
   const ovalL = Math.round((screenWidth - ovalW) / 2)
-  const ovalT = Math.round(screenHeight * 0.14)
-  const ovalR = Math.round(ovalW / 2)   // border-radius px value
+  const ovalT = Math.round(screenHeight * 0.12)
 
   const navY = statusBarHeight + 8
-  // 右侧按钮：用 left 计算避免 CoverView 不支持 right
-  const flashBtnLeft = screenWidth - 66
+  const flashBtnLeft = screenWidth - 70
+
+  // 底部按钮区 Y 坐标
+  const btnTop = ovalT + ovalH + Math.round((screenHeight - ovalT - ovalH) * 0.42)
+  const shutterLeft = Math.round((screenWidth - 72) / 2)
+  const albumLeft = Math.round(screenWidth * 0.16)
+  const flipLeft = screenWidth - Math.round(screenWidth * 0.16) - 54
 
   // NFC
   useEffect(() => {
@@ -117,6 +121,24 @@ export default function CameraPage() {
     return true
   }
 
+  // 把 tempFilePath 复制到永久路径，避免 Camera 卸载后文件失效
+  const saveToUserData = (tempPath: string): Promise<string> => {
+    return new Promise((resolve) => {
+      try {
+        const fs = Taro.getFileSystemManager()
+        const dest = `${Taro.env.USER_DATA_PATH}/skin_preview_${Date.now()}.jpg`
+        fs.copyFile({
+          srcPath: tempPath,
+          destPath: dest,
+          success: () => resolve(dest),
+          fail: () => resolve(tempPath), // fallback
+        })
+      } catch {
+        resolve(tempPath)
+      }
+    })
+  }
+
   const doTakePhoto = () => {
     if (takingPhotoRef.current) return
     takingPhotoRef.current = true
@@ -124,10 +146,11 @@ export default function CameraPage() {
     const ctx = Taro.createCameraContext()
     ctx.takePhoto({
       quality: 'high',
-      success: (res) => {
+      success: async (res) => {
+        const finalPath = await saveToUserData(res.tempFilePath)
         takingPhotoRef.current = false
-        capturedPathRef.current = res.tempFilePath
-        setCapturedPath(res.tempFilePath)
+        capturedPathRef.current = finalPath
+        setCapturedPath(finalPath)
         setShowPreview(true)
       },
       fail: () => {
@@ -153,11 +176,12 @@ export default function CameraPage() {
       mediaType: ['image'],
       sourceType: ['camera', 'album'],
       camera: 'front',
-      success: (res) => {
-        const path = res.tempFiles[0]?.tempFilePath
-        if (path) {
-          capturedPathRef.current = path
-          setCapturedPath(path)
+      success: async (res) => {
+        const tempPath = res.tempFiles[0]?.tempFilePath
+        if (tempPath) {
+          const finalPath = await saveToUserData(tempPath)
+          capturedPathRef.current = finalPath
+          setCapturedPath(finalPath)
           setShowPreview(true)
         }
       },
@@ -190,25 +214,15 @@ export default function CameraPage() {
     })
   }
 
-  // 扫描线坐标（在椭圆内水平居中剪裁）
+  // 扫描线坐标
   const scanLineTop  = ovalT + Math.round(ovalH * scanY / 100)
   const scanLineLeft = ovalL + Math.round(ovalW * 0.08)
   const scanLineW    = Math.round(ovalW * 0.84)
 
-  // 倒计时徽章位置（椭圆下方居中）
-  const badgeW = 80
+  // 倒计时徽章（椭圆下方居中）
+  const badgeW = 96
   const badgeLeft = Math.round((screenWidth - badgeW) / 2)
-  const badgeTop = ovalT + ovalH + 16
-
-  // 状态文字位置
-  const hintTop = badgeTop + 44
-
-  // 底部按钮区（底部固定高度）
-  const bottomAreaH = screenHeight - ovalT - ovalH - navY - 56
-  const btnAreaTop = ovalT + ovalH + Math.round(bottomAreaH * 0.55)
-  const shutterLeft = Math.round((screenWidth - 72) / 2)
-  const albumLeft = Math.round(screenWidth * 0.18)
-  const flipLeft = screenWidth - Math.round(screenWidth * 0.18) - 54
+  const badgeTop = ovalT + ovalH + 14
 
   return (
     <View style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: '#000', overflow: 'hidden' }}>
@@ -223,41 +237,35 @@ export default function CameraPage() {
         />
       )}
 
-      {/* ══ CoverView 覆盖层 ══ */}
+      {/* ══ CoverView 覆盖层（Camera 上方） ══ */}
       {!showPreview && (
         <CoverView style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
 
-          {/* 返回按钮 */}
+          {/* 返回按钮 — 文字直接放在 CoverView 里，不用 Text 标签 */}
           <CoverView
             onClick={() => Taro.navigateBack()}
-            style={{ position: 'absolute', top: `${navY}px`, left: '16px', width: '40px', height: '40px', borderRadius: '20px', backgroundColor: 'rgba(0,0,0,0.6)' }}
-          >
-            <Text style={{ color: 'white', fontSize: '22px', lineHeight: '40px', textAlign: 'center', display: 'block' }}>‹</Text>
-          </CoverView>
+            style={{ position: 'absolute', top: `${navY}px`, left: '16px', width: '40px', height: '40px', borderRadius: '20px', backgroundColor: 'rgba(0,0,0,0.6)', fontSize: '22px', color: 'white', textAlign: 'center', lineHeight: '40px' }}
+          >‹</CoverView>
 
           {/* 标题 */}
-          <CoverView style={{ position: 'absolute', top: `${navY + 10}px`, left: `${Math.round(screenWidth / 2) - 40}px`, width: '80px' }}>
-            <Text style={{ color: 'white', fontSize: '16px', fontWeight: '600', textAlign: 'center', display: 'block' }}>皮肤检测</Text>
+          <CoverView style={{ position: 'absolute', top: `${navY + 10}px`, left: `${Math.round(screenWidth / 2) - 40}px`, width: '80px', fontSize: '16px', fontWeight: '600', color: 'white', textAlign: 'center' }}>
+            皮肤检测
           </CoverView>
 
-          {/* 闪光灯（用 left 定位，不用 right）*/}
+          {/* 闪光灯 */}
           <CoverView
             onClick={() => setFlashMode(FLASH_NEXT[flashMode])}
-            style={{ position: 'absolute', top: `${navY}px`, left: `${flashBtnLeft}px`, width: '50px', height: '40px', borderRadius: '20px', backgroundColor: 'rgba(0,0,0,0.6)' }}
-          >
-            <Text style={{ color: flashMode !== 'off' ? '#fbbf24' : 'white', fontSize: '11px', lineHeight: '40px', textAlign: 'center', display: 'block' }}>
-              {FLASH_LABEL[flashMode]}
-            </Text>
-          </CoverView>
+            style={{ position: 'absolute', top: `${navY}px`, left: `${flashBtnLeft}px`, width: '54px', height: '40px', borderRadius: '20px', backgroundColor: 'rgba(0,0,0,0.6)', fontSize: '11px', color: flashMode !== 'off' ? '#fbbf24' : 'white', textAlign: 'center', lineHeight: '40px' }}
+          >{FLASH_LABEL[flashMode]}</CoverView>
 
-          {/* 椭圆引导框（CoverView 不支持 border 简写，分开写）*/}
+          {/* 椭圆引导框 */}
           <CoverView style={{
             position: 'absolute',
             top: `${ovalT}px`,
             left: `${ovalL}px`,
             width: `${ovalW}px`,
             height: `${ovalH}px`,
-            borderRadius: `${ovalR}px`,
+            borderRadius: `${Math.round(ovalW / 2)}px`,
             borderWidth: '3px',
             borderStyle: 'solid',
             borderColor: countingDown ? '#4ade80' : 'rgba(255,255,255,0.7)',
@@ -277,7 +285,7 @@ export default function CameraPage() {
             }} />
           )}
 
-          {/* 倒计时徽章（椭圆下方） */}
+          {/* 倒计时徽章 */}
           {countingDown && countdown > 0 && (
             <CoverView style={{
               position: 'absolute',
@@ -287,66 +295,63 @@ export default function CameraPage() {
               height: '36px',
               borderRadius: '18px',
               backgroundColor: '#4ade80',
-            }}>
-              <Text style={{ color: '#000', fontSize: '18px', fontWeight: 'bold', lineHeight: '36px', textAlign: 'center', display: 'block' }}>
-                {countdown} 秒
-              </Text>
-            </CoverView>
+              fontSize: '16px',
+              fontWeight: '700',
+              color: '#000',
+              textAlign: 'center',
+              lineHeight: '36px',
+            }}>{countdown} 秒后拍照</CoverView>
           )}
 
-          {/* 状态提示文字 */}
-          <CoverView style={{ position: 'absolute', top: `${hintTop}px`, left: 0, width: '100%' }}>
-            <Text style={{ color: countingDown ? '#4ade80' : 'rgba(255,255,255,0.85)', fontSize: '14px', textAlign: 'center', display: 'block' }}>
-              {countingDown ? '自动拍照中，请保持不动' : '请将面部对准椭圆框'}
-            </Text>
-            <Text style={{ color: 'rgba(255,255,255,0.38)', fontSize: '11px', textAlign: 'center', display: 'block', marginTop: '5px' }}>
-              确保光线充足，保持表情自然
-            </Text>
+          {/* 状态文字（倒计时徽章下方） */}
+          <CoverView style={{
+            position: 'absolute',
+            top: `${badgeTop + 46}px`,
+            left: 0,
+            width: '100%',
+            fontSize: '13px',
+            color: countingDown ? '#4ade80' : 'rgba(255,255,255,0.85)',
+            textAlign: 'center',
+          }}>
+            {countingDown ? '请保持面部不动' : '请将面部对准椭圆框'}
           </CoverView>
 
-          {/* 相册按钮 */}
+          {/* 相册 */}
           <CoverView
             onClick={pickFromAlbum}
-            style={{ position: 'absolute', top: `${btnAreaTop}px`, left: `${albumLeft}px`, width: '54px', height: '54px', borderRadius: '14px', backgroundColor: 'rgba(255,255,255,0.15)' }}
-          >
-            <Text style={{ color: 'white', fontSize: '12px', lineHeight: '54px', textAlign: 'center', display: 'block' }}>相册</Text>
-          </CoverView>
+            style={{ position: 'absolute', top: `${btnTop}px`, left: `${albumLeft}px`, width: '54px', height: '54px', borderRadius: '14px', backgroundColor: 'rgba(255,255,255,0.18)', fontSize: '12px', color: 'white', textAlign: 'center', lineHeight: '54px' }}
+          >相册</CoverView>
 
-          {/* 手动快门（中间大圆按钮） */}
+          {/* 快门（大白圆） */}
           <CoverView
             onClick={doTakePhoto}
-            style={{ position: 'absolute', top: `${btnAreaTop - 8}px`, left: `${shutterLeft}px`, width: '72px', height: '72px', borderRadius: '36px', backgroundColor: 'white' }}
+            style={{ position: 'absolute', top: `${btnTop - 9}px`, left: `${shutterLeft}px`, width: '72px', height: '72px', borderRadius: '36px', backgroundColor: 'rgba(255,255,255,0.95)' }}
           >
             <CoverView style={{
               position: 'absolute',
-              top: '6px',
-              left: '6px',
-              width: '60px',
-              height: '60px',
+              top: '6px', left: '6px',
+              width: '60px', height: '60px',
               borderRadius: '30px',
               borderWidth: '2px',
               borderStyle: 'solid',
-              borderColor: '#d1d5db',
+              borderColor: 'rgba(0,0,0,0.15)',
               backgroundColor: 'transparent',
             }} />
           </CoverView>
 
-          {/* 翻转摄像头 */}
+          {/* 翻转 */}
           <CoverView
             onClick={toggleCamera}
-            style={{ position: 'absolute', top: `${btnAreaTop}px`, left: `${flipLeft}px`, width: '54px', height: '54px', borderRadius: '14px', backgroundColor: 'rgba(255,255,255,0.15)' }}
-          >
-            <Text style={{ color: 'white', fontSize: '12px', lineHeight: '54px', textAlign: 'center', display: 'block' }}>翻转</Text>
-          </CoverView>
+            style={{ position: 'absolute', top: `${btnTop}px`, left: `${flipLeft}px`, width: '54px', height: '54px', borderRadius: '14px', backgroundColor: 'rgba(255,255,255,0.18)', fontSize: '12px', color: 'white', textAlign: 'center', lineHeight: '54px' }}
+          >翻转</CoverView>
 
         </CoverView>
       )}
 
       {/* ══ 预览页（Camera 已卸载，普通 View，按钮完全可点）══ */}
       {showPreview && (
-        <View style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, background: '#111', display: 'flex', flexDirection: 'column' }}>
+        <View style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: '#111', display: 'flex', flexDirection: 'column' }}>
 
-          {/* 顶部导航 */}
           <View style={{ paddingTop: `${statusBarHeight + 8}px`, paddingBottom: '8px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', alignItems: 'center' }}>
             <View
               onClick={resetAndRetry}
@@ -357,23 +362,18 @@ export default function CameraPage() {
             <Text style={{ color: 'white', fontSize: '16px', fontWeight: '600' }}>确认照片</Text>
           </View>
 
-          {/* 照片预览（椭圆形，与扫描框一致） */}
+          {/* 照片预览 */}
           <View style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <View style={{
-              borderRadius: '50%',
-              overflow: 'hidden',
-              borderWidth: '3px',
-              borderStyle: 'solid',
-              borderColor: 'rgba(255,255,255,0.2)',
-              width: `${ovalW}px`,
-              height: `${ovalH}px`,
-            }}>
-              <Image
-                src={capturedPathRef.current || capturedPath}
-                mode="aspectFill"
-                style={{ width: `${ovalW}px`, height: `${ovalH}px`, display: 'block' }}
-              />
-            </View>
+            <Image
+              src={capturedPathRef.current || capturedPath}
+              mode="aspectFill"
+              style={{
+                width: `${ovalW}px`,
+                height: `${ovalH}px`,
+                borderRadius: `${Math.round(ovalW / 2)}px`,
+                display: 'block',
+              }}
+            />
           </View>
 
           <Text style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', textAlign: 'center', display: 'block', padding: '0 32px 12px' }}>
