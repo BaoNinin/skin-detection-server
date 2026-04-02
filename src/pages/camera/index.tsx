@@ -22,6 +22,9 @@ export default function CameraPage() {
   const [scanY, setScanY] = useState(10)
   const scanDirRef = useRef(1)
   const takingPhotoRef = useRef(false)
+  const cdTimerRef = useRef<any>(null)       // 倒计时 interval ref
+  const cdValueRef = useRef(5)               // 当前倒计时值 ref（不依赖 state）
+  const doTakePhotoRef = useRef<() => void>(() => {})
 
   const [capturedPath, setCapturedPath] = useState('')
   const capturedPathRef = useRef('')
@@ -62,27 +65,30 @@ export default function CameraPage() {
 
   const startCountdown = () => {
     if (takingPhotoRef.current) return
+    // 清除可能存在的旧计时器
+    if (cdTimerRef.current) { clearInterval(cdTimerRef.current); cdTimerRef.current = null }
+    cdValueRef.current = 5
     setCountdown(5)
     setScanY(10)
     scanDirRef.current = 1
     setCountingDown(true)
+    // 用 ref 驱动倒计时，避免 useEffect 闭包问题
+    cdTimerRef.current = setInterval(() => {
+      cdValueRef.current -= 1
+      setCountdown(cdValueRef.current)
+      if (cdValueRef.current <= 0) {
+        clearInterval(cdTimerRef.current)
+        cdTimerRef.current = null
+        // 直接通过 ref 调用最新版本的 doTakePhoto
+        doTakePhotoRef.current()
+      }
+    }, 1000)
   }
 
-  // 倒计时 ticker（不在 updater 里调副作用）
-  useEffect(() => {
-    if (!countingDown) return
-    const interval = setInterval(() => {
-      setCountdown(prev => (prev <= 1 ? 0 : prev - 1))
-    }, 1000)
-    return () => clearInterval(interval)
-  }, [countingDown])
-
-  // countdown 归零时触发拍照
-  useEffect(() => {
-    if (countingDown && countdown === 0) {
-      doTakePhoto()
-    }
-  }, [countdown, countingDown])
+  const stopCountdown = () => {
+    if (cdTimerRef.current) { clearInterval(cdTimerRef.current); cdTimerRef.current = null }
+    setCountingDown(false)
+  }
 
   // 扫描线动画
   useEffect(() => {
@@ -146,26 +152,31 @@ export default function CameraPage() {
   const doTakePhoto = () => {
     if (takingPhotoRef.current) return
     takingPhotoRef.current = true
-    setCountingDown(false)
+    stopCountdown()
     const ctx = Taro.createCameraContext()
     ctx.takePhoto({
       quality: 'high',
-      success: async (res) => {
-        const finalPath = await saveToUserData(res.tempFilePath)
-        takingPhotoRef.current = false
-        capturedPathRef.current = finalPath
-        setCapturedPath(finalPath)
-        setShowPreview(true)
+      success: (res) => {
+        saveToUserData(res.tempFilePath).then((finalPath) => {
+          takingPhotoRef.current = false
+          capturedPathRef.current = finalPath
+          setCapturedPath(finalPath)
+          setShowPreview(true)
+        })
       },
-      fail: () => {
+      fail: (err) => {
+        console.error('takePhoto fail:', JSON.stringify(err))
         takingPhotoRef.current = false
         Taro.showToast({ title: '拍照失败，请重试', icon: 'none' })
         setTimeout(() => startCountdown(), 1200)
       }
     })
   }
+  // 保持 ref 始终指向最新版本
+  doTakePhotoRef.current = doTakePhoto
 
   const resetAndRetry = () => {
+    stopCountdown()
     setShowPreview(false)
     capturedPathRef.current = ''
     setCapturedPath('')
@@ -174,7 +185,7 @@ export default function CameraPage() {
   }
 
   const pickFromAlbum = () => {
-    setCountingDown(false)
+    stopCountdown()
     Taro.chooseMedia({
       count: 1,
       mediaType: ['image'],
@@ -199,7 +210,7 @@ export default function CameraPage() {
   }
 
   const toggleCamera = () => {
-    setCountingDown(false)
+    stopCountdown()
     setDevicePosition(prev => prev === 'front' ? 'back' : 'front')
     setTimeout(() => startCountdown(), 900)
   }
