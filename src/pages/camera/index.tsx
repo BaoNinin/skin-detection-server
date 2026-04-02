@@ -29,6 +29,7 @@ export default function CameraPage() {
   const [capturedPath, setCapturedPath] = useState('')
   const capturedPathRef = useRef('')
   const [showPreview, setShowPreview] = useState(false)
+  const [previewReady, setPreviewReady] = useState(false) // 图片加载完毕标志
 
   const [showCooling, setShowCooling] = useState(false)
   const [cooldown, setCooldown] = useState({ minutes: 0, seconds: 0 })
@@ -131,24 +132,6 @@ export default function CameraPage() {
     return true
   }
 
-  // 把 tempFilePath 复制到永久路径，避免 Camera 卸载后文件失效
-  const saveToUserData = (tempPath: string): Promise<string> => {
-    return new Promise((resolve) => {
-      try {
-        const fs = Taro.getFileSystemManager()
-        const dest = `${Taro.env.USER_DATA_PATH}/skin_preview_${Date.now()}.jpg`
-        fs.copyFile({
-          srcPath: tempPath,
-          destPath: dest,
-          success: () => resolve(dest),
-          fail: () => resolve(tempPath), // fallback
-        })
-      } catch {
-        resolve(tempPath)
-      }
-    })
-  }
-
   const doTakePhoto = () => {
     if (takingPhotoRef.current) return
     takingPhotoRef.current = true
@@ -157,12 +140,13 @@ export default function CameraPage() {
     ctx.takePhoto({
       quality: 'high',
       success: (res) => {
-        saveToUserData(res.tempFilePath).then((finalPath) => {
-          takingPhotoRef.current = false
-          capturedPathRef.current = finalPath
-          setCapturedPath(finalPath)
-          setShowPreview(true)
-        })
+        // 直接用 tempFilePath —— Camera 组件保持挂载（只是缩成 0x0），
+        // 所以 tempFilePath 始终有效，不需要 copyFile
+        takingPhotoRef.current = false
+        capturedPathRef.current = res.tempFilePath
+        setCapturedPath(res.tempFilePath)
+        setPreviewReady(false)
+        setShowPreview(true)
       },
       fail: (err) => {
         console.error('takePhoto fail:', JSON.stringify(err))
@@ -178,6 +162,7 @@ export default function CameraPage() {
   const resetAndRetry = () => {
     stopCountdown()
     setShowPreview(false)
+    setPreviewReady(false)
     capturedPathRef.current = ''
     setCapturedPath('')
     takingPhotoRef.current = false
@@ -191,12 +176,12 @@ export default function CameraPage() {
       mediaType: ['image'],
       sourceType: ['camera', 'album'],
       camera: 'front',
-      success: async (res) => {
-        const tempPath = res.tempFiles[0]?.tempFilePath
-        if (tempPath) {
-          const finalPath = await saveToUserData(tempPath)
-          capturedPathRef.current = finalPath
-          setCapturedPath(finalPath)
+      success: (res) => {
+        const path = res.tempFiles[0]?.tempFilePath
+        if (path) {
+          capturedPathRef.current = path
+          setCapturedPath(path)
+          setPreviewReady(false)
           setShowPreview(true)
         }
       },
@@ -242,17 +227,21 @@ export default function CameraPage() {
   return (
     <View style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: '#000', overflow: 'hidden' }}>
 
-      {/* 全屏 Camera */}
-      {isWeapp && !showPreview && (
+      {/* Camera 永远挂载，showPreview 时缩成 0x0 保持 tempFilePath 有效 */}
+      {isWeapp && (
         <Camera
           devicePosition={devicePosition}
           flash={flashMode}
           mode="normal"
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+          style={{
+            position: 'absolute', top: 0, left: 0,
+            width: showPreview ? '0px' : '100%',
+            height: showPreview ? '0px' : '100%',
+          }}
         />
       )}
 
-      {/* ══ CoverView 覆盖层（Camera 上方） ══ */}
+      {/* ══ CoverView 覆盖层（仅 Camera 模式显示） ══ */}
       {!showPreview && (
         <CoverView style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
 
@@ -382,13 +371,21 @@ export default function CameraPage() {
             <Image
               src={capturedPathRef.current || capturedPath}
               mode="aspectFill"
+              onLoad={() => setPreviewReady(true)}
+              onError={() => Taro.showToast({ title: '图片加载失败', icon: 'none' })}
               style={{
                 width: `${ovalW}px`,
                 height: `${ovalH}px`,
                 borderRadius: `${Math.round(ovalW / 2)}px`,
                 display: 'block',
+                opacity: previewReady ? 1 : 0,
               }}
             />
+            {!previewReady && (
+              <View style={{ position: 'absolute', width: `${ovalW}px`, height: `${ovalH}px`, borderRadius: `${Math.round(ovalW / 2)}px`, background: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>加载中...</Text>
+              </View>
+            )}
           </View>
 
           <Text style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', textAlign: 'center', display: 'block', padding: '0 32px 12px' }}>
