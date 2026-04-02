@@ -103,10 +103,10 @@ export default function CameraPage() {
   }
 
   // 拍完照跳转到独立预览页，Camera 留在页面栈不卸载，tempFilePath 始终有效
+  // 用 Storage 传路径，避免 URL 参数长度限制导致路径被截断
   const goToPreview = (path: string) => {
-    Taro.navigateTo({
-      url: `/pages/camera-preview/index?imagePath=${encodeURIComponent(path)}`
-    })
+    Taro.setStorageSync('pendingPreviewPath', path)
+    Taro.navigateTo({ url: '/pages/camera-preview/index' })
   }
 
   const doTakePhoto = () => {

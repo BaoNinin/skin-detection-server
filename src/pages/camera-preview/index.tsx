@@ -1,10 +1,10 @@
 import { View, Text, Image, Button } from '@tarojs/components'
-import Taro, { useRouter } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { useState } from 'react'
 
 export default function CameraPreviewPage() {
-  const router = useRouter()
-  const imagePath = decodeURIComponent(router.params.imagePath || '')
+  // 从 Storage 读路径，避免 URL 参数长度限制截断
+  const imagePath = Taro.getStorageSync('pendingPreviewPath') || ''
   const sysInfo = Taro.getSystemInfoSync()
   const statusBarHeight = sysInfo.statusBarHeight || 44
   const screenHeight = sysInfo.screenHeight || 667
