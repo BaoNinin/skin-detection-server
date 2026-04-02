@@ -467,7 +467,7 @@ export default function AnalyzingPage() {
               <Text className="text-6xl font-bold text-blue-700 block" style={{ textShadow: '0 0 20px rgba(251, 113, 133, 0.8)' }}>
                 {activationCountdown}
               </Text>
-              <Text className="text-sm text-gray-600 mt-2 block">深度分析中</Text>
+              <Text className="text-sm text-gray-600 mt-2 block">面部分析中</Text>
             </View>
 
             {/* 激活进度条 */}

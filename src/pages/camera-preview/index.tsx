@@ -1,16 +1,12 @@
 import { View, Text, Image, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { useState } from 'react'
+import { cameraState } from '@/utils/cameraState'
 
 export default function CameraPreviewPage() {
-  // 从 Storage 读路径，避免 URL 参数长度限制截断
-  const imagePath = Taro.getStorageSync('pendingPreviewPath') || ''
+  const imageSrc = cameraState.previewImageSrc
   const sysInfo = Taro.getSystemInfoSync()
   const statusBarHeight = sysInfo.statusBarHeight || 44
   const screenHeight = sysInfo.screenHeight || 667
-
-  const [imgLoaded, setImgLoaded] = useState(false)
-  const [imgError, setImgError] = useState(false)
 
   const checkCooldown = (): boolean => {
     const last = Taro.getStorageSync('lastAnalysisTime')
@@ -28,60 +24,73 @@ export default function CameraPreviewPage() {
   }
 
   const handleConfirm = () => {
-    if (!imagePath) {
+    if (!imageSrc) {
       Taro.showToast({ title: '照片获取失败，请重新拍照', icon: 'none' })
       Taro.navigateBack()
       return
     }
     if (!checkCooldown()) return
     Taro.setStorageSync('lastAnalysisTime', Date.now())
-    Taro.redirectTo({
-      url: `/pages/analyzing/index?imagePath=${encodeURIComponent(imagePath)}&scanSuccess=true`
-    })
+    // 如果是 base64 data URI，需要先保存为文件再传给分析页
+    if (imageSrc.startsWith('data:')) {
+      // 把 base64 写入临时文件后跳转
+      try {
+        const fs = Taro.getFileSystemManager()
+        const base64 = imageSrc.replace(/^data:image\/\w+;base64,/, '')
+        const tmpPath = `${Taro.env.USER_DATA_PATH || ''}/skin_confirm_${Date.now()}.jpg`
+        // 若 USER_DATA_PATH 为空则用写入方式（wx全局）
+        const wxGlobal = (globalThis as any).wx
+        const userDataPath = wxGlobal?.env?.USER_DATA_PATH || ''
+        if (!userDataPath) {
+          // 无法写文件，直接跳转（分析页可能无法加载）
+          Taro.redirectTo({ url: `/pages/analyzing/index?imagePath=${encodeURIComponent(imageSrc.slice(0, 200))}&scanSuccess=true` })
+          return
+        }
+        const dest = `${userDataPath}/skin_confirm_${Date.now()}.jpg`
+        fs.writeFile({
+          filePath: dest,
+          data: base64,
+          encoding: 'base64',
+          success: () => {
+            Taro.redirectTo({ url: `/pages/analyzing/index?imagePath=${encodeURIComponent(dest)}&scanSuccess=true` })
+          },
+          fail: () => {
+            Taro.showToast({ title: '图片处理失败，请重拍', icon: 'none' })
+          }
+        })
+      } catch {
+        Taro.showToast({ title: '图片处理失败，请重拍', icon: 'none' })
+      }
+    } else {
+      Taro.redirectTo({ url: `/pages/analyzing/index?imagePath=${encodeURIComponent(imageSrc)}&scanSuccess=true` })
+    }
   }
 
   const handleRetake = () => {
+    cameraState.previewImageSrc = ''
     Taro.navigateBack()
   }
 
   return (
     <View style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: '#111', display: 'flex', flexDirection: 'column' }}>
 
-      {/* 顶部导航 */}
       <View style={{ paddingTop: `${statusBarHeight + 8}px`, paddingBottom: '8px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-        <View
-          onClick={handleRetake}
-          style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '12px' }}
-        >
+        <View onClick={handleRetake} style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '12px' }}>
           <Text style={{ color: 'white', fontSize: '22px' }}>‹</Text>
         </View>
         <Text style={{ color: 'white', fontSize: '16px', fontWeight: '600' }}>确认照片</Text>
       </View>
 
-      {/* 照片展示区 */}
-      <View style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', position: 'relative' }}>
-        {imgError ? (
-          <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-            <Text style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px', textAlign: 'center' }}>照片加载失败</Text>
-            <Text style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', textAlign: 'center' }}>{imagePath.slice(0, 40)}</Text>
-          </View>
-        ) : (
+      <View style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 20px' }}>
+        {imageSrc ? (
           <Image
-            src={imagePath}
+            src={imageSrc}
             mode="aspectFit"
-            onLoad={() => setImgLoaded(true)}
-            onError={() => setImgError(true)}
-            style={{
-              width: '100%',
-              height: `${Math.round(screenHeight * 0.58)}px`,
-              borderRadius: '16px',
-              display: 'block',
-            }}
+            style={{ width: '100%', height: `${Math.round(screenHeight * 0.6)}px`, borderRadius: '16px', display: 'block' }}
           />
-        )}
-        {!imgLoaded && !imgError && (
-          <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>加载中...</Text>
+        ) : (
+          <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: `${Math.round(screenHeight * 0.6)}px` }}>
+            <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px' }}>未获取到照片，请重新拍照</Text>
           </View>
         )}
       </View>
@@ -90,18 +99,11 @@ export default function CameraPreviewPage() {
         照片仅用于本次皮肤状态分析，分析完成后立即删除
       </Text>
 
-      {/* 操作按钮 */}
       <View style={{ padding: '0 24px 48px', display: 'flex', flexDirection: 'column', gap: '12px', flexShrink: 0 }}>
-        <Button
-          onClick={handleConfirm}
-          style={{ background: 'white', color: '#1d4ed8', borderRadius: '50px', fontSize: '17px', fontWeight: '700', height: '52px', lineHeight: '52px', border: 'none', margin: 0 }}
-        >
+        <Button onClick={handleConfirm} style={{ background: 'white', color: '#1d4ed8', borderRadius: '50px', fontSize: '17px', fontWeight: '700', height: '52px', lineHeight: '52px', border: 'none', margin: 0 }}>
           开始分析
         </Button>
-        <Button
-          onClick={handleRetake}
-          style={{ background: 'rgba(255,255,255,0.1)', color: 'white', borderRadius: '50px', fontSize: '15px', height: '48px', lineHeight: '48px', border: 'none', margin: 0 }}
-        >
+        <Button onClick={handleRetake} style={{ background: 'rgba(255,255,255,0.1)', color: 'white', borderRadius: '50px', fontSize: '15px', height: '48px', lineHeight: '48px', border: 'none', margin: 0 }}>
           重新拍照
         </Button>
       </View>

@@ -2,6 +2,7 @@ import { View, Camera, CoverView } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect, useRef } from 'react'
 import { startNFCDiscovery, stopNFCDiscovery, NFCData } from '@/utils/nfc'
+import { cameraState } from '@/utils/cameraState'
 
 type FlashMode = 'off' | 'on' | 'torch'
 const FLASH_NEXT: Record<FlashMode, FlashMode> = { off: 'on', on: 'torch', torch: 'off' }
@@ -102,11 +103,28 @@ export default function CameraPage() {
     }, 1000)
   }
 
-  // 拍完照跳转到独立预览页，Camera 留在页面栈不卸载，tempFilePath 始终有效
-  // 用 Storage 传路径，避免 URL 参数长度限制导致路径被截断
+  // 把文件读成 base64 存入内存，完全不依赖跨页面文件路径
+  const readFileToMemory = (filePath: string): Promise<string> => {
+    return new Promise((resolve) => {
+      try {
+        const fs = Taro.getFileSystemManager()
+        fs.readFile({
+          filePath,
+          encoding: 'base64',
+          success: (res: any) => resolve(`data:image/jpeg;base64,${res.data}`),
+          fail: () => resolve(filePath), // fallback: 直接用路径
+        })
+      } catch {
+        resolve(filePath)
+      }
+    })
+  }
+
   const goToPreview = (path: string) => {
-    Taro.setStorageSync('pendingPreviewPath', path)
-    Taro.navigateTo({ url: '/pages/camera-preview/index' })
+    readFileToMemory(path).then((src) => {
+      cameraState.previewImageSrc = src
+      Taro.navigateTo({ url: '/pages/camera-preview/index' })
+    })
   }
 
   const doTakePhoto = () => {
@@ -117,6 +135,7 @@ export default function CameraPage() {
     ctx.takePhoto({
       quality: 'high',
       success: (res) => {
+        takingPhotoRef.current = false
         goToPreview(res.tempFilePath)
       },
       fail: (err) => {
