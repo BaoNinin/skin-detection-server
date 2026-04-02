@@ -75,7 +75,7 @@ export default function CameraPage() {
           quality: 'high',
           success: (res: any) => {
             takingPhotoRef.current = false
-            goToAnalyzing(res.tempFilePath)
+            goToAnalyzing(res.tempImagePath)
           },
           fail: (err: any) => {
             // takePhoto 失败：降级到系统相机
@@ -150,7 +150,7 @@ export default function CameraPage() {
         quality: 'high',
         success: (res: any) => {
           takingPhotoRef.current = false
-          goToAnalyzing(res.tempFilePath)
+          goToAnalyzing(res.tempImagePath)
         },
         fail: () => {
           takingPhotoRef.current = false
