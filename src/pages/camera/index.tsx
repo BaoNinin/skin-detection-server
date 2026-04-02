@@ -68,17 +68,21 @@ export default function CameraPage() {
     setCountingDown(true)
   }
 
-  // 倒计时 ticker
+  // 倒计时 ticker（不在 updater 里调副作用）
   useEffect(() => {
     if (!countingDown) return
     const interval = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) { clearInterval(interval); doTakePhoto(); return 0 }
-        return prev - 1
-      })
+      setCountdown(prev => (prev <= 1 ? 0 : prev - 1))
     }, 1000)
     return () => clearInterval(interval)
   }, [countingDown])
+
+  // countdown 归零时触发拍照
+  useEffect(() => {
+    if (countingDown && countdown === 0) {
+      doTakePhoto()
+    }
+  }, [countdown, countingDown])
 
   // 扫描线动画
   useEffect(() => {
