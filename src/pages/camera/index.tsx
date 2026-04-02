@@ -5,7 +5,7 @@ import { startNFCDiscovery, stopNFCDiscovery, NFCData } from '@/utils/nfc'
 
 type FlashMode = 'off' | 'on' | 'torch'
 const FLASH_NEXT: Record<FlashMode, FlashMode> = { off: 'on', on: 'torch', torch: 'off' }
-const FLASH_ICON: Record<FlashMode, string> = { off: '⚡', on: '🔦', torch: '💡' }
+const FLASH_LABEL: Record<FlashMode, string> = { off: '闪光', on: '常亮', torch: '手电' }
 
 export default function CameraPage() {
   const isWeapp = Taro.getEnv() === Taro.ENV_TYPE.WEAPP
@@ -25,6 +25,7 @@ export default function CameraPage() {
   const countdownRef = useRef(false) // avoid stale closure
 
   const [capturedPath, setCapturedPath] = useState('')
+  const capturedPathRef = useRef('') // 同步存储，避免 state 批量更新时序问题
   const [showPreview, setShowPreview] = useState(false)
 
   const [showCooling, setShowCooling] = useState(false)
@@ -122,6 +123,7 @@ export default function CameraPage() {
         takingPhotoRef.current = false
         setCountingDown(false)
         countdownRef.current = false
+        capturedPathRef.current = res.tempFilePath
         setCapturedPath(res.tempFilePath)
         setShowPreview(true)
       },
@@ -136,6 +138,7 @@ export default function CameraPage() {
 
   const resetAndRetry = () => {
     setShowPreview(false)
+    capturedPathRef.current = ''
     setCapturedPath('')
     takingPhotoRef.current = false
     setTimeout(() => startCountdown(), 800)
@@ -151,7 +154,11 @@ export default function CameraPage() {
       camera: 'front',
       success: (res) => {
         const path = res.tempFiles[0]?.tempFilePath
-        if (path) { setCapturedPath(path); setShowPreview(true) }
+        if (path) {
+          capturedPathRef.current = path
+          setCapturedPath(path)
+          setShowPreview(true)
+        }
       },
       fail: (err) => {
         if (err.errMsg && !err.errMsg.includes('cancel')) {
@@ -226,9 +233,9 @@ export default function CameraPage() {
           {/* 闪光灯按钮 */}
           <CoverView
             onClick={() => setFlashMode(FLASH_NEXT[flashMode])}
-            style={{ position: 'absolute', top: `${navY}px`, right: '16px', width: '40px', height: '40px', borderRadius: '20px', backgroundColor: 'rgba(0,0,0,0.55)' }}
+            style={{ position: 'absolute', top: `${navY}px`, right: '16px', width: '50px', height: '40px', borderRadius: '20px', backgroundColor: 'rgba(0,0,0,0.55)' }}
           >
-            <Text style={{ fontSize: '18px', lineHeight: '40px', textAlign: 'center', display: 'block' }}>{FLASH_ICON[flashMode]}</Text>
+            <Text style={{ color: 'white', fontSize: '12px', lineHeight: '40px', textAlign: 'center', display: 'block' }}>{FLASH_LABEL[flashMode]}</Text>
           </CoverView>
 
           {/* ── 椭圆面部引导框 ── */}
@@ -256,30 +263,22 @@ export default function CameraPage() {
             }} />
           )}
 
-          {/* 倒计时数字（椭圆中心） */}
-          {countingDown && countdown > 0 && (
-            <CoverView style={{
-              position: 'absolute',
-              top: `${cdCY}px`,
-              left: `${cdCX}px`,
-              width: '60px',
-              height: '60px',
-              borderRadius: '30px',
-              backgroundColor: 'rgba(0,0,0,0.6)',
-            }}>
-              <Text style={{ color: 'white', fontSize: '28px', fontWeight: 'bold', lineHeight: '60px', textAlign: 'center', display: 'block' }}>
-                {countdown}
-              </Text>
-            </CoverView>
-          )}
-
-          {/* 状态文字（椭圆下方） */}
-          <CoverView style={{ position: 'absolute', top: `${ovalT + ovalH + 20}px`, left: 0, right: 0 }}>
+          {/* 状态文字 + 倒计时（椭圆下方，不遮挡面部） */}
+          <CoverView style={{ position: 'absolute', top: `${ovalT + ovalH + 18}px`, left: 0, right: 0 }}>
+            {countingDown && countdown > 0 && (
+              <CoverView style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '6px' }}>
+                <CoverView style={{ backgroundColor: '#4ade80', borderRadius: '22px', paddingLeft: '16px', paddingRight: '16px', paddingTop: '4px', paddingBottom: '4px' }}>
+                  <Text style={{ color: '#000', fontSize: '20px', fontWeight: 'bold', textAlign: 'center', display: 'block' }}>
+                    {countdown}
+                  </Text>
+                </CoverView>
+              </CoverView>
+            )}
             <Text style={{ color: countingDown ? '#4ade80' : 'rgba(255,255,255,0.9)', fontSize: '15px', textAlign: 'center', display: 'block' }}>
-              {countingDown ? `${countdown} 秒后自动拍照` : '请将面部移至框内'}
+              {countingDown ? '秒后自动拍照' : '请将面部移至框内'}
             </Text>
             <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', textAlign: 'center', display: 'block', marginTop: '6px' }}>
-              请保持面部自然，确保光线充足
+              保持面部自然，确保光线充足
             </Text>
           </CoverView>
 
@@ -288,14 +287,14 @@ export default function CameraPage() {
             onClick={pickFromAlbum}
             style={{ position: 'absolute', bottom: '48px', left: `${Math.round(screenWidth * 0.2) - 27}px`, width: '54px', height: '54px', borderRadius: '14px', backgroundColor: 'rgba(0,0,0,0.55)' }}
           >
-            <Text style={{ fontSize: '26px', lineHeight: '54px', textAlign: 'center', display: 'block' }}>🖼️</Text>
+            <Text style={{ color: 'white', fontSize: '12px', lineHeight: '54px', textAlign: 'center', display: 'block' }}>相册</Text>
           </CoverView>
 
           <CoverView
             onClick={toggleCamera}
             style={{ position: 'absolute', bottom: '48px', right: `${Math.round(screenWidth * 0.2) - 27}px`, width: '54px', height: '54px', borderRadius: '14px', backgroundColor: 'rgba(0,0,0,0.55)' }}
           >
-            <Text style={{ fontSize: '26px', lineHeight: '54px', textAlign: 'center', display: 'block' }}>🔄</Text>
+            <Text style={{ color: 'white', fontSize: '12px', lineHeight: '54px', textAlign: 'center', display: 'block' }}>翻转</Text>
           </CoverView>
 
         </CoverView>
@@ -315,19 +314,13 @@ export default function CameraPage() {
           </View>
 
           <View style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 24px' }}>
-            {capturedPath ? (
-              <View style={{ borderRadius: '16px', overflow: 'hidden', border: '3px solid rgba(255,255,255,0.15)', width: `${Math.round(screenWidth * 0.78)}px`, height: `${Math.round(screenWidth * 0.78 * 1.3)}px` }}>
-                <Image
-                  src={capturedPath}
-                  mode="aspectFill"
-                  style={{ width: `${Math.round(screenWidth * 0.78)}px`, height: `${Math.round(screenWidth * 0.78 * 1.3)}px`, display: 'block' }}
-                />
-              </View>
-            ) : (
-              <View style={{ background: 'rgba(255,255,255,0.08)', borderRadius: '16px', width: `${Math.round(screenWidth * 0.78)}px`, height: `${Math.round(screenWidth * 0.78 * 1.3)}px`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px' }}>照片加载中...</Text>
-              </View>
-            )}
+            <View style={{ borderRadius: '50%', overflow: 'hidden', border: '3px solid rgba(255,255,255,0.2)', width: `${Math.round(screenWidth * 0.72)}px`, height: `${Math.round(screenWidth * 0.72 * 1.3)}px` }}>
+              <Image
+                src={capturedPathRef.current || capturedPath}
+                mode="aspectFill"
+                style={{ width: `${Math.round(screenWidth * 0.72)}px`, height: `${Math.round(screenWidth * 0.72 * 1.3)}px`, display: 'block' }}
+              />
+            </View>
           </View>
 
           <Text style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', textAlign: 'center', display: 'block', padding: '0 32px 12px' }}>
